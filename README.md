@@ -3,8 +3,11 @@
 Group Members:
 
 Marc teBoekhorst
+
 Michael Vezina
+
 Justin Krol
+
 (insert)
 
 
