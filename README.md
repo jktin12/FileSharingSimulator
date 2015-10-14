@@ -2,10 +2,10 @@
 
 Group Members:
 
-\nMarc teBoekhorst
-\nMichael Vezina
-\nJustin Krol
-\n(insert)
+Marc teBoekhorst
+Michael Vezina
+Justin Krol
+(insert)
 
 
 
