@@ -1,4 +1,8 @@
-public class producer extends user{
+/*
+ * Subclass of user that creates and likes its own document
+ */
+
+public class producer extends user {
 	
 	private document myDoc;
 
