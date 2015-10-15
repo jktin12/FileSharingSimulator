@@ -10,12 +10,10 @@ public class document {
 	
 	private String tag;
 	private List<user> userLiked;
-	private int popularity;
 	
 	public document(String tag) {
 		this.tag = tag;
 		userLiked = new ArrayList<user>();
-		popularity = 0;
 	}
 	
 	public String getTag(){
@@ -26,16 +24,18 @@ public class document {
 		return userLiked.size();
 	}
 	
-	//Each time the document is liked, the document stores
-	//the user and the popularity is increased
+	//Adds a user to the list of users who liked this document
 	public void addLike(user u){
 		userLiked.add(u);
-		addPop(u.numberOfFollows()+1);
 	}
 	
-	//Adds an amount to the popularity of the document
-	public void addPop(int a){
-		popularity=popularity+a;
+	//Calculates the popularity of the document
+	public int calculatePop(int a){
+		int popularity = userLiked.size();
+		for (user u:userLiked){
+			popularity = popularity + u.numberOfFollowers();
+		}
+		return popularity;
 	}
 	
 }
