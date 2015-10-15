@@ -20,8 +20,8 @@ public class document {
 		return tag;
 	}
 	
-	public int getLikes(){
-		return userLiked.size();
+	public List<user> getUserLiked(){
+		return userLiked;
 	}
 	
 	//Adds a user to the list of users who liked this document
@@ -30,7 +30,7 @@ public class document {
 	}
 	
 	//Calculates the popularity of the document
-	public int calculatePop(int a){
+	public int calculatePop(){
 		int popularity = userLiked.size();
 		for (user u:userLiked){
 			popularity = popularity + u.numberOfFollowers();
