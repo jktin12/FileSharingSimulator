@@ -37,7 +37,7 @@ public class user {
 						currentBest = d;
 					}
 				}
-				//Add the highest popularity document to the top3 list
+				//Add the highest popularity document to the top5 list
 				top5.add(currentBest);
 				temp.remove(currentBest);
 			}
