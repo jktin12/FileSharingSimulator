@@ -1,6 +1,6 @@
 --------README for 3110 project--------
 
-Team Name: nullSquadException
+Team Name: nullSquad
 
 Marc teBoekhorst
 
