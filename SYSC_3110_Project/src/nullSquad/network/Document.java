@@ -100,17 +100,18 @@ public class Document
 	 */
 	public boolean equals(Object o)
 	{
-		if(this.equals(o))
-			return true;
-		if(!(o instanceof Document))
-			return false;
-		else
-		{	
-			Document d = (Document)o;
-			if(d.docID == this.docID)
+			// If the two object references are equal, return true
+			if (this == o)
 				return true;
-		}
-		return false;
+			
+			
+			// If the object is not an instance of Document, return false
+			if (!(o instanceof Document))
+				return false;
+
+			// Returns whether the two document IDs are the same
+			return (((Document) o).docID == this.docID);
+
 	}
 	
 	/**
