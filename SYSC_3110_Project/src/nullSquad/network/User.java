@@ -84,10 +84,11 @@ public abstract class User
 	}
 
 	/**
-	 * Adds a user to the list of followers 
+	 * Adds a user to the list of followers
 	 * 
-	 * @param user The user to add the list of followers
-	 * @return 
+	 * @param user
+	 *            The user to add the list of followers
+	 * @return
 	 */
 	public boolean addFollower(User user)
 	{
@@ -98,21 +99,24 @@ public abstract class User
 		// Add the user to the list of people who are following this user
 		return followers.add(user);
 	}
-	
+
 	/**
 	 * Removes the Follower from the list of followers
+	 * 
 	 * @param user
-	 * @return Whether or not the follower was removed successfully 
+	 * @return Whether or not the follower was removed successfully
 	 */
 	public boolean removeFollower(User user)
 	{
 		// Returns whether or not the user was removed
-		return followers.remove(user);	
+		return followers.remove(user);
 	}
 
 	/**
 	 * Follows the specified user
-	 * @param user the user to be followed
+	 * 
+	 * @param user
+	 *            the user to be followed
 	 * @return Returns whether or not the user was followed successfully
 	 */
 	public boolean followUser(User user)
@@ -125,15 +129,58 @@ public abstract class User
 		return this.following.add(user);
 
 	}
-	
+
 	/**
+	 * Unfollows the specified user
 	 * 
 	 * @param user
-	 * @return
+	 *            The user to unfollow
+	 * @return Whether or not the user was unfollowed successfully
 	 */
 	public boolean unfollowUser(User user)
 	{
+		// Check to see if the user was successfully unfollowed
+		if (!user.removeFollower(this))
+			return false;
+
+		// Remove user from following list
+		return this.following.remove(user);
+	}
+	
+	
+	
+	/**
+	 * Overrides the equals method (from Object)
+	 * Checks to see if two user objects are the same
+	 * 
+	 * @param o The object to compare to
+	 * @return Returns whether or not two objects are the same
+	 */
+	@Override
+	public boolean equals(Object o)
+	{
+		// If the address of the two objects is the same, they are equivilent
+		if(this == o)
+			return true;
 		
+		// If the object is not an instance of user, return false
+		if(! (o instanceof User))
+			return false;
+		
+		// If the user ID of both instances are the same, they are equivilent users
+		return (this.userID == ((User) o).userID);
+	}
+
+	/**
+	 * Gets the string representation of the user
+	 * @return Returns a string representation of this user
+	 */
+	@Override
+	public String toString()
+	{
+		return "User ID: " + this.userID + "\nTaste: " + this.taste + "\nFollowers: " 
+					+ followers.size() + "\nFollowing: " + this.following.size() + "\nNumber of Documents Liked: " 
+					+ this.likedDocuments.size() + "\n";
 	}
 
 }
