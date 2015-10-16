@@ -1,14 +1,13 @@
 /**
  * Title: SYSC 3110 Project
- * Created By: Michael Vezina
+ * @author MVezina
  * Student Number: 100934579
- * Team: nullSquad
+ * Team: noSquad
  */
 
 package nullSquad.network;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public abstract class User
 {
@@ -21,34 +20,34 @@ public abstract class User
 	/**
 	 * Creates a user with the specified userID and taste
 	 * 
-	 * @param userID
-	 *            User ID of the user to be created
-	 * @param taste
-	 *            The taste of the user
+	 * @param userID User ID of the user to be created
+	 * @param taste The taste of the user
+	 * @author MVezina
 	 */
 	public User(int userID, String taste)
 	{
 		this.userID = userID;
 		this.taste = taste;
-
 		followers = new ArrayList<>();
 		following = new ArrayList<>();
-
 		likedDocuments = new ArrayList<>();
 	}
 
 	/**
 	 * The action that is run by the user when the simulator calls it. This
-	 * method needs to be implemented by subclasses
+	 * method needs to be implemented by subclasses.
+	 * 
+	 * @param net The main network for the simulation
+	 * @author MVezina
 	 */
-	public abstract void act();
+	public abstract void act(Network net);
 
 	/**
 	 * Called When the User wants to like a document
 	 * 
-	 * @param doc
-	 *            The Document that the user is going to like
+	 * @param doc The Document that the user is going to like
 	 * @return Whether or not the document was added successfully
+	 * @author MVezina
 	 */
 	public boolean likeDocument(Document doc)
 	{
@@ -69,6 +68,7 @@ public abstract class User
 	 * 
 	 * @param doc the document to be unliked
 	 * @return Returns whether or not the document was unliked successfully
+	 * @author MVezina
 	 */
 	public boolean unlikeDocument(Document doc)
 	{
@@ -87,6 +87,7 @@ public abstract class User
 	 * 
 	 * @param user The user to add the list of followers
 	 * @return Whether or not the follower was added
+	 * @author MVezina
 	 */
 	public boolean addFollower(User user)
 	{
@@ -103,6 +104,7 @@ public abstract class User
 	 * 
 	 * @param user The User to remove as a follower
 	 * @return Whether or not the follower was removed successfully
+	 * @author MVezina
 	 */
 	public boolean removeFollower(User user)
 	{
@@ -115,6 +117,7 @@ public abstract class User
 	 * 
 	 * @param user the user to be followed
 	 * @return Returns whether or not the user was followed successfully
+	 * @author MVezina
 	 */
 	public boolean followUser(User user)
 	{
@@ -124,7 +127,59 @@ public abstract class User
 
 		// Add the user to the list of users being followed by this user
 		return this.following.add(user);
+	}
 
+	/**
+	 * Gets the User ID of the user
+	 * 
+	 * @return the user ID
+	 * @author MVezina
+	 */
+	public int getUserID()
+	{
+		return this.userID;
+	}
+
+	/**
+	 * @return The taste of the user
+	 * @author MVezina
+	 */
+	public String getTaste()
+	{
+		return this.taste;
+	}
+
+	/**
+	 * Gets all of the users that are currently following this user
+	 * 
+	 * @return The list of followers
+	 * @author MVezina
+	 */
+	public List<User> getFollowers()
+	{
+		return this.followers;
+	}
+
+	/**
+	 * Gets all of the users that this user is following
+	 * 
+	 * @return The list of users being followed by this user
+	 * @author MVezina
+	 */
+	public List<User> getFollowing()
+	{
+		return this.following;
+	}
+
+	/**
+	 * Gets all of the documents liked by this user
+	 * 
+	 * @return The List of documents liked by this user
+	 * @author MVezina
+	 */
+	public List<Document> getLikedDocuments()
+	{
+		return this.likedDocuments;
 	}
 
 	/**
@@ -132,6 +187,7 @@ public abstract class User
 	 * 
 	 * @param user The user to unfollow
 	 * @return Whether or not the user was unfollowed successfully
+	 * @author MVezina
 	 */
 	public boolean unfollowUser(User user)
 	{
@@ -149,6 +205,7 @@ public abstract class User
 	 * 
 	 * @param o The object to compare to
 	 * @return Returns whether or not two objects are the same
+	 * @author MVezina
 	 */
 	@Override
 	public boolean equals(Object o)
@@ -170,6 +227,7 @@ public abstract class User
 	 * Gets the string representation of the user
 	 * 
 	 * @return Returns a string representation of this user
+	 * @author MVezina
 	 */
 	@Override
 	public String toString()
