@@ -21,23 +21,26 @@ public class Document
 	private Date dateUploaded;
 	
 	/**
+	 * @author Marc Tebo
 	 * Creates a Document with a name, tag and producer who created the document
 	 * 
 	 * @param name	Name of the document
 	 * @param tag	Search tag that will be used to find this document
 	 * @param producer	Creator of the document
+	 * 
 	 */
-	public Document(String name, String tag, Producer producer)
+	public Document(String name, String tag, Producer producer, int docID)
 	{
 		this.name = name;
 		this.tag = tag;
 		this.producer = producer;
-		
+		this.docID = docID;
 		likedBy = new ArrayList<>();
 		dateUploaded = Calendar.getInstance().getTime();
 	}
 	
 	/**
+	 * @author Marc Tebo
 	 * User who "likes" this document will be added to the list of people who like this document
 	 * 
 	 * @param user User who "likes" the document
@@ -55,6 +58,7 @@ public class Document
 	}
 	
 	/**
+	 * @author Marc Tebo
 	 * User who wants to "unlike" this document will be removed from the list of people who liked it
 	 * @param user	User who "unlikes" the document
 	 * @return	whether or not the doucument was "unliked"
@@ -70,6 +74,7 @@ public class Document
 	}
 	
 	/**
+	 * @author Marc Tebo
 	 * Gets all users who have "liked" this document
 	 * @return	List of users who "liked" the document
 	 */
@@ -79,6 +84,7 @@ public class Document
 	}
 	
 	/**
+	 * @author Marc Tebo
 	 * Returns string representation of the document
 	 */
 	public String toString()
@@ -88,6 +94,7 @@ public class Document
 	}
 	
 	/**
+	 * @author Marc Tebo
 	 * Compares if two documents are the same
 	 * @returns true if documents have the same unique bookID
 	 */
@@ -107,6 +114,7 @@ public class Document
 	}
 	
 	/**
+	 * @author Marc Tebo
 	 * @return	Document Tag
 	 */
 	public String getTag()
@@ -115,7 +123,7 @@ public class Document
 	}
 	
 	/**
-	 * 
+	 * @author Marc Tebo
 	 * @return	Document ID
 	 */
 	public int getDocID()
@@ -124,7 +132,7 @@ public class Document
 	}
 	
 	/**
-	 * 
+	 * @author Marc Tebo
 	 * @return	Document Upload Date
 	 */
 	public Date getDate()
