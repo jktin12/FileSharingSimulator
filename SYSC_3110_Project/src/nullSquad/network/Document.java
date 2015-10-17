@@ -78,7 +78,7 @@ public class Document
 	 * Gets all users who have "liked" this document
 	 * @return	List of users who "liked" the document
 	 */
-	public List<User> allLikers()
+	public List<User> getUserLikes()
 	{
 		return likedBy;
 	}
@@ -127,7 +127,7 @@ public class Document
 	 * @author Marc Tebo
 	 * @return	Document ID
 	 */
-	public int getDocID()
+	public int getDocumentID()
 	{
 		return docID;
 	}
@@ -136,9 +136,17 @@ public class Document
 	 * @author Marc Tebo
 	 * @return	Document Upload Date
 	 */
-	public Date getDate()
+	public Date getDateUploaded()
 	{
 		return dateUploaded;
+	}
+	
+	/**
+	 * @return Document Name
+	 */
+	public String getDocumentName()
+	{
+		return name;
 	}
 	
 	/**
