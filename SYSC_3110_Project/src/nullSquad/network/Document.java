@@ -140,5 +140,14 @@ public class Document
 	{
 		return dateUploaded;
 	}
+	
+	/**
+	 * @author Justin Krol
+	 * @return	Document Producer
+	 */
+	public Producer getProducer()
+	{
+		return producer;
+	}
 
 }
