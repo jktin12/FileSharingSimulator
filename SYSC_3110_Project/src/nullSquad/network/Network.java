@@ -93,7 +93,7 @@ public class Network
 				//find the document in the topKDocuments list with the least number of likes
 				Document min = findDocMinLikes(topKDocuments);
 				//Check if doc has more likes than this document
-				if(doc.allLikers().size() > doc.allLikers().size())
+				if(doc.getUserLikes().size() > doc.getUserLikes().size())
 				{
 					//if it does, replace the min likes document with the new one
 					topKDocuments.remove(min);
@@ -186,7 +186,7 @@ public class Network
 		
 		for(Document d: topKDocuments)
 		{
-			if(d.allLikers().size() < dMinLikes.allLikers().size())
+			if(d.getUserLikes().size() < dMinLikes.getUserLikes().size())
 			{
 				dMinLikes = d;
 			}
