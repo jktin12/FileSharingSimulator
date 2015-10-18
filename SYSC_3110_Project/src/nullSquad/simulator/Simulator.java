@@ -71,7 +71,7 @@ public class Simulator
 		Scanner in = new Scanner(System.in);
 		String tag;
 		
-		System.out.println("Please enter" + numberOfTags + " tastes/tags");
+		System.out.println("Please enter " + numberOfTags + " tastes/tags:");
 		for (int x=0; x<numberOfTags;x++) {
 			tag = in.next();
 			tastesAndTags.add(tag);
@@ -93,7 +93,6 @@ public class Simulator
 		network.getUsers().get(randomUser).act(network);
 	}
 	
-
 	/**
 	 * Simple-console based implementation of the
 	 * simulation
@@ -109,7 +108,7 @@ public class Simulator
 	        Scanner in = new Scanner(System.in);
 	        
 	        System.out.println("Welcome to a simulation of a file-sharing social network");
-	        
+	      
 	        System.out.println("Enter the number of tags:");
 	        numberOfTags = in.nextInt();
 	        System.out.println("Enter the number of consumers:");
@@ -117,22 +116,16 @@ public class Simulator
 	        System.out.println("Enter the number of producers:");
 	        numberOfProducers = in.nextInt();
 	        
-	        System.out.println("Would you like to run the simulation? (y/n)");
+	        System.out.println("Would you like to run the simulation? (yes/no)");
 	        start = in.next();
-	        
-	        while ((start!="y") || (start!="n")) {
-	        	System.out.println("Invalid input please enter either y/n");
-	        	start = in.next();
-	        }
-	       
-	        if (start=="y"){
+	 
+	        if (start.equals("yes")){
 	        	System.out.println("Simulation starting:");
 	          	addTastesAndTags(numberOfTags);
 	        	addProducers(numberOfProducers);
 	        	addConsumers(numberOfConsumers);
 	  
-	        	
-	        	while (start=="y") {
+	        	while (start.equals("yes")) {
 	        		
 	        		simulationStep();	
 	        		
@@ -146,14 +139,9 @@ public class Simulator
 	        			System.out.print(document.toString());
 	        		}
 	        		
-	        		System.out.println("Would you like to continue the simulation? (y/n)");
+	        		System.out.println("Would you like to continue the simulation? (yes/no)");
 	        		start = in.next();
-	        		
-	        		while ((start!="y") || (start!="n")) {
-	        			System.out.println("Invalid input please enter either y/n");
-	      	        	start = in.next();
-	      	        }
-	        	}  	
+	        	}  
 	        }
 	        System.out.println("Exiting...");       
 	}
