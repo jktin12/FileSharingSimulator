@@ -1,7 +1,8 @@
 /**
  * Title: SYSC 3110 Project
+ * @author Justin Krol
+ * Student Number: 100941980
  * Team: nullSquad
- * To be implemented by Justin
  */
 
 package nullSquad.network;
