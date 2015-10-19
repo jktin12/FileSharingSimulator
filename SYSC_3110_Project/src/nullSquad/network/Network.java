@@ -12,7 +12,6 @@ import java.util.List;
 
 public class Network
 {
-	private int nextAvailableUserID = 0;
 	private List<User> users;
 	private List<Document> allDocuments;
 	
@@ -35,23 +34,22 @@ public class Network
 	 * @author Justin Krol
 	 * Add a user to the network if it has not already been added
 	 * @param user who will be added to the network
-	 * @return userID if the user could be added, -1 if the user could not
+	 * @return true if the user could be added, false if the user could not
 	 * because it was already registered or the user argument was null
 	 */
-	public int registerUser(User user)
+	public boolean registerUser(User user)
 	{
 		if(user != null)
 		{
 			if(users.contains(user)){
 				//System.out.println("User has already been added to the network");
-				return -1;
+				return false;
 			}
 			users.add(user);
-			nextAvailableUserID++;
-			return nextAvailableUserID-1;
+			return true;
 		}
 		//System.out.println("No user object to register (null)");
-		return -1;
+		return false;
 	}
 	
 	/**
