@@ -12,7 +12,7 @@ import java.util.List;
 
 public class Network
 {
-	private int nextAvailableUserID = 0;
+	private int nextAvailableUserID = 1;
 	private List<User> users;
 	private List<Document> allDocuments;
 	
