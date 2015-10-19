@@ -29,12 +29,12 @@ public class Document
 	 * @param producer	Creator of the document
 	 * 
 	 */
-	public Document(String name, String tag, Producer producer, int docID)
+	public Document(String name, String tag, Producer producer)
 	{
 		this.name = name;
 		this.tag = tag;
 		this.producer = producer;
-		this.docID = docID;
+		docID = 0;
 		likedBy = new ArrayList<>();
 		dateUploaded = Calendar.getInstance().getTime();
 	}
@@ -157,5 +157,13 @@ public class Document
 	{
 		return producer;
 	}
-
+	/**
+	 * Sets the document ID to the integer specified in the parameters
+	 * @author Marc Tebo
+	 * @param docID	the document ID that will replace the existing docID
+	 */
+	public void setDocumentID(int docID)
+	{
+		this.docID = docID;
+	}
 }
