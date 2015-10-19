@@ -12,7 +12,7 @@ import java.util.List;
 
 public class Network
 {
-	private int nextAvailableUserID = 1;
+	private int nextAvailableUserID = 1, nextAvailableDocID = 1;
 	private List<User> users;
 	private List<Document> allDocuments;
 	
@@ -76,12 +76,6 @@ public class Network
 		return false;
 	}
 	
-	//being moved from Network.java to Consumer.java
-	public int calculatePayoff(List<Document> documents)
-	{
-		return 0;
-	}
-	
 	public List<Document> search(int topK)
 	{
 		List<Document> topKDocuments = new ArrayList<Document>();
@@ -112,22 +106,23 @@ public class Network
 	 * @author Justin Krol
 	 * Add a document to the network if it has not already been added
 	 * @param document that will be added to the network
-	 * @return true if the document could be added, false if the document could not
+	 * @return docID if the document could be added, -1 if the document could not
 	 * because it was already added or the document argument was null
 	 */
-	public boolean addDocument(Document doc)
+	public int addDocument(Document doc)
 	{
 		if(doc != null)
 		{
 			if(allDocuments.contains(doc)){
 				//System.out.println("Document has already been added to the network");
-				return false;
+				return -1;
 			}
 			allDocuments.add(doc);
-			return true;
+			nextAvailableDocID++;
+			return nextAvailableDocID;
 		}
 		//System.out.println("No document object to add (null)");
-		return false;
+		return -1;
 	}
 	
 	/**
