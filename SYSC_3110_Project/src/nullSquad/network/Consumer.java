@@ -6,6 +6,7 @@
  *         Team: noSquad
  */
 
+
 package nullSquad.network;
 
 import nullSquad.document.*;
@@ -64,7 +65,7 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 
 		// Calculates the payoff of the search results
 		int payoff = calculatePayoff(documentResults);
-		System.out.println("User: " + userID + " has searched for the top 10 documents.\nThe documents returned by the search resulted in a payoff of: " + payoff);
+		System.out.println("User: " + userName + " has Searched.\nThe documents returned by the search resulted in a payoff of: " + payoff);
 
 		// Like all documents that match the users taste
 		for (Document d : documentResults)
@@ -90,7 +91,6 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 	 */
 	public int calculatePayoff(List<Document> documents)
 	{
-		System.out.println("Calculating the payoff strategy for the consumer\n");
 		return payoffStrategy.consumerPayoffStrategy(this, documents);
 	}
 
