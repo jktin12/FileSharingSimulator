@@ -58,7 +58,7 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 			System.out.println("The User is not currently registered.");
 			return;
 		}
-
+		
 		// Searches for the top k results (k = random number between 1-10)
 		List<Document> documentResults = net.search(this, (new Random()).nextInt(10) + 1);
 
@@ -72,8 +72,8 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 			if (d.getTag().equals(taste))
 			{
 				// Likes the document
-				this.likeDocument(d);
-				System.out.println("User: " + userID + " has liked Document ID: " + d.getDocumentID() + " (" + d.getDocumentName() + ") because the tag matches the user's taste!");
+				if(this.likeDocument(d))
+					System.out.println("User: " + userID + " has liked Document ID: " + d.getDocumentID() + " (" + d.getDocumentName() + ") because the tag matches the user's taste!");
 			}
 		}
 
