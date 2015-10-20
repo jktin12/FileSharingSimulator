@@ -8,7 +8,9 @@
 package nullSquad.network;
 
 import nullSquad.document.*;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Network
@@ -113,7 +115,7 @@ public class Network
 				}	
 				
 				
-				for (User u : user.getFollowing())
+				for (User u : user.getFollowing())	//check all users that this user follows
 				{
 					if(doc.getUserLikes().contains(u))
 					{
@@ -136,12 +138,15 @@ public class Network
 					topKDocuments.add(doc);
 				}
 			}
-			
-			
 		}
 		
-		
-		
+		else if(topKDocuments.size() > topK)
+		{
+			Collections.sort(topKDocuments);
+			Collections.reverse(topKDocuments);
+			topKDocuments.subList(0, topK-1);
+		}
+
 		
 		//After all documents have been checked, return the list of topK documents
 		return topKDocuments;
