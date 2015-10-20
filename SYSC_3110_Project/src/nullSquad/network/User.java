@@ -1,32 +1,35 @@
 /**
  * Title: SYSC 3110 Project
+ * 
  * @author MVezina
- * Student Number: 100934579
- * Team: noSquad
+ *         Student Number: 100934579
+ *         Team: noSquad
  */
 
 package nullSquad.network;
 
 import java.util.*;
 
-public abstract class User
+import nullSquad.document.Document;
+
+public abstract class User 
 {
 	protected int				userID;
+	protected String			userName;
 	protected List<User>		followers;
 	protected List<User>		following;
 	protected List<Document>	likedDocuments;
 	protected String			taste;
 
 	/**
-	 * Creates a user with the specified userID and taste
+	 * Creates a user with the specified taste
 	 * 
-	 * @param userID User ID of the user to be created
 	 * @param taste The taste of the user
 	 * @author MVezina
 	 */
-	public User(int userID, String taste)
+	public User(String taste)
 	{
-		this.userID = userID;
+		this.userID = 0;
 		this.taste = taste;
 		followers = new ArrayList<>();
 		following = new ArrayList<>();
@@ -34,13 +37,20 @@ public abstract class User
 	}
 
 	/**
-	 * The action that is run by the user when the simulator calls it. This
-	 * method needs to be implemented by subclasses.
+	 * The action that is run by the user when the simulator calls it.
+	 * Subclasses will override this method, but must call this first
 	 * 
 	 * @param net The main network for the simulation
 	 * @author MVezina
 	 */
-	public abstract void act(Network net);
+	public void act(Network net)
+	{
+		// Registers this user with the network
+		// Registering a user returns the userID
+		if (userID <= 0)
+			this.userID = net.registerUser(this);
+
+	}
 
 	/**
 	 * Called When the User wants to like a document
@@ -49,14 +59,18 @@ public abstract class User
 	 * @return Whether or not the document was added successfully
 	 * @author MVezina
 	 */
-	public boolean likeDocument(Document doc)
+	protected boolean likeDocument(Document doc)
 	{
+		if (doc == null)
+			return false;
+
 		// Check to see if the document already exists in the list
 		if (!likedDocuments.contains(doc))
 			return false;
 
 		// Adds the document to the list of liked documents
 		likedDocuments.add(doc);
+		
 
 		// Adds this user to the list of users who like the document and return
 		// the result
@@ -70,8 +84,11 @@ public abstract class User
 	 * @return Returns whether or not the document was unliked successfully
 	 * @author MVezina
 	 */
-	public boolean unlikeDocument(Document doc)
+	protected boolean unlikeDocument(Document doc)
 	{
+		if (doc == null)
+			return false;
+
 		// Checks to make sure that the document has been liked before unliking
 		// the document
 		if (!likedDocuments.contains(doc))
@@ -91,6 +108,9 @@ public abstract class User
 	 */
 	public boolean addFollower(User user)
 	{
+		if (user == null)
+			return false;
+
 		// Checks to see if the user is already following this user
 		if (followers.contains(user))
 			return false;
@@ -108,6 +128,9 @@ public abstract class User
 	 */
 	public boolean removeFollower(User user)
 	{
+		if (user == null)
+			return false;
+
 		// Returns whether or not the user was removed
 		return followers.remove(user);
 	}
@@ -119,8 +142,11 @@ public abstract class User
 	 * @return Returns whether or not the user was followed successfully
 	 * @author MVezina
 	 */
-	public boolean followUser(User user)
+	protected boolean followUser(User user)
 	{
+		if (user == null)
+			return false;
+
 		// Checks to see if the specified user can be followed
 		if (!user.addFollower(this))
 			return false;
@@ -138,6 +164,17 @@ public abstract class User
 	public int getUserID()
 	{
 		return this.userID;
+	}
+
+	/**
+	 * Gets the user name
+	 * 
+	 * @return the user name
+	 * @author MVezina
+	 */
+	public String getUserName()
+	{
+		return this.userName;
 	}
 
 	/**
@@ -189,7 +226,7 @@ public abstract class User
 	 * @return Whether or not the user was unfollowed successfully
 	 * @author MVezina
 	 */
-	public boolean unfollowUser(User user)
+	protected boolean unfollowUser(User user)
 	{
 		// Check to see if the user was successfully unfollowed
 		if (!user.removeFollower(this))
@@ -218,9 +255,20 @@ public abstract class User
 		if (!(o instanceof User))
 			return false;
 
-		// If the user ID of both instances are the same, they are equivalent
-		// users
-		return (this.userID == ((User) o).userID);
+		// Cast object to user
+		User u = (User) o;
+
+		// If either IDs are set, compare by ID.
+		// If one is set, and the other is unset, return false (!=)
+		// If they are different, return false (!=)
+		// If they are both not set (userID == 0), then compare by other fields
+		if (userID > 0 || u.getUserID() > 0)
+			return (this.userID == ((User) o).userID);
+
+		// else compare by other fields (number of following, number of
+		// followers, taste of user, number of liked documents
+		return (this.userName.equals(u.userName) && this.likedDocuments.size() == u.getLikedDocuments().size() && this.followers.size() == u.getFollowers().size() && this.following.size() == u.getFollowing().size() && this.taste.equals(u.getTaste()));
+
 	}
 
 	/**
@@ -232,7 +280,7 @@ public abstract class User
 	@Override
 	public String toString()
 	{
-		return "User ID: " + this.userID + "\nTaste: " + this.taste + "\nFollowers: " + followers.size() + "\nFollowing: " + this.following.size() + "\nNumber of Documents Liked: " + this.likedDocuments.size() + "\n";
+		return "User ID: " + this.userID + "\nUser Name: " + this.userName + "\nTaste: " + this.taste + "\nFollowers: " + followers.size() + "\nFollowing: " + this.following.size() + "\nNumber of Documents Liked: " + this.likedDocuments.size() + "\n";
 	}
 
 }
