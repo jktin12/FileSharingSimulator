@@ -96,17 +96,12 @@ public class Simulator
 		Scanner in = new Scanner(System.in);
 
 		System.out.println("Welcome to a simulation of a file-sharing social network");
-		/*
-		 * System.out.println("Enter the number of tags: (1-6)");
-		 * numberOfTags = in.nextInt();
-		 * System.out.println("Enter the number of consumers:");
-		 * numberOfConsumers = in.nextInt();
-		 * System.out.println("Enter the number of producers:");
-		 * numberOfProducers = in.nextInt();
-		 */
-		numberOfTags = 2;
-		numberOfConsumers = 2;
-		numberOfProducers = 2;
+		
+		  System.out.println("Enter the number of consumers:");
+		  numberOfConsumers = in.nextInt();
+		  System.out.println("Enter the number of producers:");
+		  numberOfProducers = in.nextInt();
+		 
 
 		System.out.println("Would you like to run the simulation? (yes/no)");
 		start = in.next();
