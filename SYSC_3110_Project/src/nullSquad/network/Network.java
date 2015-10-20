@@ -14,6 +14,7 @@ import java.util.List;
 public class Network
 {
 	private int nextAvailableUserID = 1;
+	private int nextAvailableDocID = 1;
 	private List<User> users;
 	private List<Document> allDocuments;
 	
@@ -126,9 +127,10 @@ public class Network
 		if(doc != null)
 		{
 			if(allDocuments.contains(doc)){
-				//System.out.println("Document has already been added to the network");
+				System.out.println("Document has already been added to the network");
 				return false;
 			}
+			doc.setDocumentID(nextAvailableDocID ++); 
 			allDocuments.add(doc);
 			return true;
 		}
