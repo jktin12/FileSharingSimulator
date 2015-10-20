@@ -42,7 +42,7 @@ public class Simulator
 		int randomTaste = randomNumber.nextInt(allTastesAndTags.size());
 		for (int x=0; x<numberOfConsumers;x++) 
 		{	
-			User user = new Consumer(allTastesAndTags.get(randomTaste));
+			User user = new Consumer("Consumer"+x,allTastesAndTags.get(randomTaste));
 			network.registerUser(user);
 		}
 	}
@@ -59,7 +59,7 @@ public class Simulator
 		int randomTaste = randomNumber.nextInt(allTastesAndTags.size());
 		for (int x=0; x<numberOfProducers;x++) 
 		{
-			User user = new Producer(allTastesAndTags.get(randomTaste));
+			User user = new Producer("Producer"+x,allTastesAndTags.get(randomTaste));
 			network.registerUser(user);
 		}
 	}
