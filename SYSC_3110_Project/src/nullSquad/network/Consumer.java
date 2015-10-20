@@ -123,11 +123,6 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 					totalPayoff += 2;
 			}
 
-			// Remove 5 points of the user has already liked the document
-			if (consumer.getLikedDocuments().contains(d))
-			{
-				totalPayoff -= 3;
-			}
 
 		}
 
