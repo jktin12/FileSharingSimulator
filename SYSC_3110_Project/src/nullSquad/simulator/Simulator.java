@@ -14,7 +14,8 @@ public class Simulator
 {
 	private Network network;
 	private Random randomNumber;
-	private List<String> tastesAndTags;
+	private enum tags { MUSIC, BOOKS, GAMING, SCHOOL, SPORTS, PROGRAMMING }
+	private List<String> allTastesAndTags;
 	
 	/**
 	 * Creates a simulator with specified network
@@ -26,57 +27,58 @@ public class Simulator
 	{
 		this.network = network;
 		randomNumber = new Random();
-		tastesAndTags = new ArrayList<String>();
+		allTastesAndTags = new ArrayList<String>();
 	}
 	
 	/**
 	 * Adds the specified number of consumers into the network
-	 * with userID x
+	 *
 	 * 
 	 * @param numberOfConsumers Number of consumers in the network
 	 * @author Raymond Wu
 	 */
-	private void addConsumers(int numberOfConsumers) 
+	private void createConsumers(int numberOfConsumers) 
 	{
-		int randomTaste = randomNumber.nextInt(tastesAndTags.size());
-		for (int x=0; x<numberOfConsumers;x++) {
-			User user = new Consumer(tastesAndTags.get(randomTaste));
+		int randomTaste = randomNumber.nextInt(allTastesAndTags.size());
+		for (int x=0; x<numberOfConsumers;x++) 
+		{	
+			User user = new Consumer(allTastesAndTags.get(randomTaste));
 			network.registerUser(user);
 		}
 	}
 	
 	/**
 	 * Adds the specified number of producers into the network
-	 * with userID 10x
+	 * 
 	 * 
 	 * @param numberOfProducers Number of producers in the network
 	 * @author Raymond Wu
 	 */
-	private void addProducers(int numberOfProducers)
+	private void createProducers(int numberOfProducers)
 	{
-		int randomTaste = randomNumber.nextInt(tastesAndTags.size());
-		for (int x=0; x<numberOfProducers;x++) {
-			User user = new Producer(tastesAndTags.get(randomTaste));
+		int randomTaste = randomNumber.nextInt(allTastesAndTags.size());
+		for (int x=0; x<numberOfProducers;x++) 
+		{
+			User user = new Producer(allTastesAndTags.get(randomTaste));
 			network.registerUser(user);
 		}
 	}
 	
 	/**
-	 * Asks the user to input different tastes and tags
+	 * Sets number of random tags in simulation based on given parameter
 	 * 
 	 * @param numberOfTags Number of tastes/tags to be used in network
 	 * @author Raymond Wu
 	 */
-	private void addTastesAndTags(int numberOfTags)
+	private void setTastesAndTags(int numberOfTags)
 	{
-		Scanner in = new Scanner(System.in);
-		String tag;
-		
-		System.out.println("Please enter " + numberOfTags + " tastes/tags:");
-		for (int x=0; x<numberOfTags;x++) {
-			tag = in.next();
-			tastesAndTags.add(tag);
-		}	
+		while (allTastesAndTags.size() < numberOfTags) {
+			//Obtain a random tag from tags
+			String randomTag = tags.values()[randomNumber.nextInt(tags.values().length)].toString();
+			if (!(allTastesAndTags.contains(randomTag))) {
+				allTastesAndTags.add(randomTag);
+			}
+		}
 	}
 	
 	/**
@@ -110,7 +112,7 @@ public class Simulator
 	        
 	        System.out.println("Welcome to a simulation of a file-sharing social network");
 	      
-	        System.out.println("Enter the number of tags:");
+	        System.out.println("Enter the number of tags: (1-6)");
 	        numberOfTags = in.nextInt();
 	        System.out.println("Enter the number of consumers:");
 	        numberOfConsumers = in.nextInt();
@@ -122,16 +124,16 @@ public class Simulator
 	 
 	        if (start.equals("yes")){
 	        	System.out.println("Simulation starting:");
-	          	addTastesAndTags(numberOfTags);
-	        	addProducers(numberOfProducers);
-	        	addConsumers(numberOfConsumers);
-	  
+	          	setTastesAndTags(numberOfTags);
+	        	createProducers(numberOfProducers);
+	        	createConsumers(numberOfConsumers);
+	        
 	        	while (start.equals("yes")) {
 	        		
 	        		simulationStep();	
 	        		
 	        		System.out.println("Current users in the simulation:");
-	        		for (User user:network.getUsers()) {
+	        		for (User user : network.getUsers()) {
 	        			System.out.print(user.toString());
 	        		}
 	        		
