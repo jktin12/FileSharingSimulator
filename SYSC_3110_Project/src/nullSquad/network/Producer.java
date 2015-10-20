@@ -57,7 +57,10 @@ public class Producer extends User implements ProducerPayoffStrategy,
 	public boolean addFollower(User user)
 	{
 		boolean res = super.addFollower(user);
-		System.out.println("A User has followed you! Your updated payoff is: " + calculatePayoff());
+		
+		if (res)
+			System.out.println(this.getUserName() + " has been followed by " + user.getUserName() + ". Updated Producer Payoff: " + calculatePayoff());
+		
 		return res;
 	};
 
