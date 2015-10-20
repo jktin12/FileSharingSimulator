@@ -82,7 +82,7 @@ public class Producer extends User implements ProducerPayoffStrategy,
 		}
 
 		// Create a new document
-		Document newDoc = new Document("Document (" + Calendar.getInstance().getTime() + ")", this.taste, this);
+		Document newDoc = new Document("Document " + this.taste + " (" + Calendar.getInstance().getTime() + ")", this.taste, this);
 
 		// Add new document to document produced
 		docsProduced.add(newDoc);
@@ -178,6 +178,7 @@ public class Producer extends User implements ProducerPayoffStrategy,
 		return (this.docsProduced.size() == p.docsProduced.size());
 
 	}
+	
 
 	/**
 	 * DocumentLiked Event Handler
@@ -188,7 +189,7 @@ public class Producer extends User implements ProducerPayoffStrategy,
 		if (docLikeEvent.getSource().getProducer().equals(this))
 		{
 			// Calculate and print the payoff
-			System.out.println("Your Document has been liked! Current Payoff: " + calculatePayoff());
+			System.out.println("Producer: " + this.getUserName() + " Document has been liked! Current Payoff: " + calculatePayoff());
 		}
 
 	}
