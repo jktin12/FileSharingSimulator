@@ -78,7 +78,7 @@ public abstract class User
 			return false;
 
 		// Check to see if the document already exists in the list
-		if (!likedDocuments.contains(doc))
+		if (likedDocuments.contains(doc))
 			return false;
 
 		// Adds the document to the list of liked documents
