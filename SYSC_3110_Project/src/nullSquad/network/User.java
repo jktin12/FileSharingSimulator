@@ -12,7 +12,7 @@ import java.util.*;
 
 import nullSquad.document.Document;
 
-public abstract class User 
+public abstract class User
 {
 	protected int				userID;
 	protected String			userName;
@@ -29,12 +29,12 @@ public abstract class User
 	 */
 	public User(String userName, String taste)
 	{
-		if(userName == null)
+		if (userName == null)
 			userName = "";
-		
-		if(taste == null)
-			taste = "";		
-		
+
+		if (taste == null)
+			taste = "";
+
 		this.userID = 0;
 		this.userName = userName;
 		this.taste = taste;
@@ -50,13 +50,19 @@ public abstract class User
 	 * @param net The main network for the simulation
 	 * @author MVezina
 	 */
-	public void act(Network net)
+	public abstract void act(Network net);
+
+	/**
+	 * Registers the user with the specified network
+	 * @param net
+	 * @author MVezina
+	 */
+	public void registerUser(Network net)
 	{
 		// Registers this user with the network
 		// Registering a user returns the userID
 		if (userID <= 0)
 			this.userID = net.registerUser(this);
-
 	}
 
 	/**
@@ -77,7 +83,6 @@ public abstract class User
 
 		// Adds the document to the list of liked documents
 		likedDocuments.add(doc);
-		
 
 		// Adds this user to the list of users who like the document and return
 		// the result
@@ -254,8 +259,6 @@ public abstract class User
 	@Override
 	public boolean equals(Object o)
 	{
-		
-		
 		// If the address of the two objects is the same, they are equivalent
 		if (this == o)
 			return true;
