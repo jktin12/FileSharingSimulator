@@ -43,7 +43,7 @@ public class Simulator
 		for (int x=0; x<numberOfConsumers;x++) 
 		{	
 			User user = new Consumer("Consumer"+x,allTastesAndTags.get(randomTaste));
-			network.registerUser(user);
+			user.registerUser(network);
 		}
 	}
 	
@@ -60,7 +60,7 @@ public class Simulator
 		for (int x=0; x<numberOfProducers;x++) 
 		{
 			User user = new Producer("Producer"+x,allTastesAndTags.get(randomTaste));
-			network.registerUser(user);
+			user.registerUser(network);
 		}
 	}
 	
@@ -90,10 +90,11 @@ public class Simulator
 	public void simulationStep() 
 	{
 		//Generate a random number so the simulation can get a random user
-		int randomUser = randomNumber.nextInt(network.getUsers().size());
+		User randomUser = network.getUsers().get(randomNumber.nextInt(network.getUsers().size()));
 		
 		//Ask the random user to "act"
-		network.getUsers().get(randomUser).act(network);
+		System.out.println("User: " + randomUser.getUserName() + " is acting!");
+		randomUser.act(network);
 	}
 	
 	/**
@@ -111,13 +112,18 @@ public class Simulator
 	        Scanner in = new Scanner(System.in);
 	        
 	        System.out.println("Welcome to a simulation of a file-sharing social network");
-	      
+	      /*
 	        System.out.println("Enter the number of tags: (1-6)");
 	        numberOfTags = in.nextInt();
 	        System.out.println("Enter the number of consumers:");
 	        numberOfConsumers = in.nextInt();
 	        System.out.println("Enter the number of producers:");
 	        numberOfProducers = in.nextInt();
+	        */
+	        numberOfTags = 2;
+	        numberOfConsumers = 2;
+	        numberOfProducers = 2;
+	        
 	        
 	        System.out.println("Would you like to run the simulation? (yes/no)");
 	        start = in.next();
@@ -134,12 +140,12 @@ public class Simulator
 	        		
 	        		System.out.println("Current users in the simulation:");
 	        		for (User user : network.getUsers()) {
-	        			System.out.print(user.toString());
+	        			System.out.print(user.toString() + "\n");
 	        		}
 	        		
 	        		System.out.println("Current documents in the simulation:");
 	        		for (Document document : network.getAllDocuments()) {
-	        			System.out.print(document.toString());
+	        			System.out.print(document.toString() + "\n");
 	        		}
 	        		
 	        		System.out.println("Would you like to continue the simulation? (yes/no)");
