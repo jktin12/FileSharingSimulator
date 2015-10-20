@@ -4,12 +4,12 @@
  * Student Number: 100925246
  * Team: nullSquad
  */
-package nullSquad.network;
+package nullSquad.document;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+
+import nullSquad.network.Producer;
+import nullSquad.network.User;
 
 public class Document
 {
@@ -19,6 +19,7 @@ public class Document
 	private List<User> likedBy;
 	private Producer producer;
 	private Date dateUploaded;
+	private List<DocumentLikeListener> likeListeners;
 	
 	/**
 	 * @author Marc Tebo
@@ -36,8 +37,34 @@ public class Document
 		this.producer = producer;
 		docID = 0;
 		likedBy = new ArrayList<>();
+		likeListeners = new LinkedList<>();
+		
+		// By default, the producer listens to when the document gets a like
+		likeListeners.add(producer);
+		
 		dateUploaded = Calendar.getInstance().getTime();
 	}
+	
+	
+	/**
+	 * @param listener The listener to be added to the list
+	 * @author MVezina
+	 */
+	public void addLikeListener(DocumentLikeListener listener)
+	{
+		if(!likeListeners.contains(listener))
+			this.likeListeners.add(listener);
+	}
+	
+	/**
+	 * @param listener The listener to be removed from the list
+	 * @author MVezina
+	 */
+	public boolean removeLikeListener(DocumentLikeListener listener)
+	{
+		return likeListeners.remove(listener);
+	}
+	
 	
 	/**
 	 * @author Marc Tebo
@@ -51,9 +78,15 @@ public class Document
 		if (likedBy.contains(user))
 		{
 			return false;
+		}	
+		likedBy.add(user);
+		
+		// Iterate through all like listeners and notify that this document has been liked
+		for(DocumentLikeListener listener : likeListeners)
+		{
+			listener.DocumentLiked(new DocumentLikeEvent(this));
 		}
 		
-		likedBy.add(user);
 		return true;
 	}
 	
@@ -89,7 +122,7 @@ public class Document
 	 */
 	public String toString()
 	{		
-		return ("Name: " + this.name + "\nTag: " + this.tag + "\nProducer:  " + this.producer + "\nDate Uploaded: " + this.dateUploaded);
+		return ("Name: " + this.name + "\nDocument ID: " + docID + "\nTag: " + this.tag + "\nProducer:  " + this.producer + "\nDate Uploaded: " + this.dateUploaded);
 		
 	}
 	
