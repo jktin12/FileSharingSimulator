@@ -11,7 +11,7 @@ import java.util.*;
 import nullSquad.network.Producer;
 import nullSquad.network.User;
 
-public class Document
+public class Document implements Comparable<Document>
 {
 	private String name;
 	private String tag;
@@ -198,5 +198,15 @@ public class Document
 	public void setDocumentID(int docID)
 	{
 		this.docID = docID;
+	}
+	
+	
+	public int compareTo(Document doc){
+		if(this.getUserLikes().size() > doc.getUserLikes().size())
+			return 1;
+		else if(this.getUserLikes().size() == doc.getUserLikes().size())
+			return 0;
+		else
+			return -1;
 	}
 }
