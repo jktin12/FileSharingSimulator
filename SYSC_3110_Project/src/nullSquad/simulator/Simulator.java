@@ -8,7 +8,61 @@ package nullSquad.simulator;
 
 import nullSquad.document.*;
 import nullSquad.network.*;
+
 import java.util.*;
+
+/**
+ * Added Enum for Command Strings
+ * 
+ * @author MVezina
+ */
+enum SimulationCommand
+{
+	RUN("RUN"), STEP("STEP"), EXIT("EXIT"), STATS("STATS"), UNKNOWN("UNKWN");
+
+	private String	cmdStr;
+
+	/**
+	 * Allows Enum Values to be associated with a command String
+	 * 
+	 * @param commandStr
+	 */
+	SimulationCommand(String commandStr)
+	{
+		this.cmdStr = commandStr;
+	}
+
+	/**
+	 * @return Gets Command String
+	 * @author MVezina
+	 */
+	public String getCommandStr()
+	{
+		return cmdStr;
+	}
+
+	/**
+	 * Converts String to Simulation Command
+	 * 
+	 * @param input Input String to convert to Simulation Command
+	 * @return Simulation Command Associated with input String
+	 * @author MVezina
+	 */
+	public static SimulationCommand getCommandFromStr(String input)
+	{
+		if (input.equalsIgnoreCase(RUN.getCommandStr()))
+			return RUN;
+		else if (input.equalsIgnoreCase(STEP.getCommandStr()))
+			return STEP;
+		else if (input.equalsIgnoreCase(STATS.getCommandStr()))
+			return STATS;
+		else if (input.equalsIgnoreCase(EXIT.getCommandStr()))
+			return EXIT;
+		else
+			return UNKNOWN;
+	}
+
+}
 
 public class Simulator
 {
@@ -19,7 +73,6 @@ public class Simulator
 	{
 		MUSIC, BOOKS, GAMING, SCHOOL, SPORTS, PROGRAMMING
 	}
-
 
 	/**
 	 * Creates a simulator with specified network
@@ -66,6 +119,14 @@ public class Simulator
 	}
 
 	/**
+	 * Prints all available commands
+	 */
+	public void printAllCommandStrings()
+	{
+		System.out.println("- " + SimulationCommand.RUN.getCommandStr() + "\n- " + SimulationCommand.STEP.getCommandStr() +"\n- " + SimulationCommand.STATS.getCommandStr() + "\n- " + SimulationCommand.EXIT.getCommandStr() + "\n");
+	}
+
+	/**
 	 * Performs one simulation cycle which calls
 	 * a user to "act"
 	 * 
@@ -77,8 +138,26 @@ public class Simulator
 		User randomUser = network.getUsers().get(randomNumber.nextInt(network.getUsers().size()));
 
 		// Ask the random user to "act"
-		System.out.println("User: " + randomUser.getUserName() + " is acting!");
+		System.out.println("Simulation Step: " + randomUser.getUserName() + " is acting!");
 		randomUser.act(network);
+		
+		System.out.println("");
+		
+	}
+
+	public void PrintStats()
+	{
+		System.out.println("Current users in the simulation:");
+		for (User user : network.getUsers())
+		{
+			System.out.print(user.toString() + "\n");
+		}
+
+		System.out.println("Current documents in the simulation: " + network.getAllDocuments().size());
+		for (Document document : network.getAllDocuments())
+		{
+			System.out.print(document.toString() + "\n\n");
+		}
 	}
 
 	/**
@@ -89,74 +168,77 @@ public class Simulator
 	 */
 	public void simulationRun()
 	{
-		int numberOfTags;
 		int numberOfProducers;
 		int numberOfConsumers;
 		String start;
 		Scanner in = new Scanner(System.in);
 
 		System.out.println("Welcome to a simulation of a file-sharing social network");
-		
-		  System.out.println("Enter the number of consumers:");
-		  numberOfConsumers = in.nextInt();
-		  System.out.println("Enter the number of producers:");
-		  numberOfProducers = in.nextInt();
-		 
+
+		System.out.println("Enter the number of consumers:");
+		numberOfConsumers = in.nextInt();
+		System.out.println("Enter the number of producers:");
+		numberOfProducers = in.nextInt();
 
 		System.out.println("Would you like to run the simulation? (yes/no)");
 		start = in.next();
 
-		if (start.equals("yes"))
+		while (!start.equalsIgnoreCase("yes") && !start.equalsIgnoreCase("no"))
+		{
+			System.out.println("Would you like to run the simulation? (yes/no)");
+			start = in.next();
+		}
+
+		if (start.equalsIgnoreCase("yes"))
 		{
 			System.out.println("Simulation starting:");
-			
+
 			createProducers(numberOfProducers);
 			createConsumers(numberOfConsumers);
 
 			while (true)
 			{
-				// Break if user enters no
-				if (start.equalsIgnoreCase("no") || start.equalsIgnoreCase("stop"))
-					break;
+				System.out.println("Available Commands:");
+				printAllCommandStrings();
 
-				switch (start.toLowerCase())
-				{
-
-				// Continue the simulation
-					case "go":
-						break;
-
-					// Print out all the stats
-					case "stats":
-					{
-						System.out.println("Current users in the simulation:");
-						for (User user : network.getUsers())
-						{
-							System.out.print(user.toString() + "\n");
-						}
-
-						System.out.println("Current documents in the simulation: " + network.getAllDocuments().size());
-						for (Document document : network.getAllDocuments())
-						{
-							System.out.print(document.toString() + "\n\n");
-						}
-					}
-
-					// Any other input results in asking the user again
-					default:
-						System.out.println("Please Enter a Command (GO, STOP, STATS)");
-						start = in.next();
-
-						continue;
-
-				}
-
-				simulationStep();
-
-				System.out.println("Please Enter a Command (GO, STOP, STATS):");
+				System.out.print("Please Enter a Command: ");
 				start = in.next();
 
 				System.out.println();
+
+				switch (SimulationCommand.getCommandFromStr(start))
+				{
+
+					case RUN:
+					{
+						System.out.print("Please Enter the Number of Steps to Execute: ");
+						int n = in.nextInt();
+						if (n <= 0)
+							n = 1;
+
+						while (n-- > 0)
+							simulationStep();
+					}
+						break;
+					// Continue the simulation
+					case STEP:
+						simulationStep();
+						break;
+
+					// Print out all the stats
+					case STATS:
+						PrintStats();
+						break;
+
+					case EXIT:
+						System.exit(0);
+						break;
+
+					// Any other input results in asking the user again
+					default:
+						break;
+
+				}
 
 			}
 		}
