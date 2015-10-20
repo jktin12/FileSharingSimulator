@@ -54,7 +54,7 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 		super.act(net);
 
 		// Searches for the top k results (k = random number between 1-10)
-		List<Document> documentResults = net.search((new Random()).nextInt(10) + 1);
+		List<Document> documentResults = net.search(this, (new Random()).nextInt(10) + 1);
 
 		// Calculates the payoff of the search results
 		int payoff = calculatePayoff(documentResults);

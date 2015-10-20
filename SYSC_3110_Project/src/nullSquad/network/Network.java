@@ -7,6 +7,7 @@
 
 package nullSquad.network;
 
+import nullSquad.document.*;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -8,6 +8,7 @@
 
 package nullSquad.network;
 
+
 import java.util.*;
 
 import nullSquad.document.*;
@@ -83,7 +84,7 @@ public class Producer extends User implements ProducerPayoffStrategy,
 		this.likeDocument(newDoc);
 
 		// Search the network for top 10 documents
-		for (Document d : net.search(10))
+		for (Document d : net.search(this, 10))
 		{
 			// Like all documents with the same taste as this User
 			if (d.getTag().equals(taste))

@@ -6,6 +6,7 @@
  */
 package nullSquad.simulator;
 
+import nullSquad.document.*;
 import nullSquad.network.*;
 import java.util.*;
 
@@ -39,7 +40,7 @@ public class Simulator
 	{
 		int randomTaste = randomNumber.nextInt(tastesAndTags.size());
 		for (int x=0; x<numberOfConsumers;x++) {
-			User user = new Consumer(x,tastesAndTags.get(randomTaste));
+			User user = new Consumer(tastesAndTags.get(randomTaste));
 			network.registerUser(user);
 		}
 	}
@@ -55,7 +56,7 @@ public class Simulator
 	{
 		int randomTaste = randomNumber.nextInt(tastesAndTags.size());
 		for (int x=0; x<numberOfProducers;x++) {
-			User user = new Producer(x+100,tastesAndTags.get(randomTaste));
+			User user = new Producer(tastesAndTags.get(randomTaste));
 			network.registerUser(user);
 		}
 	}
@@ -135,7 +136,7 @@ public class Simulator
 	        		}
 	        		
 	        		System.out.println("Current documents in the simulation:");
-	        		for (Document document:network.getAllDocuments()) {
+	        		for (Document document : network.getAllDocuments()) {
 	        			System.out.print(document.toString());
 	        		}
 	        		
