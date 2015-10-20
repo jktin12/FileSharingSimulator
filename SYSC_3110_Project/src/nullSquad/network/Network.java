@@ -85,6 +85,7 @@ public class Network
 	public List<Document> search(User user, int topK)
 	{
 		List<Document> topKDocuments = new ArrayList<Document>();
+		
 		for(Document doc: allDocuments)
 		{
 			if(doc.getTag().equals(user.getTaste())){
