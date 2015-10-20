@@ -8,7 +8,6 @@
 
 package nullSquad.network;
 
-
 import java.util.*;
 
 import nullSquad.document.*;
@@ -23,7 +22,8 @@ public class Producer extends User implements ProducerPayoffStrategy,
 	// The Producer Payoff Strategy to be used
 	private ProducerPayoffStrategy	payoffStrategy;
 
-	public Producer(ProducerPayoffStrategy payoffStrat, String userName, String taste)
+	public Producer(ProducerPayoffStrategy payoffStrat, String userName,
+			String taste)
 	{
 		this(userName, taste);
 
@@ -72,7 +72,7 @@ public class Producer extends User implements ProducerPayoffStrategy,
 	public void act(Network net)
 	{
 		// Ensure the user has been registered
-		if(userID <= 0)
+		if (userID <= 0)
 		{
 			System.out.println("The User is not currently registered.");
 			return;
@@ -83,12 +83,12 @@ public class Producer extends User implements ProducerPayoffStrategy,
 
 		// Add new document to document produced
 		docsProduced.add(newDoc);
-		
-		// The document is now added to the network
-		net.addDocument(newDoc);
 
 		// Like your own document
 		this.likeDocument(newDoc);
+
+		// The document is now added to the network
+		net.addDocument(newDoc);
 
 		// Search the network for top 10 documents
 		for (Document d : net.search(this, 10))
@@ -182,12 +182,12 @@ public class Producer extends User implements ProducerPayoffStrategy,
 	@Override
 	public void DocumentLiked(DocumentLikeEvent docLikeEvent)
 	{
-		if(docLikeEvent.getSource().getProducer().equals(this))
+		if (docLikeEvent.getSource().getProducer().equals(this))
 		{
 			// Calculate and print the payoff
 			System.out.println("Your Document has been liked! Current Payoff: " + calculatePayoff());
 		}
-		
+
 	}
 
 }
