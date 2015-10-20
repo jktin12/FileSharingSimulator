@@ -20,7 +20,6 @@ public class Simulator
 		MUSIC, BOOKS, GAMING, SCHOOL, SPORTS, PROGRAMMING
 	}
 
-	private List<String>	allTastesAndTags;
 
 	/**
 	 * Creates a simulator with specified network
@@ -32,7 +31,6 @@ public class Simulator
 	{
 		this.network = network;
 		randomNumber = new Random();
-		allTastesAndTags = new ArrayList<String>();
 	}
 
 	/**
@@ -44,10 +42,9 @@ public class Simulator
 	 */
 	private void createConsumers(int numberOfConsumers)
 	{
-		int randomTaste = randomNumber.nextInt(allTastesAndTags.size());
 		for (int x = 0; x < numberOfConsumers; x++)
 		{
-			User user = new Consumer("Consumer" + x, allTastesAndTags.get(randomTaste));
+			User user = new Consumer("Consumer" + x, tags.values()[randomNumber.nextInt(tags.values().length)].toString());
 			user.registerUser(network);
 		}
 	}
@@ -61,30 +58,10 @@ public class Simulator
 	 */
 	private void createProducers(int numberOfProducers)
 	{
-		int randomTaste = randomNumber.nextInt(allTastesAndTags.size());
 		for (int x = 0; x < numberOfProducers; x++)
 		{
-			User user = new Producer("Producer" + x, allTastesAndTags.get(randomTaste));
+			User user = new Producer("Producer" + x, tags.values()[randomNumber.nextInt(tags.values().length)].toString());
 			user.registerUser(network);
-		}
-	}
-
-	/**
-	 * Sets number of random tags in simulation based on given parameter
-	 * 
-	 * @param numberOfTags Number of tastes/tags to be used in network
-	 * @author Raymond Wu
-	 */
-	private void setTastesAndTags(int numberOfTags)
-	{
-		while (allTastesAndTags.size() < numberOfTags)
-		{
-			// Obtain a random tag from tags
-			String randomTag = tags.values()[randomNumber.nextInt(tags.values().length)].toString();
-			if (!(allTastesAndTags.contains(randomTag)))
-			{
-				allTastesAndTags.add(randomTag);
-			}
 		}
 	}
 
@@ -137,7 +114,7 @@ public class Simulator
 		if (start.equals("yes"))
 		{
 			System.out.println("Simulation starting:");
-			setTastesAndTags(numberOfTags);
+			
 			createProducers(numberOfProducers);
 			createConsumers(numberOfConsumers);
 
@@ -163,7 +140,7 @@ public class Simulator
 							System.out.print(user.toString() + "\n");
 						}
 
-						System.out.println("Current documents in the simulation:");
+						System.out.println("Current documents in the simulation: " + network.getAllDocuments().size());
 						for (Document document : network.getAllDocuments())
 						{
 							System.out.print(document.toString() + "\n");
