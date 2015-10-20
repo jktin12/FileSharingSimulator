@@ -231,6 +231,8 @@ public class Simulator
 						break;
 
 					case EXIT:
+						System.out.println("Exiting Simulator..");
+						System.out.println("Halted Simulator");
 						System.exit(0);
 						break;
 
