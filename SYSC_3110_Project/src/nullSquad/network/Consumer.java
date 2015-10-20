@@ -23,12 +23,13 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 	 * Calls the default constructor and sets the Consumer Payoff Strategy
 	 * 
 	 * @param payoffStrat The payoff Strategy to be used
+	 * @param userName The name of the user
 	 * @param taste The taste of the user
 	 */
-	public Consumer(ConsumerPayoffStrategy payoffStrat, String taste)
+	public Consumer(ConsumerPayoffStrategy payoffStrat,String userName, String taste)
 	{
 		// Call the default Constructor
-		this(taste);
+		this(userName, taste);
 
 		// Set the payoff Strategy if it is not null
 		if (payoffStrat != null)
@@ -41,9 +42,9 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 	 * 
 	 * @param taste The taste of the Consumer
 	 */
-	public Consumer(String taste)
+	public Consumer(String userName, String taste)
 	{
-		super(taste);
+		super(userName, taste);
 		this.payoffStrategy = this;
 	}
 
@@ -136,7 +137,7 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 	public String toString()
 	{
 		// Print User Type and the basic fields of a user
-		return "User Type: Consumer\n" + super.toString();
+		return "User Type: Consumer\n" + super.toString() + "\n";
 	}
 
 	/**

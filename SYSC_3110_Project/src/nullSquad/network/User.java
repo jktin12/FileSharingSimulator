@@ -27,9 +27,16 @@ public abstract class User
 	 * @param taste The taste of the user
 	 * @author MVezina
 	 */
-	public User(String taste)
+	public User(String userName, String taste)
 	{
+		if(userName == null)
+			userName = "";
+		
+		if(taste == null)
+			taste = "";		
+		
 		this.userID = 0;
+		this.userName = userName;
 		this.taste = taste;
 		followers = new ArrayList<>();
 		following = new ArrayList<>();
@@ -247,6 +254,8 @@ public abstract class User
 	@Override
 	public boolean equals(Object o)
 	{
+		
+		
 		// If the address of the two objects is the same, they are equivalent
 		if (this == o)
 			return true;
@@ -280,7 +289,7 @@ public abstract class User
 	@Override
 	public String toString()
 	{
-		return "User ID: " + this.userID + "\nUser Name: " + this.userName + "\nTaste: " + this.taste + "\nFollowers: " + followers.size() + "\nFollowing: " + this.following.size() + "\nNumber of Documents Liked: " + this.likedDocuments.size() + "\n";
+		return "User ID: " + this.userID + "\nUser Name: " + this.userName + "\nTaste: " + this.taste + "\nFollowers: " + followers.size() + "\nFollowing: " + this.following.size() + "\nNumber of Documents Liked: " + this.likedDocuments.size();
 	}
 
 }

@@ -23,9 +23,9 @@ public class Producer extends User implements ProducerPayoffStrategy,
 	// The Producer Payoff Strategy to be used
 	private ProducerPayoffStrategy	payoffStrategy;
 
-	public Producer(ProducerPayoffStrategy payoffStrat, String taste)
+	public Producer(ProducerPayoffStrategy payoffStrat, String userName, String taste)
 	{
-		this(taste);
+		this(userName, taste);
 
 		// Set the payoff strategy if it is not null
 		if (payoffStrat != null)
@@ -39,9 +39,9 @@ public class Producer extends User implements ProducerPayoffStrategy,
 	 * @param userID the userID of the new user
 	 * @param taste the taste of the user
 	 */
-	public Producer(String taste)
+	public Producer(String name, String taste)
 	{
-		super(taste);
+		super(name, taste);
 		this.docsProduced = new ArrayList<Document>();
 
 		// Sets the default payoff strategy to the interface implementation in
@@ -77,6 +77,9 @@ public class Producer extends User implements ProducerPayoffStrategy,
 		// Create a new document
 		Document newDoc = new Document("Document (" + Calendar.getInstance().getTime() + ")", this.taste, this);
 
+		// Add new document to document produced
+		docsProduced.add(newDoc);
+		
 		// The document is now added to the network
 		net.addDocument(newDoc);
 
@@ -147,7 +150,7 @@ public class Producer extends User implements ProducerPayoffStrategy,
 	@Override
 	public String toString()
 	{
-		return "User Type: Producer (Payoff: " + calculatePayoff() + ")\n" + super.toString();
+		return "User Type: Producer (Payoff: " + calculatePayoff() + ")\n" + super.toString() + "\nDocuments Produced: " + docsProduced.size() + "\n";
 	}
 
 	@Override
