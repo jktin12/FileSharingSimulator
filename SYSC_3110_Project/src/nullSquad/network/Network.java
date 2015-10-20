@@ -82,25 +82,29 @@ public class Network
 		return 0;
 	}
 	
-	public List<Document> search(int topK)
+	public List<Document> search(User user, int topK)
 	{
 		List<Document> topKDocuments = new ArrayList<Document>();
 		for(Document doc: allDocuments)
 		{
-			if(topKDocuments.size() < topK)
-			{
-				topKDocuments.add(doc);
-			}
-			else
-			{
-				//find the document in the topKDocuments list with the least number of likes
-				Document min = findDocMinLikes(topKDocuments);
-				//Check if doc has more likes than this document
-				if(doc.getUserLikes().size() > doc.getUserLikes().size())
+			if(doc.getTag().equals(user.getTaste())){
+				
+				if(topKDocuments.size() < topK)
 				{
-					//if it does, replace the min likes document with the new one
-					topKDocuments.remove(min);
 					topKDocuments.add(doc);
+				}
+				
+				else
+				{
+					//find the document in the topKDocuments list with the least number of likes
+					Document min = findDocMinLikes(topKDocuments);
+					//Check if doc has more likes than this document
+					if(doc.getUserLikes().size() > min.getUserLikes().size())
+					{
+						//if it does, replace the min likes document with the new one
+						topKDocuments.remove(min);
+						topKDocuments.add(doc);
+					}
 				}
 			}
 		}
