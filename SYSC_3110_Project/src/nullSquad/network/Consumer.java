@@ -26,7 +26,8 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 	 * @param userName The name of the user
 	 * @param taste The taste of the user
 	 */
-	public Consumer(ConsumerPayoffStrategy payoffStrat,String userName, String taste)
+	public Consumer(ConsumerPayoffStrategy payoffStrat, String userName,
+			String taste)
 	{
 		// Call the default Constructor
 		this(userName, taste);
@@ -51,8 +52,12 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 	@Override
 	public void act(Network net)
 	{
-		// Call the superclass act method first
-		super.act(net);
+		// Ensure the user has been registered
+		if (userID <= 0)
+		{
+			System.out.println("The User is not currently registered.");
+			return;
+		}
 
 		// Searches for the top k results (k = random number between 1-10)
 		List<Document> documentResults = net.search(this, (new Random()).nextInt(10) + 1);
