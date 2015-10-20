@@ -71,8 +71,12 @@ public class Producer extends User implements ProducerPayoffStrategy,
 	@Override
 	public void act(Network net)
 	{
-		// Call the superclass act first
-		super.act(net);
+		// Ensure the user has been registered
+		if(userID <= 0)
+		{
+			System.out.println("The User is not currently registered.");
+			return;
+		}
 
 		// Create a new document
 		Document newDoc = new Document("Document (" + Calendar.getInstance().getTime() + ")", this.taste, this);
@@ -183,6 +187,7 @@ public class Producer extends User implements ProducerPayoffStrategy,
 			// Calculate and print the payoff
 			System.out.println("Your Document has been liked! Current Payoff: " + calculatePayoff());
 		}
+		
 	}
 
 }
