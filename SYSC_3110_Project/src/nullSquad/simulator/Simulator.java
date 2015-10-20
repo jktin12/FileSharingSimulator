@@ -143,7 +143,7 @@ public class Simulator
 						System.out.println("Current documents in the simulation: " + network.getAllDocuments().size());
 						for (Document document : network.getAllDocuments())
 						{
-							System.out.print(document.toString() + "\n");
+							System.out.print(document.toString() + "\n\n");
 						}
 					}
 
