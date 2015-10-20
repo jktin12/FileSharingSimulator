@@ -84,33 +84,65 @@ public class Network
 		return 0;
 	}
 	
+	/**
+	 * Searches the network for the top k documents
+	 * @param user The user that will search the network
+	 * @param topK Number of results to be returned
+	 * @return The top K results from the network
+	 * @author MVezina
+	 */
 	public List<Document> search(User user, int topK)
 	{
-		List<Document> topKDocuments = new ArrayList<Document>();
+		if(allDocuments.size() < topK)
+		{
+			return allDocuments;
+		}
+		
+		List<Document> topKDocuments = new ArrayList<Document>();		
 		
 		for(Document doc: allDocuments)
 		{
-			if(doc.getTag().equals(user.getTaste())){
-				
-				if(topKDocuments.size() < topK)
-				{
+			// If document isnt liked by the searching user
+			if(!doc.getUserLikes().contains(user))
+			{
+				// If tag matches users taste
+				if(doc.getTag().equals(user.getTaste()))
+				{				
 					topKDocuments.add(doc);
-				}
+					continue;
+				}	
 				
-				else
+				
+				for (User u : user.getFollowing())
 				{
-					//find the document in the topKDocuments list with the least number of likes
-					Document min = findDocMinLikes(topKDocuments);
-					//Check if doc has more likes than this document
-					if(doc.getUserLikes().size() > min.getUserLikes().size())
+					if(doc.getUserLikes().contains(u))
 					{
-						//if it does, replace the min likes document with the new one
-						topKDocuments.remove(min);
 						topKDocuments.add(doc);
+						break;
 					}
 				}
-			}
+			}			
 		}
+		
+		if(topKDocuments.size() < topK)
+		{
+			for(Document doc : allDocuments)
+			{
+				if(!topKDocuments.contains(doc))
+				{
+					if(topKDocuments.size() == topK)
+						break;
+					
+					topKDocuments.add(doc);
+				}
+			}
+			
+			
+		}
+		
+		
+		
+		
 		//After all documents have been checked, return the list of topK documents
 		return topKDocuments;
 	}
