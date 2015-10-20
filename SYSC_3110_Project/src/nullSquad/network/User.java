@@ -120,7 +120,7 @@ public abstract class User
 	 */
 	public boolean addFollower(User user)
 	{
-		if (user == null)
+		if (user == null || user.equals(this))
 			return false;
 
 		// Checks to see if the user is already following this user
@@ -156,11 +156,13 @@ public abstract class User
 	 */
 	protected boolean followUser(User user)
 	{
+		
 		if (user == null)
 			return false;
 
 		// Checks to see if the specified user can be followed
-		if (!user.addFollower(this))
+		// Checks to see if user is equal to this user
+		if (!user.addFollower(this) || equals(user))
 			return false;
 
 		// Add the user to the list of users being followed by this user
