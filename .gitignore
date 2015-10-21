@@ -1,1 +1,11 @@
 /.metadata
+
+*.html
+
+SYSC_3110_Project/doc/package-list
+
+*.js
+
+*.css
+
+SYSC_3110_Project/NetworkSimulator.jar
