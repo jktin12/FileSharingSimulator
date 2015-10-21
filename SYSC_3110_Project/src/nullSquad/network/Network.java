@@ -23,11 +23,6 @@ public class Network
 	/**
 	 * @author Justin Krol
 	 * Creates a Network with a list of users and a list of documents
-	 * 
-	 * @param name	Name of the document
-	 * @param tag	Search tag that will be used to find this document
-	 * @param producer	Creator of the document
-	 * 
 	 */
 	public Network()
 	{
@@ -155,7 +150,8 @@ public class Network
 	/**
 	 * @author Justin Krol
 	 * Add a document to the network if it has not already been added
-	 * @param document that will be added to the network
+	 * 
+	 * @param doc The Document that will be added to the network
 	 * @return true if the document could be added, false if the document could not
 	 * because it was already added or the document argument was null
 	 */
@@ -178,7 +174,8 @@ public class Network
 	/**
 	 * @author Justin Krol
 	 * Remove a document from the network if it has been added
-	 * @param document that will be removed from the network
+	 * 
+	 * @param doc The document that will be removed from the network
 	 * @return true if the document could be removed, false if the document could not
 	 * because it was not on the network or the document argument was null
 	 */

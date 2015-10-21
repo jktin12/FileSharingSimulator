@@ -36,12 +36,12 @@ public class Producer extends User implements ProducerPayoffStrategy,
 	 * Default Constructor.
 	 * Creates a producer with the specified userID and taste
 	 * 
-	 * @param userID the userID of the new user
+	 * @param userName the userID of the new user
 	 * @param taste the taste of the user
 	 */
-	public Producer(String name, String taste)
+	public Producer(String userName, String taste)
 	{
-		super(name, taste);
+		super(userName, taste);
 		this.docsProduced = new ArrayList<Document>();
 
 		// Sets the default payoff strategy to the interface implementation in

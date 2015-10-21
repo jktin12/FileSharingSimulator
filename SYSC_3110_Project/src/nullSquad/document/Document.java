@@ -58,6 +58,7 @@ public class Document implements Comparable<Document>
 	
 	/**
 	 * @param listener The listener to be removed from the list
+	 * @return Returns whether or not the listener was removed
 	 * @author MVezina
 	 */
 	public boolean removeLikeListener(DocumentLikeListener listener)
@@ -129,8 +130,9 @@ public class Document implements Comparable<Document>
 	/**
 	 * @author Marc Tebo
 	 * Compares if two documents are the same
-	 * @returns true if documents have the same unique bookID
+	 * @return true if documents have the same unique bookID
 	 */
+	@Override
 	public boolean equals(Object o)
 	{
 			// If the two object references are equal, return true

@@ -24,6 +24,7 @@ public abstract class User
 	/**
 	 * Creates a user with the specified taste
 	 * 
+	 * @param userName The user's name
 	 * @param taste The taste of the user
 	 * @author MVezina
 	 */
@@ -54,7 +55,7 @@ public abstract class User
 
 	/**
 	 * Registers the user with the specified network
-	 * @param net
+	 * @param net The network to register the user on
 	 * @author MVezina
 	 */
 	public void registerUser(Network net)

@@ -145,6 +145,10 @@ public class Simulator
 		
 	}
 
+	/**
+	 * Prints the stats of the network 
+	 * @author MVezina
+	 */
 	public void PrintStats()
 	{
 		System.out.println("Current users in the simulation:");

@@ -42,6 +42,7 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 	 * Default Constructor. Sets the default Consumer Payoff Strategy (the
 	 * payoffStrategy(..) method defined in this class)
 	 * 
+	 * @param userName The User's Name
 	 * @param taste The taste of the Consumer
 	 */
 	public Consumer(String userName, String taste)
