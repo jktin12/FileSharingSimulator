@@ -11,6 +11,11 @@ import java.util.*;
 import nullSquad.network.Producer;
 import nullSquad.network.User;
 
+/**
+ * Document class represents a document that is produced by a producer
+ * @author Marc Tebo
+ *
+ */
 public class Document implements Comparable<Document>
 {
 	private String name;

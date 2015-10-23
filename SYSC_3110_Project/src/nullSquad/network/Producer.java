@@ -13,6 +13,13 @@ import java.util.*;
 import nullSquad.document.*;
 import nullSquad.strategies.ProducerPayoffStrategy;
 
+/**
+ * Producer class that extends User and implements the default
+ * ProducerPayoffStrategy
+ * This class represents a Producer that belongs to a network
+ * 
+ * @author MVezina
+ */
 public class Producer extends User implements ProducerPayoffStrategy,
 		DocumentLikeListener
 {

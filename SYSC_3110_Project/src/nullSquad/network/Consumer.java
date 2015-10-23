@@ -6,7 +6,6 @@
  *         Team: noSquad
  */
 
-
 package nullSquad.network;
 
 import nullSquad.document.*;
@@ -14,6 +13,13 @@ import nullSquad.strategies.*;
 
 import java.util.*;
 
+/**
+ * Producer class that extends User and implements the default
+ * ProducerPayoffStrategy
+ * This class represents a Producer that belongs to a network
+ * 
+ * @author MVezina
+ */
 public class Consumer extends User implements ConsumerPayoffStrategy
 {
 
@@ -60,7 +66,7 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 			System.out.println("The User is not currently registered.");
 			return;
 		}
-		
+
 		// Searches for the top k results (k = random number between 1-10)
 		List<Document> documentResults = net.search(this, (new Random()).nextInt(10) + 1);
 
@@ -74,7 +80,7 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 			if (d.getTag().equals(taste))
 			{
 				// Likes the document
-				if(this.likeDocument(d))
+				if (this.likeDocument(d))
 					System.out.println("User: " + userID + " has liked Document ID: " + d.getDocumentID() + " (" + d.getDocumentName() + ") because the tag matches the user's taste!");
 			}
 		}
@@ -123,7 +129,6 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 				if (u.getLikedDocuments().contains(d))
 					totalPayoff += 2;
 			}
-
 
 		}
 

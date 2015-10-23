@@ -7,8 +7,9 @@ package nullSquad.document;
 
 
 /**
+ * Represents the event of a user liking a document
+ * 
  * @author MVezina
- *
  */
 public class DocumentLikeEvent
 {

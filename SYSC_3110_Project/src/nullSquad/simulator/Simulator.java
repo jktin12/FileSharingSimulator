@@ -64,6 +64,11 @@ enum SimulationCommand
 
 }
 
+/**
+ * Represents the simulator that simulates a social network
+ * @author Raymond Wu
+ *
+ */
 public class Simulator
 {
 	private Network	network;
