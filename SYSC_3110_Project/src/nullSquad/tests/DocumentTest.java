@@ -1,94 +1,211 @@
 package nullSquad.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.util.Calendar;
+import java.util.Date;
+
+import nullSquad.document.Document;
+import nullSquad.network.Consumer;
+import nullSquad.network.Producer;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 public class DocumentTest {
-
+	public Producer prod;
+	public Document doc;
+	public Consumer cons;
+	
 	@Before
 	public void setUp() throws Exception {
+		prod = new Producer("Producer","TEST");
+		doc = new Document("TestDocument", "TEST", prod);
+		cons = new Consumer("TestConsumer","TEST");
 	}
 
 	@After
 	public void tearDown() throws Exception {
 	}
-
+	
+	/**
+	 * @author Marc Tebo
+	 * Test case for the Document constructor
+	 */
 	@Test
 	public void testDocument() {
-		fail("Not yet implemented");
+		Document testDoc = new Document("TestDocument","TEST",prod);
+		assertTrue(doc.equals(testDoc));
 	}
-
+	
+	/**
+	 * @author Marc Tebo
+	 * Test case for the addLikeListener method
+	 */
 	@Test
 	public void testAddLikeListener() {
-		fail("Not yet implemented");
+		doc.addLikeListener(prod);
+		assertTrue(doc.getLikeListeners().contains(prod));
 	}
-
+	
+	/**
+	 * @author Marc Tebo
+	 * Test case for the removeLikeListener method
+	 */
 	@Test
 	public void testRemoveLikeListener() {
-		fail("Not yet implemented");
+		assertTrue(doc.getLikeListeners().contains(prod));
+		doc.removeLikeListener(prod);
+		assertTrue(!doc.getLikeListeners().contains(prod));
 	}
-
+	
+	/**
+	 * @author Marc Tebo
+	 * Test case for the getLikeListeners method
+	 */
+	@Test
+	public void testGetLikeListeners(){
+		Producer testProd = new Producer("TestProducer","TEST");
+		doc.addLikeListener(testProd);
+		assertTrue(doc.getLikeListeners().contains(prod) && doc.getLikeListeners().contains(testProd));
+	}
+	
+	/**
+	 * @author Marc Tebo
+	 * Test case for the likeDocument method
+	 */
 	@Test
 	public void testLikeDocument() {
-		fail("Not yet implemented");
+		doc.likeDocument(cons);
+		assertTrue(doc.getUserLikes().contains(cons));
 	}
 
+	/**
+	 * @author Marc Tebo
+	 * Test case for the unlikeDocument method
+	 */
 	@Test
 	public void testUnlikeDocument() {
-		fail("Not yet implemented");
+		doc.likeDocument(cons);
+		assertTrue(doc.getUserLikes().contains(cons));
+		doc.unlikeDocument(cons);
+		assertTrue(!doc.getUserLikes().contains(cons));
 	}
 
+	/**
+	 * @author Marc Tebo
+	 * Test case for the getUserLikes method
+	 */
 	@Test
 	public void testGetUserLikes() {
-		fail("Not yet implemented");
+		Consumer testCons = new Consumer("TestConsumer2","TEST");
+		doc.likeDocument(cons);
+		doc.likeDocument(testCons);
+		assertTrue(doc.getUserLikes().contains(cons)&& doc.getUserLikes().contains(testCons));
 	}
 
+	/**
+	 * @author Marc Tebo
+	 * Test case for the toString method
+	 */
 	@Test
 	public void testToString() {
-		fail("Not yet implemented");
+		assertEquals(doc.toString(),"Name: " + doc.getDocumentName()+ 
+				"\nDocument ID: " + doc.getDocumentID() + "\nTag: " + doc.getTag()
+				+ "\nProducer: " + doc.getProducer().getUserName() + 
+				"\nDate Uploaded: " + doc.getDateUploaded());
 	}
 
+	/**
+	 * @author Marc Tebo
+	 * Test case for the equals method
+	 */
 	@Test
 	public void testEqualsObject() {
-		fail("Not yet implemented");
+		Document testDoc1 = new Document("TestDocument", "TEST", prod);
+		Document testDoc2 = new Document("TestDocument", "TEST", prod);
+		assertTrue(testDoc1.equals(testDoc2));
 	}
-
+	
+	/**
+	 * @author Marc Tebo
+	 * Test case for the getTag method
+	 */
 	@Test
 	public void testGetTag() {
-		fail("Not yet implemented");
+		assertTrue(doc.getTag().equals("TEST"));
 	}
-
+	
+	/**
+	 * @author Marc Tebo
+	 * Test case for the getDocumentID method
+	 */
 	@Test
 	public void testGetDocumentID() {
-		fail("Not yet implemented");
+		doc.setDocumentID(1234);
+		assertEquals(doc.getDocumentID(),1234);
 	}
 
+	/**
+	 * @author Marc Tebo
+	 * Test case for the getDateUploaded method
+	 */
 	@Test
 	public void testGetDateUploaded() {
-		fail("Not yet implemented");
+		Date testDateUploaded = Calendar.getInstance().getTime();
+		Document testDoc = new Document("TestDocument","TEST",prod);
+		assertTrue(testDoc.getDateUploaded().compareTo(testDateUploaded) <= 0);
 	}
 
+	/**
+	 * @author Marc Tebo
+	 * Test case for the testGetDocumentName method
+	 */
 	@Test
 	public void testGetDocumentName() {
-		fail("Not yet implemented");
+		assertEquals(doc.getDocumentName(),"TestDocument");
 	}
 
+	/**
+	 * @author Marc Tebo
+	 * Test case for the getProducer method
+	 */
 	@Test
 	public void testGetProducer() {
-		fail("Not yet implemented");
+		assertEquals(doc.getProducer(),prod);
 	}
 
+	/**
+	 * @author Marc Tebo
+	 * Test case for setDocumentID method
+	 */
 	@Test
 	public void testSetDocumentID() {
-		fail("Not yet implemented");
+		assertEquals(doc.getDocumentID(),0);
+		doc.setDocumentID(12345);
+		assertEquals(doc.getDocumentID(),12345);
 	}
 
+	/**
+	 * @author Marc Tebo
+	 * Test case for the compareTo method
+	 */
 	@Test
 	public void testCompareTo() {
-		fail("Not yet implemented");
+		Document testDoc = new Document("TestDocument2","TEST",prod);
+		doc.likeDocument(prod);
+		testDoc.likeDocument(prod);
+		testDoc.likeDocument(cons);
+		
+		assertEquals(testDoc.compareTo(doc), 1);
+		
+		testDoc.unlikeDocument(cons);
+		assertEquals(testDoc.compareTo(doc),0);
+		
+		testDoc.unlikeDocument(prod);
+		assertEquals(testDoc.compareTo(doc), -1);
 	}
-
 }
