@@ -64,6 +64,12 @@ enum SimulationCommand
 
 }
 
+/**
+ * Represents the simulator that simulates a social network
+ * 
+ * @author Raymond Wu
+ *
+ */
 public class Simulator
 {
 	private Network	network;
@@ -80,10 +86,14 @@ public class Simulator
 	 * @param network Network of all the users/documents
 	 * @author Raymond Wu
 	 */
-	public Simulator(Network network)
+	public Simulator(Network network, int numberOfProducers,
+			int numberOfConsumers)
 	{
 		this.network = network;
 		randomNumber = new Random();
+
+		createProducers(numberOfProducers);
+		createConsumers(numberOfConsumers);
 	}
 
 	/**
@@ -123,7 +133,7 @@ public class Simulator
 	 */
 	public void printAllCommandStrings()
 	{
-		System.out.println("- " + SimulationCommand.RUN.getCommandStr() + "\n- " + SimulationCommand.STEP.getCommandStr() +"\n- " + SimulationCommand.STATS.getCommandStr() + "\n- " + SimulationCommand.EXIT.getCommandStr() + "\n");
+		System.out.println("- " + SimulationCommand.RUN.getCommandStr() + "\n- " + SimulationCommand.STEP.getCommandStr() + "\n- " + SimulationCommand.STATS.getCommandStr() + "\n- " + SimulationCommand.EXIT.getCommandStr() + "\n");
 	}
 
 	/**
@@ -140,13 +150,13 @@ public class Simulator
 		// Ask the random user to "act"
 		System.out.println("Simulation Step: " + randomUser.getUserName() + " is acting!");
 		randomUser.act(network);
-		
+
 		System.out.println("");
-		
 	}
 
 	/**
-	 * Prints the stats of the network 
+	 * Prints the stats of the network
+	 * 
 	 * @author MVezina
 	 */
 	public void PrintStats()
@@ -170,93 +180,12 @@ public class Simulator
 	 * 
 	 * @author Raymond Wu
 	 */
-	public void simulationRun()
+	public void simulationRun(int stepsToRun)
 	{
-		int numberOfProducers;
-		int numberOfConsumers;
-		String start;
-		Scanner in = new Scanner(System.in);
-
-		System.out.println("Welcome to a simulation of a file-sharing social network");
-
-		System.out.println("Enter the number of consumers:");
-		numberOfConsumers = in.nextInt();
-		System.out.println("Enter the number of producers:");
-		numberOfProducers = in.nextInt();
-
-		System.out.println("Would you like to run the simulation? (yes/no)");
-		start = in.next();
-
-		while (!start.equalsIgnoreCase("yes") && !start.equalsIgnoreCase("no"))
+		while (stepsToRun-- > 0)
 		{
-			System.out.println("Would you like to run the simulation? (yes/no)");
-			start = in.next();
+			simulationStep();
 		}
-
-		if (start.equalsIgnoreCase("yes"))
-		{
-			System.out.println("Simulation starting:");
-
-			createProducers(numberOfProducers);
-			createConsumers(numberOfConsumers);
-
-			while (true)
-			{
-				System.out.println("Available Commands:");
-				printAllCommandStrings();
-
-				System.out.print("Please Enter a Command: ");
-				start = in.next();
-
-				System.out.println();
-
-				switch (SimulationCommand.getCommandFromStr(start))
-				{
-
-					case RUN:
-					{
-						System.out.print("Please Enter the Number of Steps to Execute: ");
-						int n = in.nextInt();
-						if (n <= 0)
-							n = 1;
-
-						while (n-- > 0)
-							simulationStep();
-					}
-						break;
-					// Continue the simulation
-					case STEP:
-						simulationStep();
-						break;
-
-					// Print out all the stats
-					case STATS:
-						PrintStats();
-						break;
-
-					case EXIT:
-						System.out.println("Exiting Simulator..");
-						System.out.println("Halted Simulator");
-						System.exit(0);
-						break;
-
-					// Any other input results in asking the user again
-					default:
-						break;
-
-				}
-
-			}
-		}
-		System.out.println("Exiting...");
-	}
-
-	public static void main(String[] args)
-	{
-
-		Network network = new Network();
-		Simulator simulator = new Simulator(network);
-		simulator.simulationRun();
 	}
 
 }

@@ -12,6 +12,11 @@ import java.util.*;
 
 import nullSquad.document.Document;
 
+/**
+ * Abstract class that represents a User
+ * 
+ * @author MVezina
+ */
 public abstract class User
 {
 	protected int				userID;
@@ -55,6 +60,7 @@ public abstract class User
 
 	/**
 	 * Registers the user with the specified network
+	 * 
 	 * @param net The network to register the user on
 	 * @author MVezina
 	 */
@@ -157,7 +163,7 @@ public abstract class User
 	 */
 	protected boolean followUser(User user)
 	{
-		
+
 		if (user == null)
 			return false;
 
