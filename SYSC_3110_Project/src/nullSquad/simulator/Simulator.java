@@ -149,7 +149,7 @@ public class Simulator
 
 		// Ask the random user to "act"
 		System.out.println("Simulation Step: " + randomUser.getUserName() + " is acting!");
-		randomUser.act(network);
+		randomUser.act(network, 10);
 
 		System.out.println("");
 	}

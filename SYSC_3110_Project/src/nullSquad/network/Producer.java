@@ -79,7 +79,7 @@ public class Producer extends User implements ProducerPayoffStrategy,
 	 * - Likes documents with own taste
 	 */
 	@Override
-	public void act(FileSharingSystem net)
+	public void act(FileSharingSystem net, int kResults)
 	{
 		// Ensure the user has been registered
 		if (userID <= 0)
@@ -101,7 +101,7 @@ public class Producer extends User implements ProducerPayoffStrategy,
 		net.addDocument(newDoc);
 
 		// Search the network for top 10 documents
-		for (Document d : net.search(this, 10))
+		for (Document d : net.search(this, kResults))
 		{
 			// Like all documents with the same taste as this User
 			if (d.getTag().equals(taste))

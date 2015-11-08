@@ -38,7 +38,7 @@ public class SimulatorGUI extends JFrame
 		int numConsumers = 2; // Integer.parseInt(JOptionPane.showInputDialog(this,
 								// "Please Enter The Number Of Consumers to Create (0-20): "));
 
-		Network network = new Network();
+		FileSharingSystem network = new FileSharingSystem();
 		// Create a new simulator
 		simulator = new Simulator(network, numProducers, numConsumers);
 

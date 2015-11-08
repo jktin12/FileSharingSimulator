@@ -58,7 +58,7 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 	}
 
 	@Override
-	public void act(FileSharingSystem net)
+	public void act(FileSharingSystem net, int kResults)
 	{
 		// Ensure the user has been registered
 		if (userID <= 0)
