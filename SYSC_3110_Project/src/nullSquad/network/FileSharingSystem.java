@@ -19,7 +19,7 @@ import java.util.List;
  * 
  * @author Justin Krol
  */
-public class Network
+public class FileSharingSystem
 {
 	private int				nextAvailableUserID	= 1;
 	private int				nextAvailableDocID	= 1;
@@ -30,7 +30,7 @@ public class Network
 	 * @author Justin Krol
 	 *         Creates a Network with a list of users and a list of documents
 	 */
-	public Network()
+	public FileSharingSystem()
 	{
 		users = new ArrayList<>();
 		allDocuments = new ArrayList<>();

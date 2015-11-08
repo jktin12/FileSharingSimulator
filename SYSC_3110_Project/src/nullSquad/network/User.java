@@ -56,7 +56,7 @@ public abstract class User
 	 * @param net The main network for the simulation
 	 * @author MVezina
 	 */
-	public abstract void act(Network net);
+	public abstract void act(FileSharingSystem net);
 
 	/**
 	 * Registers the user with the specified network
@@ -64,7 +64,7 @@ public abstract class User
 	 * @param net The network to register the user on
 	 * @author MVezina
 	 */
-	public void registerUser(Network net)
+	public void registerUser(FileSharingSystem net)
 	{
 		// Registers this user with the network
 		// Registering a user returns the userID

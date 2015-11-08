@@ -72,7 +72,7 @@ enum SimulationCommand
  */
 public class Simulator
 {
-	private Network	network;
+	private FileSharingSystem	network;
 	private Random	randomNumber;
 
 	private enum tags
@@ -86,7 +86,7 @@ public class Simulator
 	 * @param network Network of all the users/documents
 	 * @author Raymond Wu
 	 */
-	public Simulator(Network network, int numberOfProducers,
+	public Simulator(FileSharingSystem network, int numberOfProducers,
 			int numberOfConsumers)
 	{
 		this.network = network;

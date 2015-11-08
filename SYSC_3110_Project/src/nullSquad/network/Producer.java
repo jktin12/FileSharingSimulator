@@ -79,7 +79,7 @@ public class Producer extends User implements ProducerPayoffStrategy,
 	 * - Likes documents with own taste
 	 */
 	@Override
-	public void act(Network net)
+	public void act(FileSharingSystem net)
 	{
 		// Ensure the user has been registered
 		if (userID <= 0)
