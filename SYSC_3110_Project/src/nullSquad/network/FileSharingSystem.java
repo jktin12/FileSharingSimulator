@@ -228,30 +228,4 @@ public class FileSharingSystem
 		return users;
 	}
 
-	// Note: This method will likely become obsolete once documents are sorted
-	// using a more sophisticated approach. Documents will likely implement
-	// comparable
-	// and will be sorted by the search function.
-	/**
-	 * @author Justin Krol
-	 *         Helper method for search used to find the minimum liked document
-	 *         in a list of documents
-	 * @param user who will be removed from the network
-	 * @return true if the user could be removed, false if the user could not
-	 *         because it was not registered or the user argument was null
-	 */
-	private Document findDocMinLikes(List<Document> topKDocuments)
-	{
-		Document dMinLikes = topKDocuments.get(0);
-
-		for (Document d : topKDocuments)
-		{
-			if (d.getUserLikes().size() < dMinLikes.getUserLikes().size())
-			{
-				dMinLikes = d;
-			}
-		}
-		return dMinLikes;
-	}
-
 }
