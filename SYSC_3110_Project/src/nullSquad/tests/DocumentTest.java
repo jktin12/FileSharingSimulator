@@ -1,7 +1,7 @@
 package nullSquad.tests;
 import nullSquad.document.*;
 
-import static org.junit.Assert.*;
+import org.junit.Assert.*;
 
 import org.junit.Test;
 
