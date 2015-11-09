@@ -115,7 +115,7 @@ public class Producer extends User implements ProducerPayoffStrategy,
 				}
 			}
 		}
-
+		this.payoffHistory.add(calculatePayoff());
 	}
 
 	/**
@@ -199,6 +199,14 @@ public class Producer extends User implements ProducerPayoffStrategy,
 			System.out.println("Producer: " + this.getUserName() + " Document has been liked! Current Payoff: " + calculatePayoff());
 		}
 
+	}
+
+	@Override
+	public void addIterationPayoff(int currentIteration) {
+		if(currentIteration == getPayoffHistory().size())		
+		{
+			payoffHistory.add(calculatePayoff());
+		}
 	}
 
 }
