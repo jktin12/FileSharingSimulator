@@ -84,7 +84,7 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 					System.out.println("User: " + userID + " has liked Document ID: " + d.getDocumentID() + " (" + d.getDocumentName() + ") because the tag matches the user's taste!");
 			}
 		}
-
+		payoffHistory.add(payoff);
 	}
 
 	/**
@@ -106,7 +106,11 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 	public int consumerPayoffStrategy(Consumer consumer, List<Document> documentSearchResults)
 	{
 		int totalPayoff = 0;
-
+		if(documentSearchResults == null)
+		{
+			return 0;
+		}
+		
 		for (Document d : documentSearchResults)
 		{
 			// One point is associated with if the user's taste matches the
@@ -157,6 +161,22 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 		// returns true, the two Consumers are equal
 		return (super.equals(o) && o instanceof Consumer);
 
+	}
+
+	@Override
+	public void addIterationPayoff(int currentIteration) {
+		
+		if(currentIteration == 0)
+		{
+			this.payoffHistory.add(calculatePayoff(null));
+			return;
+		}
+		
+		// Only add a payoff iteration if the history is not updated
+		if(currentIteration == getPayoffHistory().size())
+		{	// For the Consumer, we just want to set the previous iteration payoff 
+			this.payoffHistory.add(getPayoffHistory().get(currentIteration-1));
+		}
 	}
 
 }
