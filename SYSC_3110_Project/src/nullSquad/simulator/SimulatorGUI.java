@@ -469,7 +469,7 @@ public class SimulatorGUI extends JFrame implements ListDataListener, MouseListe
 	 * 
 	 * @author Raymond Wu
 	 */
-	public void simulationStep()
+	private void simulationStep()
 	{
 		// Generate a random number so the simulation can get a random user
 		User randomUser = network.getUsers().get(randomNumber.nextInt(network.getUsers().size()));
@@ -511,7 +511,6 @@ public class SimulatorGUI extends JFrame implements ListDataListener, MouseListe
 
 	public static void main(String[] args) {
 		new SimulatorGUI("Simulator");
-		//new GraphGUI(new Producer("asd", "asd"));
 	}
 
 	/**
