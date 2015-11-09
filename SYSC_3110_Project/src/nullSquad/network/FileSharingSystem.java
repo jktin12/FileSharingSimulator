@@ -11,8 +11,11 @@ package nullSquad.network;
 import nullSquad.document.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import javax.swing.DefaultListModel;
 
 /**
  * Represents the network
@@ -23,8 +26,8 @@ public class FileSharingSystem
 {
 	private int				nextAvailableUserID	= 1;
 	private int				nextAvailableDocID	= 1;
-	private List<User>		users;
-	private List<Document>	allDocuments;
+	private DefaultListModel<User>		usersListModel;
+	private DefaultListModel<Document>	documentsListModel;
 
 	/**
 	 * @author Justin Krol
@@ -32,8 +35,8 @@ public class FileSharingSystem
 	 */
 	public FileSharingSystem()
 	{
-		users = new ArrayList<>();
-		allDocuments = new ArrayList<>();
+		usersListModel = new DefaultListModel<>();
+		documentsListModel = new DefaultListModel<>();
 	}
 
 	/**
@@ -47,12 +50,12 @@ public class FileSharingSystem
 	{
 		if (user != null)
 		{
-			if (users.contains(user))
+			if (usersListModel.contains(user))
 			{
 				// System.out.println("User has already been added to the network");
 				return -1;
 			}
-			users.add(user);
+			usersListModel.addElement(user);
 			nextAvailableUserID++;
 			return nextAvailableUserID - 1;
 		}
@@ -71,24 +74,18 @@ public class FileSharingSystem
 	{
 		if (user != null)
 		{
-			if (!users.contains(user))
+			if (!usersListModel.contains(user))
 			{
 				// System.out.println("User is not currently registered on the network");
 				return false;
 			}
-			users.remove(user);
+			usersListModel.removeElement(user);
 			return true;
 		}
 		// System.out.println("No user object to remove (null)");
 		return false;
 	}
-
-	// being moved from Network.java to Consumer.java
-	public int calculatePayoff(List<Document> documents)
-	{
-		return 0;
-	}
-
+	
 	/**
 	 * Searches the network for the top k documents
 	 * 
@@ -99,14 +96,22 @@ public class FileSharingSystem
 	 */
 	public List<Document> search(User user, int topK)
 	{
-		if (allDocuments.size() < topK)
+		List<Document> documentList = new ArrayList<>();
+		
+		// Copy the documents over to the list
+		for(int i = 0; i < documentsListModel.getSize(); i++){
+			documentList.add((documentsListModel.getElementAt(i)));
+		}
+		
+		
+		if (documentList.size() < topK)
 		{
-			return allDocuments;
+			return documentList;
 		}
 
 		List<Document> topKDocuments = new ArrayList<Document>();
 
-		for (Document doc : allDocuments)
+		for (Document doc : documentList)
 		{
 			// If document isnt liked by the searching user
 			if (!doc.getUserLikes().contains(user))
@@ -132,7 +137,7 @@ public class FileSharingSystem
 
 		if (topKDocuments.size() < topK)
 		{
-			for (Document doc : allDocuments)
+			for (Document doc : documentList)
 			{
 				if (!topKDocuments.contains(doc))
 				{
@@ -169,13 +174,13 @@ public class FileSharingSystem
 	{
 		if (doc != null)
 		{
-			if (allDocuments.contains(doc))
+			if (documentsListModel.contains(doc))
 			{
 				System.out.println("Document has already been added to the network");
 				return false;
 			}
 			doc.setDocumentID(nextAvailableDocID++);
-			allDocuments.add(doc);
+			documentsListModel.addElement(doc);
 			return true;
 		}
 		// System.out.println("No document object to add (null)");
@@ -196,12 +201,12 @@ public class FileSharingSystem
 	{
 		if (doc != null)
 		{
-			if (!allDocuments.contains(doc))
+			if (!documentsListModel.contains(doc))
 			{
 				// System.out.println("User is not currently registered on the network");
 				return false;
 			}
-			allDocuments.remove(doc);
+			documentsListModel.removeElement(doc);
 			return true;
 		}
 		// System.out.println("No user object to remove (null)");
@@ -215,9 +220,39 @@ public class FileSharingSystem
 	 */
 	public List<Document> getAllDocuments()
 	{
-		return allDocuments;
+		List<Document> documentList = new ArrayList<>();
+		
+		// Copy the documents over to the list
+		for(int i = 0; i < documentsListModel.getSize(); i++){
+			documentList.add((documentsListModel.getElementAt(i)));
+		}
+		
+		return documentList;
 	}
 
+	/**
+	 * Gets the Document List Model
+	 * @author MVezina
+	 * @return Document List Model
+	 */
+	
+	public DefaultListModel<Document> getDocumentsListModel()
+	{
+		return this.documentsListModel;
+	}
+	
+	
+	/**
+	 * Gets the User List Model
+	 * @author MVezina
+	 * @return User List Model
+	 */
+	
+	public DefaultListModel<User> getUsersListModel()
+	{
+		return this.usersListModel;
+	}
+	
 	/**
 	 * @author Justin Krol
 	 *         Getter for the list of users
@@ -225,7 +260,14 @@ public class FileSharingSystem
 	 */
 	public List<User> getUsers()
 	{
-		return users;
+		List<User> userList = new ArrayList<>();
+		
+		// Copy the documents over to the list
+		for(int i = 0; i < usersListModel.getSize(); i++){
+			userList.add((usersListModel.getElementAt(i)));
+		}
+		
+		return userList;
 	}
 
 }
