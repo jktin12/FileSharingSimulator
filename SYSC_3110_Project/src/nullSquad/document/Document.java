@@ -157,7 +157,7 @@ public class Document implements Comparable<Document>
 			if (!(o instanceof Document))
 				return false;
 
-			// Returns whether the two document IDs are the same
+			// Returns whether the two documents attributes are the same
 			Document d = (Document) o;
 			return (d.getDocumentID() == this.docID
 					&& d.getDocumentName().equals(this.name) 
