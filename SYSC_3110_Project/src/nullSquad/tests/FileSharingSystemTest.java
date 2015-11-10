@@ -18,7 +18,6 @@ import nullSquad.network.Consumer;
 import nullSquad.network.FileSharingSystem;
 import nullSquad.network.Producer;
 import nullSquad.network.User;
-import nullSquad.simulator.Simulator.tags;
 
 public class FileSharingSystemTest {
 
@@ -30,13 +29,13 @@ public class FileSharingSystemTest {
 	@Before
 	public void setUp() throws Exception {
 		network = new FileSharingSystem();
-		consumer1 = new Consumer("John", tags.PROGRAMMING.toString());
-		producer1 = new Producer("Jim", tags.PROGRAMMING.toString());
-		docA = new Document("docA", tags.PROGRAMMING.toString(), (Producer)producer1);
-		docB = new Document("docB", tags.BOOKS.toString(), (Producer)producer1);
-		docC = new Document("docC", tags.MUSIC.toString(), (Producer)producer1);
-		docD = new Document("docD", tags.SPORTS.toString(), (Producer)producer1);
-		docE = new Document("docE", tags.PROGRAMMING.toString(), (Producer)producer1);
+		consumer1 = new Consumer("John", "Programming");
+		producer1 = new Producer("Jim", "Programming");
+		docA = new Document("docA", "Programming", (Producer)producer1);
+		docB = new Document("docB", "Books", (Producer)producer1);
+		docC = new Document("docC", "Music", (Producer)producer1);
+		docD = new Document("docD", "Sports", (Producer)producer1);
+		docE = new Document("docE", "Programming", (Producer)producer1);
 /*		documents = new ArrayList<Document>();
 		documents.add(docA);
 		documents.add(docB);
@@ -83,8 +82,8 @@ public class FileSharingSystemTest {
 		System.out.println(list.get(0));
 		System.out.println(list.get(1));
 		
-		assertEquals(tags.PROGRAMMING.toString(), network.search(consumer1, 2).get(0).getTag());
-		assertEquals(tags.PROGRAMMING.toString(), network.search(consumer1, 2).get(1).getTag());
+		assertEquals("Programming", network.search(consumer1, 2).get(0).getTag());
+		assertEquals("Programming", network.search(consumer1, 2).get(1).getTag());
 	}
 
 	@Test
