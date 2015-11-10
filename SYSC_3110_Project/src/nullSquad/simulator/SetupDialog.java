@@ -129,7 +129,7 @@ public class SetupDialog{
 			numConsumersTextField,
 			new JLabel("Tags (Seperated by Commas): "),
 			tagsTextField,
-			new JLabel("Number of Simulations to Run: "),
+			new JLabel("Maximum Steps to Run: "),
 			numSimulationIterationsTextField,
 			new JLabel("Simulator Seed: "),
 			simSeedTextField,
