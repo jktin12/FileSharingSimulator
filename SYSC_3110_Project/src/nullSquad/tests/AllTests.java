@@ -8,7 +8,6 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({DocumentTest.class, ProducerTest.class, UserTest.class})
+@SuiteClasses({DocumentTest.class, ProducerTest.class, UserTest.class, FileSharingSystem.class})
 public class AllTests {
-
 }

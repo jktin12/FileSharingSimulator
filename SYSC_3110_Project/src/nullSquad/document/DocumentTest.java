@@ -1,4 +1,4 @@
-package nullSquad.tests;
+package nullSquad.document;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
