@@ -96,7 +96,7 @@ public class ConsumerTest {
 	public void testConstructor2Args() {
 		Consumer consumer2 = new Consumer("John", booksTag);
 		assertEquals("John", consumer2.getUserName());
-		assertEquals("BOOKS", consumer2.getTaste());
+		assertEquals(booksTag, consumer2.getTaste());
 	}
 
 
