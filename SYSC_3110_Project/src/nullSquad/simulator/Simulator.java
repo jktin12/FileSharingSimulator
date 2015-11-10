@@ -75,10 +75,14 @@ public class Simulator
 	private FileSharingSystem	network;
 	private Random	randomNumber;
 
-	private enum tags
+	/* Made public so that unit tests can use these values
+	 * when creating a user
+	 */
+	public enum tags
 	{
 		MUSIC, BOOKS, GAMING, SCHOOL, SPORTS, PROGRAMMING
 	}
+	
 
 	/**
 	 * Creates a simulator with specified network

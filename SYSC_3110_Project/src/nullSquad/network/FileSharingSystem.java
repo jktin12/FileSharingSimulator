@@ -148,7 +148,7 @@ public class FileSharingSystem
 		{
 			Collections.sort(topKDocuments);
 			Collections.reverse(topKDocuments);
-			topKDocuments.subList(0, topK - 1);
+			topKDocuments = topKDocuments.subList(0, topK);
 		}
 
 		// After all documents have been checked, return the list of topK

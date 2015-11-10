@@ -61,7 +61,7 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 	public void act(FileSharingSystem net, int kResults)
 	{
 		// Ensure the user has been registered
-		if (userID <= 0)
+		if (userID < 1)
 		{
 			System.out.println("The User is not currently registered.");
 			return;
