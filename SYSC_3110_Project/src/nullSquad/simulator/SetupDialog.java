@@ -16,7 +16,11 @@ public class SetupDialog{
 	private JFormattedTextField numSimulationIterationsTextField;
 	private JFormattedTextField simSeedTextField;
 	
-	
+	/**
+	 * Initialize the SetupDialog
+	 * @param parent The parent of the SetupDialog
+	 * @author MVezina
+	 */
 	public SetupDialog(JFrame parent)
 	{
 		// Set up a basic integer number formatter (JTextField input can only take in digits)
@@ -24,43 +28,65 @@ public class SetupDialog{
 		numFormatter.setValueClass(Integer.class);
 		numFormatter.setMinimum(0);
 		numFormatter.setMaximum(Integer.MAX_VALUE);
-		numFormatter.setCommitsOnValidEdit(true);
 		numFormatter.setAllowsInvalid(false);
 		
 		
 		// Set up all text fields
 		this.numConsumersTextField = new JFormattedTextField(numFormatter);
-		this.numProducersTextField = new JFormattedTextField(numFormatter);
+		this.numProducersTextField = new JFormattedTextField(numFormatter);		
 		
 		numFormatter.setMinimum(1);
 		this.numSimulationIterationsTextField = new JFormattedTextField(numFormatter);
 		this.simSeedTextField = new JFormattedTextField(numFormatter);
 		
-		
-		this.tagsTextField = new JFormattedTextField();
-		
+		// Initialize the tagsTextField
+		this.tagsTextField = new JTextField();
+		this.tagsTextField.setText("Music, Gaming, Programming, Java, Apple, Microsoft, Google");
 		showDialog(parent);
 	}
 	
+	/**
+	 * Get the entered simulation seed
+	 * @return The Simulation Seed
+	 * @author MVezina
+	 */
 	public int getSimulationSeed()
-	{	
+	{		
 		return Integer.parseInt(simSeedTextField.getText().replaceAll(",", "").trim());
 	}
 	
+	/**
+	 * Returns The total number of simulation iterations to run
+	 * @return Total Number of Simulation iterations to run
+	 * @author MVezina
+	 */
 	public int getTotalSimulationIterations()
 	{	
 		return Integer.parseInt(numSimulationIterationsTextField.getText().replaceAll(",", "").trim());
 	}
 	
-	
+	/**
+	 * @return Number of Producers to be created
+	 * @author MVezina
+	 */
 	public int getNumProducers()
 	{	
 		return Integer.parseInt(numProducersTextField.getText().replaceAll(",", "").trim());
 	}
+	
+	/**
+	 * @return Number of Consumers to be created
+	 * @author MVezina
+	 */
 	public int getNumConsumers()
 	{	
 		return Integer.parseInt(numConsumersTextField.getText().replaceAll(",", "").trim());
 	}
+	
+	/**
+	 * @return Available tags
+	 * @author MVezina
+	 */
 	public List<String> getTags()
 	{
 		List<String> list = new ArrayList<>();
@@ -73,8 +99,29 @@ public class SetupDialog{
 		return list;
 	}
 	
-	public void showDialog(JFrame parentFrame)
+	private boolean isEntryValid(JTextField entry)
 	{
+		// Used to notify which field is incorrect/invalid by setting the field background color to red
+		if(entry.getText().isEmpty())
+		{
+			entry.setBackground(Color.RED);
+			return false;
+		}
+		else
+		{
+			// Reset the background to white if the entry is valid
+			entry.setBackground(Color.WHITE);
+			return true;
+		}
+	}
+	
+	/**
+	 * Show the SetupDialog
+	 * @author MVezina
+	 */
+	private void showDialog(JFrame parentFrame)
+	{
+		// Components to be shown on the input dialog
 		JComponent[] components = new JComponent[] {
 			new JLabel("Number of Producers: "),
 			numProducersTextField,
@@ -88,79 +135,32 @@ public class SetupDialog{
 			simSeedTextField,
 		};
 		
-		
+		// Continue showing the dialog until valid entries are prevalent
 		while(true)
 		{		
+			// Show the dialog
 			if( JOptionPane.showConfirmDialog(parentFrame, components, "Simulator Setup", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.CANCEL_OPTION)
 			{
 				System.exit(0);
 			}
 			else
 			{
-				
+				// Whether or not ALL entries are valid
 				boolean success = true;
 				
-				// Used to notify which field is incorrect/invalid by setting the field to red
-				if(numProducersTextField.getText().isEmpty())
-				{
-					numProducersTextField.setBackground(Color.RED);
-					success = false;
-				}
-				else
-				{
-					numProducersTextField.setBackground(Color.WHITE);
-				}
+				// Check to see if the JTextField entries are valid
+				success &= isEntryValid(numProducersTextField);
+				success &= isEntryValid(numConsumersTextField);
+				success &= isEntryValid(numSimulationIterationsTextField);
+				success &= isEntryValid(tagsTextField);
+				success &= isEntryValid(simSeedTextField);
 				
-				if( numConsumersTextField.getText().isEmpty())
-				{
-					numConsumersTextField.setBackground(Color.RED);
-					success = false;
-				}
-				else
-				{
-					numConsumersTextField.setBackground(Color.WHITE);
-				}
-				
-				if( numSimulationIterationsTextField.getText().isEmpty())
-				{
-					numSimulationIterationsTextField.setBackground(Color.RED);
-					success = false;
-					
-				}
-				else
-				{
-					numSimulationIterationsTextField.setBackground(Color.WHITE);
-				}
-				
-				if( tagsTextField.getText().trim().isEmpty())
-				{
-					tagsTextField.setBackground(Color.RED);
-					success = false;
-					
-				}
-				else
-				{
-					tagsTextField.setBackground(Color.WHITE);
-				}
-				
-				if( simSeedTextField.getText().isEmpty())
-				{
-					simSeedTextField.setBackground(Color.RED);
-					success = false;
-					
-				}
-				else
-				{
-					simSeedTextField.setBackground(Color.WHITE);
-				}
 				
 				// If there is an invalid field, we want to continue getting input until the input is valid
-				if(!success)
-				{
-					continue;
-				}
+				if(success)
+					break;
 				
-				break;
+				
 			}
 		}
 	}

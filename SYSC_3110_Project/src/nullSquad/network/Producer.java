@@ -9,8 +9,8 @@
 package nullSquad.network;
 
 import java.util.*;
-import org.junit.*;
 import nullSquad.document.*;
+import nullSquad.simulator.SimulatorGUI;
 import nullSquad.strategies.ProducerPayoffStrategy;
 
 /**
@@ -66,7 +66,7 @@ public class Producer extends User implements ProducerPayoffStrategy,
 		boolean res = super.addFollower(user);
 		
 		if (res)
-			System.out.println(this.getUserName() + " has been followed by " + user.getUserName() + ". Updated Producer Payoff: " + calculatePayoff());
+			SimulatorGUI.appendLog(this.getUserName() + " has been followed by " + user.getUserName() + ". Updated Producer Payoff: " + calculatePayoff() + "\n");
 		
 		return res;
 	};
@@ -196,7 +196,7 @@ public class Producer extends User implements ProducerPayoffStrategy,
 		if (docLikeEvent.getSource().getProducer().equals(this))
 		{
 			// Calculate and print the payoff
-			System.out.println("Producer: " + this.getUserName() + " Document has been liked! Current Payoff: " + calculatePayoff());
+			SimulatorGUI.appendLog("Producer: " + this.getUserName() + " Document has been liked! Current Payoff: " + calculatePayoff() + "\n");
 		}
 
 	}

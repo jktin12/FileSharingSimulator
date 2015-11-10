@@ -9,6 +9,7 @@
 package nullSquad.network;
 
 import nullSquad.document.*;
+import nullSquad.simulator.SimulatorGUI;
 import nullSquad.strategies.*;
 
 import java.util.*;
@@ -72,7 +73,7 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 
 		// Calculates the payoff of the search results
 		int payoff = calculatePayoff(documentResults);
-		System.out.println("User: " + userName + " has Searched.\nThe documents returned by the search resulted in a payoff of: " + payoff);
+		SimulatorGUI.appendLog("User: " + userName + " has Searched.\nThe documents returned by the search resulted in a payoff of: " + payoff + "\n");
 
 		// Like all documents that match the users taste
 		for (Document d : documentResults)
@@ -81,7 +82,7 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 			{
 				// Likes the document
 				if (this.likeDocument(d))
-					System.out.println("User: " + userID + " has liked Document ID: " + d.getDocumentID() + " (" + d.getDocumentName() + ") because the tag matches the user's taste!");
+					SimulatorGUI.appendLog("User: " + userID + " has liked Document ID: " + d.getDocumentID() + " (" + d.getDocumentName() + ") because the tag matches the user's taste!\n");
 			}
 		}
 		payoffHistory.add(payoff);
@@ -108,7 +109,7 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 		int totalPayoff = 0;
 		if(documentSearchResults == null)
 		{
-			return 0;
+			return totalPayoff;
 		}
 		
 		for (Document d : documentSearchResults)
@@ -118,20 +119,6 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 			if (d.getTag().equals(consumer.getTaste()))
 			{
 				totalPayoff++;
-			}
-			else
-			{
-				// Remove a Payoff point if the document does not equal the
-				// user's taste
-				totalPayoff--;
-			}
-
-			// Two points for every user that likes this document that you are
-			// following
-			for (User u : consumer.getFollowing())
-			{
-				if (u.getLikedDocuments().contains(d))
-					totalPayoff += 2;
 			}
 
 		}
