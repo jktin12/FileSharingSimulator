@@ -517,7 +517,7 @@ public class SimulatorGUI extends JFrame implements ListDataListener, MouseListe
 		
 		this.setTitle("Simulator (" + currentSimulatorSequence + "/" + totalSimulatorSequences + ")");
 		this.mainSimulatorTextArea.setText(logText);
-		
+		this.repaint();
 		
 		if(currentSimulatorSequence == totalSimulatorSequences)
 		{
