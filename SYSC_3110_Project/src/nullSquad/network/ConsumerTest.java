@@ -106,10 +106,8 @@ public class ConsumerTest {
 	@Test
 	public void testCalculatePayoff() {
 		Consumer consumer3 = new Consumer("Bob", programmingTag);
-<<<<<<< HEAD
 		Consumer consumer4 = new Consumer("Joe", booksTag);
-=======
->>>>>>> origin/master
+
 		
 		network1.addDocument(docA);
 		network1.addDocument(docB);
