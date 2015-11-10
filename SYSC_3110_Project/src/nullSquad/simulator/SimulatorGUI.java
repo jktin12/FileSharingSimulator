@@ -14,6 +14,7 @@ import javax.swing.*;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
+import javax.xml.ws.handler.MessageContext;
 
 import nullSquad.network.*;
 
@@ -26,10 +27,12 @@ import nullSquad.document.*;
 @SuppressWarnings("serial")
 public class SimulatorGUI extends JFrame implements ListDataListener, MouseListener{
 
+	// The log text
+	private static String logText = "Welcome to the Simulator!\n\n";
+	
 	// Main Frame Tab Pane
 	private JTabbedPane tabbedMenuPane;
 	private JPanel mainTabPanel;
-	
 	
 	// Main Tab Panels
 	private JPanel documentsPanel;
@@ -77,7 +80,16 @@ public class SimulatorGUI extends JFrame implements ListDataListener, MouseListe
 	private int totalSimulatorSequences;
 	
 	
-
+	/**
+	 * Appends text t to log text
+	 * @param t The text to be appended
+	 */
+	public static void appendLog(String t)
+	{
+		logText += t + "\n";
+	}
+	
+	
 	/**
 	 * Constructor for creating a simulator GUI.
 	 * Initializes all values and components
@@ -167,7 +179,7 @@ public class SimulatorGUI extends JFrame implements ListDataListener, MouseListe
 		tabbedMenuPane.addTab("Simulator", simulatorPanel);
 		tabbedMenuPane.addTab("Documents", documentsPanel);
 		tabbedMenuPane.addTab("Users", usersPanel);
-
+		
 		// Add the tab pane to the JFrame
 		mainTabPanel.add(tabbedMenuPane);
 	
@@ -191,7 +203,6 @@ public class SimulatorGUI extends JFrame implements ListDataListener, MouseListe
 		
 		this.add(mainTabPanel);
 		this.add(simulatorControlsPanel);
-		this.add(Box.createRigidArea(new Dimension(0, 5)));
 	}
 
 	/**
@@ -215,7 +226,7 @@ public class SimulatorGUI extends JFrame implements ListDataListener, MouseListe
 	 * @author MVezina
 	 */
 	private void createUsersPanel()
-	{
+	{ 
 		// Create the users tab panel
 		usersPanel = new JPanel();
 		usersPanel.setLayout(new BoxLayout(usersPanel, BoxLayout.Y_AXIS));
@@ -244,6 +255,7 @@ public class SimulatorGUI extends JFrame implements ListDataListener, MouseListe
 		
 		// Create the producers JList
 		producersJList = new JList<>(producerListModel);
+		producersJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		producersJList.addMouseListener(this);
 		producersJList.addListSelectionListener((ListSelectionEvent lse) -> producersJList_selectionChanged(lse));
 	
@@ -253,6 +265,7 @@ public class SimulatorGUI extends JFrame implements ListDataListener, MouseListe
 		
 		// Create the Consumers JList
 		consumersJList = new JList<>(consumersListModel);
+		consumersJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		consumersJList.addListSelectionListener((ListSelectionEvent lse) -> consumersJList_selectionChanged(lse));
 		consumersJList.addMouseListener(this);
 		consumersListScrollPane = new JScrollPane(consumersJList);
@@ -275,6 +288,10 @@ public class SimulatorGUI extends JFrame implements ListDataListener, MouseListe
 	
 	}
 	
+	/**
+	 * The Selection event method for the consumersJList
+	 * @param lse
+	 */
 	private void consumersJList_selectionChanged(ListSelectionEvent lse) 
 	{
 		if(!lse.getValueIsAdjusting() && lse.getSource() == consumersJList)
@@ -286,12 +303,15 @@ public class SimulatorGUI extends JFrame implements ListDataListener, MouseListe
 				updateUserStats(consumersJList.getSelectedValue());
 			}
 			
-			
-			
 		}
 		
 	}
 
+	/**
+	 * The Selection Changed event method for the producersJList
+	 * @param lse The Event Object
+	 * @author MVezina
+	 */
 	private void producersJList_selectionChanged(ListSelectionEvent lse) 
 	{
 		
@@ -364,6 +384,11 @@ public class SimulatorGUI extends JFrame implements ListDataListener, MouseListe
 	}
 	
 	
+	/**
+	 * Update the currently Selected user stats
+	 * @param user The Currently Selected user
+	 * @author MVezina
+	 */
 	private void updateUserStats(User user)
 	{
 		if(user == null)
@@ -378,7 +403,7 @@ public class SimulatorGUI extends JFrame implements ListDataListener, MouseListe
 				
 		userStats += ("<b>ID</b>: " + user.getUserID() + newLine);		
 		userStats += ("<b>Name</b>: " + user.getUserName() + newLine);
-		userStats += ("<b>User Type</b>: " + (user instanceof Producer ? "Producer" : "Consumer") + newLine);
+		userStats += ("<b>User Type</b>: " + (user instanceof Producer ? "Producer" : "Consumer") + " (Payoff: " +  (user.getPayoffHistory().size() > 0 ? user.getPayoffHistory().get(user.getPayoffHistory().size()-1) : 0) + ")" + newLine);
 		userStats += ("<b>Taste</b>: " + user.getTaste() + newLine);
 		userStats += ("<b>Followers</b>: " + user.getFollowers().size() + newLine);
 		userStats += ("<b>Following</b>: " + user.getFollowing().size() + newLine);
@@ -488,15 +513,18 @@ public class SimulatorGUI extends JFrame implements ListDataListener, MouseListe
 		currentSimulatorSequence++;		
 		
 		
+		
+		
+		this.setTitle("Simulator (" + currentSimulatorSequence + "/" + totalSimulatorSequences + ")");
+		this.mainSimulatorTextArea.setText(logText);
+		
+		
 		if(currentSimulatorSequence == totalSimulatorSequences)
 		{
 			JOptionPane.showMessageDialog(null, "The simulator has finished!","Simulation Complete!", JOptionPane.INFORMATION_MESSAGE);
 			stepSimulatorButton.setEnabled(false);
 			runSimulatorButton.setEnabled(false);
 		}
-		
-		this.setTitle("Simulator (" + currentSimulatorSequence + "/" + totalSimulatorSequences + ")");
-		
 	}
 	
 	/**
@@ -557,6 +585,7 @@ public class SimulatorGUI extends JFrame implements ListDataListener, MouseListe
 	public void mouseClicked(MouseEvent e) {
 		if(e.getClickCount() == 2)
 		{
+			// If a double click action is sent on a jlist, we want to open the graph view for the selected user
 			if(e.getSource() == consumersJList && consumersJList.getSelectedValue() != null)
 			{
 				new GraphGUI(consumersJList.getSelectedValue());
@@ -575,8 +604,7 @@ public class SimulatorGUI extends JFrame implements ListDataListener, MouseListe
 	 */
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		// Method not used but required (by MouseListener interface)		
 	}
 
 	/**
@@ -584,8 +612,7 @@ public class SimulatorGUI extends JFrame implements ListDataListener, MouseListe
 	 */
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		// Method not used but required (by MouseListener interface)	
 	}
 
 	/**
@@ -593,8 +620,7 @@ public class SimulatorGUI extends JFrame implements ListDataListener, MouseListe
 	 */
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		// Method not used but required (by MouseListener interface)	
 	}
 	
 	/**
