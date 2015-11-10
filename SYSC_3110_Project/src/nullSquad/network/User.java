@@ -25,7 +25,8 @@ public abstract class User
 	protected List<User>		following;
 	protected List<Document>	likedDocuments;
 	protected String			taste;
-
+	protected List<Integer>		payoffHistory;
+	
 	/**
 	 * Creates a user with the specified taste
 	 * 
@@ -47,8 +48,26 @@ public abstract class User
 		followers = new ArrayList<>();
 		following = new ArrayList<>();
 		likedDocuments = new ArrayList<>();
+		payoffHistory = new ArrayList<>();
 	}
 
+	/**
+	 * Adds the current iteration payoff to the payoff History
+	 * @param currentIteration The current iteration of the simulator
+	 * @author MVezina
+	 */
+	public abstract void addIterationPayoff(int currentIteration);
+	
+	/**
+	 * Returns the history of the user's payoff
+	 * @return The List of integers representing the user's payoff
+	 * @author MVezina
+	 */
+	public List<Integer> getPayoffHistory()
+	{
+		return payoffHistory;
+	}
+	
 	/**
 	 * The action that is run by the user when the simulator calls it.
 	 * Subclasses will override this method, but must call this first

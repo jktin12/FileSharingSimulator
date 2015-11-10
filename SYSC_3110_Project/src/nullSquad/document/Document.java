@@ -71,6 +71,14 @@ public class Document implements Comparable<Document>
 		return likeListeners.remove(listener);
 	}
 	
+	/**
+	 * @author Marc Tebo
+	 * @return List of Like Listeners
+	 */
+	
+	public List<DocumentLikeListener> getLikeListeners(){
+		return likeListeners;
+	}
 	
 	/**
 	 * @author Marc Tebo
@@ -128,7 +136,7 @@ public class Document implements Comparable<Document>
 	 */
 	public String toString()
 	{		
-		return ("Name: " + this.name + "\nDocument ID: " + docID + "\nTag: " + this.tag + "\nProducer:  " + this.producer.getUserName() + "\nDate Uploaded: " + this.dateUploaded);
+		return ("Name: " + this.name + "\nDocument ID: " + docID + "\nTag: " + this.tag + "\nProducer: " + this.producer.getUserName() + "\nDate Uploaded: " + this.dateUploaded);
 		
 	}
 	
@@ -149,8 +157,12 @@ public class Document implements Comparable<Document>
 			if (!(o instanceof Document))
 				return false;
 
-			// Returns whether the two document IDs are the same
-			return (((Document) o).docID == this.docID);
+			// Returns whether the two documents attributes are the same
+			Document d = (Document) o;
+			return (d.getDocumentID() == this.docID
+					&& d.getDocumentName().equals(this.name) 
+					&& d.getTag().equals(this.tag)
+					&& d.getProducer().equals(this.producer));
 
 	}
 	
@@ -207,7 +219,9 @@ public class Document implements Comparable<Document>
 		this.docID = docID;
 	}
 	
-	
+	/**
+	 * @author Justin Krol
+	 */
 	public int compareTo(Document doc){
 		if(this.getUserLikes().size() > doc.getUserLikes().size())
 			return 1;
