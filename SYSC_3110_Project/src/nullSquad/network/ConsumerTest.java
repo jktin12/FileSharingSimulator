@@ -18,6 +18,7 @@ public class ConsumerTest {
 	User producer1;
 	private Document docA, docB, docC, docD, docE, docF;
 	String programmingTag, booksTag, musicTag, sportsTag;
+
 	
 	
 	@Before
@@ -105,7 +106,10 @@ public class ConsumerTest {
 	@Test
 	public void testCalculatePayoff() {
 		Consumer consumer3 = new Consumer("Bob", programmingTag);
+<<<<<<< HEAD
 		Consumer consumer4 = new Consumer("Joe", booksTag);
+=======
+>>>>>>> origin/master
 		
 		network1.addDocument(docA);
 		network1.addDocument(docB);

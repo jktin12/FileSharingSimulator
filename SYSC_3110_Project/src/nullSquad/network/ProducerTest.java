@@ -4,7 +4,7 @@
  * Student Number: 100938326
  * Team: nullSquad
  */
-package nullSquad.tests;
+package nullSquad.network;
 
 import static org.junit.Assert.*;
 

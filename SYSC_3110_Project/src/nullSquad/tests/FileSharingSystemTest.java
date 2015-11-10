@@ -25,17 +25,25 @@ public class FileSharingSystemTest {
 	private User consumer1, producer1;
 	private Document docA, docB, docC, docD, docE;
 //	private List<Document> documents;
+    String programmingTag, bookTag, musicTag, sportsTag;
+    
 	
 	@Before
 	public void setUp() throws Exception {
-		network = new FileSharingSystem();
-		consumer1 = new Consumer("John", "Programming");
-		producer1 = new Producer("Jim", "Programming");
-		docA = new Document("docA", "Programming", (Producer)producer1);
-		docB = new Document("docB", "Books", (Producer)producer1);
-		docC = new Document("docC", "Music", (Producer)producer1);
-		docD = new Document("docD", "Sports", (Producer)producer1);
-		docE = new Document("docE", "Programming", (Producer)producer1);
+        programmingTag = "Programming";
+        bookTag = "Book";
+        musicTag = "Music";
+        sportsTag = "Sports";
+        network = new FileSharingSystem();
+        
+		consumer1 = new Consumer("John", programmingTag);
+		producer1 = new Producer("Jim", programmingTag);
+		docA = new Document("docA", programmingTag, (Producer)producer1);
+		docB = new Document("docB", bookTag, (Producer)producer1);
+		docC = new Document("docC", musicTag, (Producer)producer1);
+		docD = new Document("docD", sportsTag, (Producer)producer1);
+		docE = new Document("docE", programmingTag, (Producer)producer1);
+
 /*		documents = new ArrayList<Document>();
 		documents.add(docA);
 		documents.add(docB);
@@ -82,8 +90,8 @@ public class FileSharingSystemTest {
 		System.out.println(list.get(0));
 		System.out.println(list.get(1));
 		
-		assertEquals("Programming", network.search(consumer1, 2).get(0).getTag());
-		assertEquals("Programming", network.search(consumer1, 2).get(1).getTag());
+		assertEquals(programmingTag, network.search(consumer1, 2).get(0).getTag());
+		assertEquals(programmingTag, network.search(consumer1, 2).get(1).getTag());
 	}
 
 	@Test
