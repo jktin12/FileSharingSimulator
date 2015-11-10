@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nullSquad.document.Document;
-import nullSquad.simulator.Simulator.tags;
 
 public class ConsumerTest {
 
@@ -18,21 +17,25 @@ public class ConsumerTest {
 	User consumer1, consumer2;
 	User producer1;
 	private Document docA, docB, docC, docD, docE, docF;
+	String programmingTag = "Programming";
+	String booksTag = "Programming";
+	String musicTag = "Programming";
+	String sportsTag = "Programming";
 	
 	
 	@Before
 	public void setUp() throws Exception {
-		consumer1 = new Consumer("Bob", tags.PROGRAMMING.toString());
-		consumer2 = new Consumer("Bob", tags.PROGRAMMING.toString());
+		consumer1 = new Consumer("Bob", programmingTag);
+		consumer2 = new Consumer("Bob", programmingTag);
 		network1 = new FileSharingSystem();
 		network2 = new FileSharingSystem();
-		producer1 = new Producer("Jim", tags.PROGRAMMING.toString());
-		docA = new Document("docA", tags.PROGRAMMING.toString(), (Producer)producer1);
-		docB = new Document("docB", tags.BOOKS.toString(), (Producer)producer1);
-		docC = new Document("docC", tags.MUSIC.toString(), (Producer)producer1);
-		docD = new Document("docD", tags.SPORTS.toString(), (Producer)producer1);
-		docE = new Document("docE", tags.PROGRAMMING.toString(), (Producer)producer1);
-		docF = new Document("docF", tags.PROGRAMMING.toString(), (Producer)producer1);
+		producer1 = new Producer("Jim", programmingTag);
+		docA = new Document("docA", programmingTag, (Producer)producer1);
+		docB = new Document("docB", booksTag, (Producer)producer1);
+		docC = new Document("docC", musicTag, (Producer)producer1);
+		docD = new Document("docD", sportsTag, (Producer)producer1);
+		docE = new Document("docE", programmingTag, (Producer)producer1);
+		docF = new Document("docF", programmingTag, (Producer)producer1);
 				
 	}
 
@@ -66,7 +69,7 @@ public class ConsumerTest {
 
 	@Test
 	public void testEquals() {
-		Consumer consumer3 = new Consumer("Justin", tags.BOOKS.toString());
+		Consumer consumer3 = new Consumer("Justin", booksTag);
 		assertTrue(consumer1.equals(consumer2));
 		assertTrue(consumer2.equals(consumer1));
 		assertTrue(consumer2.equals(consumer2));
@@ -91,7 +94,7 @@ public class ConsumerTest {
 
 	@Test
 	public void testConstructor2Args() {
-		Consumer consumer2 = new Consumer("John", tags.BOOKS.toString());
+		Consumer consumer2 = new Consumer("John", booksTag);
 		assertEquals("John", consumer2.getUserName());
 		assertEquals("BOOKS", consumer2.getTaste());
 	}
@@ -99,7 +102,7 @@ public class ConsumerTest {
 
 	@Test
 	public void testCalculatePayoff() {
-		Consumer consumer3 = new Consumer("Bob", tags.PROGRAMMING.toString());
+		Consumer consumer3 = new Consumer("Bob", programmingTag);
 		
 		network1.addDocument(docA);
 		network1.addDocument(docB);
