@@ -21,7 +21,7 @@ public class GraphGUI extends JFrame{
 	
 	/**
 	 * Create a GUI that shows a graph for the specified user's payoff history
-	 * @param user
+	 * @param user The user to show the Payoff history for
 	 */
 	public GraphGUI(User user) 
 	{
@@ -32,7 +32,7 @@ public class GraphGUI extends JFrame{
 		this.pack();
 		
 		this.setMinimumSize(new Dimension(500, 500));
-		this.setResizable(false);
+		//this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		
 		
@@ -94,7 +94,7 @@ public class GraphGUI extends JFrame{
 
 	/**
 	 * Draws the chart using graphics
-	 * @param g
+	 * @param g Graphics to Draw to
 	 */
 	public void drawChart(Graphics g)
 	{

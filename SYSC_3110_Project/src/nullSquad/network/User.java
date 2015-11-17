@@ -73,6 +73,7 @@ public abstract class User
 	 * Subclasses will override this method, but must call this first
 	 * 
 	 * @param net The main network for the simulation
+	 * @param kResults The number of results to search for
 	 * @author MVezina
 	 */
 	public abstract void act(FileSharingSystem net, int kResults);
