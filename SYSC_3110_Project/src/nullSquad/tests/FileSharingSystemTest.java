@@ -13,20 +13,17 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import nullSquad.document.Document;
-import nullSquad.network.Consumer;
-import nullSquad.network.FileSharingSystem;
-import nullSquad.network.Producer;
-import nullSquad.network.User;
+import nullSquad.filesharingsystem.users.*;
+import nullSquad.filesharingsystem.document.*;
+import nullSquad.filesharingsystem.*;
 
 public class FileSharingSystemTest {
 
 	private FileSharingSystem network;
 	private User consumer1, producer1;
 	private Document docA, docB, docC, docD, docE;
-//	private List<Document> documents;
     String programmingTag, bookTag, musicTag, sportsTag;
-    
+    List<String> tags ;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -34,7 +31,13 @@ public class FileSharingSystemTest {
         bookTag = "Book";
         musicTag = "Music";
         sportsTag = "Sports";
-        network = new FileSharingSystem();
+        
+        
+        tags = new ArrayList<>();
+		tags.add(programmingTag);
+		tags.add(bookTag);
+		tags.add(musicTag);
+		tags.add(sportsTag);
         
 		consumer1 = new Consumer("John", programmingTag);
 		producer1 = new Producer("Jim", programmingTag);
