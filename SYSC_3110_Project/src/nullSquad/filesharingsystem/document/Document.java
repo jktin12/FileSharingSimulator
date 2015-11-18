@@ -4,12 +4,10 @@
  * Student Number: 100925246
  * Team: nullSquad
  */
-package nullSquad.document;
+package nullSquad.filesharingsystem.document;
 
 import java.util.*;
-
-import nullSquad.network.Producer;
-import nullSquad.network.User;
+import nullSquad.filesharingsystem.users.*;
 
 /**
  * Document class represents a document that is produced by a producer

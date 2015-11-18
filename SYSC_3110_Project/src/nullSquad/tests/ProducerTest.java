@@ -4,7 +4,7 @@
  * Student Number: 100938326
  * Team: nullSquad
  */
-package nullSquad.network;
+package nullSquad.tests;
 
 import static org.junit.Assert.*;
 
@@ -14,11 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.*;
-
-import nullSquad.document.Document;
-import nullSquad.network.Consumer;
-import nullSquad.network.FileSharingSystem;
-import nullSquad.network.Producer;
+import nullSquad.filesharingsystem.users.*;
+import nullSquad.filesharingsystem.document.*;
+import nullSquad.filesharingsystem.*;
 import nullSquad.strategies.ProducerPayoffStrategy;
 
 public class ProducerTest {
@@ -32,9 +30,12 @@ public class ProducerTest {
 	@Before
 	public void setUp() throws Exception {
 		strategy = null;
+		
+		
+		
 		producer1 = new Producer("TestName","TEST");
 		producer2 = new Producer(strategy,"TestName","TEST");
-		network = new FileSharingSystem();
+		network = new FileSharingSystem(null);
 		System.setOut(new PrintStream(outContent));
 	}
 

@@ -6,19 +6,13 @@ package nullSquad.simulator;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.List;
-import java.util.Random;
-
-import org.jfree.*;
 import javax.swing.*;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.xml.ws.handler.MessageContext;
+import javax.swing.event.*;
 
-import nullSquad.network.*;
+import nullSquad.filesharingsystem.*;
 
-import nullSquad.document.*;
+import nullSquad.filesharingsystem.users.*;
+import nullSquad.filesharingsystem.document.*;
 
 /**
  * @author MVezina
@@ -72,13 +66,8 @@ public class SimulatorGUI extends JFrame implements ListDataListener, MouseListe
 	private JLabel documentStatsLabel;
 	
 	
-	// Simulator Fields
-	private Random	randomNumber;
-	private FileSharingSystem network;
-	private List<String> tags;
-	private int currentSimulatorSequence;
-	private int totalSimulatorSequences;
-	
+	private Simulator simulator;
+	JPopupMenu userPopupMenu;
 	
 	/**
 	 * Appends text t to log text
@@ -103,36 +92,34 @@ public class SimulatorGUI extends JFrame implements ListDataListener, MouseListe
 		SetupDialog sD = new SetupDialog(this);
 		
 		
-		// Initialize the network
-		network = new FileSharingSystem();
 		
 		// Set the values from the setup dialog
 		int numProducers = sD.getNumProducers(); 
 		int numConsumers = sD.getNumConsumers();
 
+		// Initialize the Simulator
+		simulator = new Simulator(new FileSharingSystem(sD.getTags()), sD.getTotalSimulationIterations());
+		
+		
 		// Initialize the simulator fields
-		this.currentSimulatorSequence = 0;
-		this.totalSimulatorSequences = sD.getTotalSimulationIterations();		
-		this.randomNumber = new Random(sD.getSimulationSeed() * new Random().nextInt());
-		this.tags = sD.getTags();
 		
 		// Initialize the List Models
-		allUsersListModel = network.getUsersListModel();
-		allDocumentsListModel = network.getDocumentsListModel();
+		allUsersListModel = simulator.getNetwork().getUsersListModel();
+		allDocumentsListModel = simulator.getNetwork().getDocumentsListModel();
 		consumersListModel = new DefaultListModel<Consumer>();
 		producerListModel = new DefaultListModel<Producer>();
 		
 		allUsersListModel.addListDataListener(this);
 		
 		// Generate the producers and consumers
-		createConsumers(numConsumers);
-		createProducers(numProducers);
+		simulator.createConsumers(numConsumers);
+		simulator.createProducers(numProducers);
 		
 		
 		
 		/* Set & Initialize Frame Properties / Components */
 		
-		this.setTitle("Simulator (" + currentSimulatorSequence + "/" + totalSimulatorSequences + ")");
+		this.setTitle("Simulator (" + simulator.getCurrentSimulatorSequence() + "/" + simulator.getTotalSimulatorSequences() + ")");
 		
 		// Set the frame layout
 		this.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
@@ -227,6 +214,11 @@ public class SimulatorGUI extends JFrame implements ListDataListener, MouseListe
 	 */
 	private void createUsersPanel()
 	{ 
+		
+		userPopupMenu = new JPopupMenu();
+		userPopupMenu.add(new JPopupMenu("HI"));
+		
+		
 		// Create the users tab panel
 		usersPanel = new JPanel();
 		usersPanel.setLayout(new BoxLayout(usersPanel, BoxLayout.Y_AXIS));
@@ -245,6 +237,7 @@ public class SimulatorGUI extends JFrame implements ListDataListener, MouseListe
 		consumerListPanel = new JPanel();
 		consumerListPanel.setLayout(new BoxLayout(consumerListPanel, BoxLayout.Y_AXIS));
 		
+		
 		// Create the panel for the Producer list
 		producerListPanel = new JPanel();
 		producerListPanel.setLayout(new BoxLayout(producerListPanel, BoxLayout.Y_AXIS));
@@ -258,7 +251,8 @@ public class SimulatorGUI extends JFrame implements ListDataListener, MouseListe
 		producersJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		producersJList.addMouseListener(this);
 		producersJList.addListSelectionListener((ListSelectionEvent lse) -> producersJList_selectionChanged(lse));
-	
+		
+		
 		producersListScrollPane = new JScrollPane(producersJList);
 		producersListScrollPane.addMouseListener(this);
 		producersListScrollPane.setPreferredSize(new Dimension(300, 150));
@@ -268,6 +262,8 @@ public class SimulatorGUI extends JFrame implements ListDataListener, MouseListe
 		consumersJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		consumersJList.addListSelectionListener((ListSelectionEvent lse) -> consumersJList_selectionChanged(lse));
 		consumersJList.addMouseListener(this);
+		consumersJList.setComponentPopupMenu(userPopupMenu);
+		
 		consumersListScrollPane = new JScrollPane(consumersJList);
 		consumersListScrollPane.setPreferredSize(new Dimension(300, 150));
 		
@@ -449,90 +445,35 @@ public class SimulatorGUI extends JFrame implements ListDataListener, MouseListe
 	void runSimulator_Click() {
 		
 	
-		while (totalSimulatorSequences - currentSimulatorSequence > 0)
+		while (simulator.getTotalSimulatorSequences() - simulator.getCurrentSimulatorSequence() > 0)
 		{
-			simulationStep();
+			stepSimulator_Click();
 		}
 	}
 	
-	/**
-	 * Adds the specified number of consumers into the network
-	 *
-	 * 
-	 * @param numberOfConsumers Number of consumers in the network
-	 * @author Raymond Wu
-	 */
-	private void createConsumers(int numberOfConsumers)
-	{
-		for (int x = 0; x < numberOfConsumers; x++)
-		{
-			User user = new Consumer("Consumer" + x, tags.get(randomNumber.nextInt(tags.size())));
-			user.registerUser(network);
-		}
-	}
-	
-	
-	/**
-	 * Adds the specified number of producers into the network
-	 * 
-	 * 
-	 * @param numberOfProducers Number of producers in the network
-	 * @author Raymond Wu
-	 */
-	private void createProducers(int numberOfProducers)
-	{
-		for (int x = 0; x < numberOfProducers; x++)
-		{
-			User user = new Producer("Producer" + x, tags.get(randomNumber.nextInt(tags.size())));
-			user.registerUser(network);
-		}
-	}
-
-	/**
-	 * Performs one simulation cycle which calls
-	 * a user to "act"
-	 * 
-	 * @author Raymond Wu
-	 */
-	private void simulationStep()
-	{
-		// Generate a random number so the simulation can get a random user
-		User randomUser = network.getUsers().get(randomNumber.nextInt(network.getUsers().size()));
-		mainSimulatorTextArea.setText(mainSimulatorTextArea.getText() + "User: " + randomUser.getUserName() + " has been called to act!\n");
-		
-		randomUser.act(network, 10);
-		
-		// Add the payoff iteration for each user
-		for(User u : network.getUsers())
-		{
-			u.addIterationPayoff(currentSimulatorSequence);
-		}
-		
-		
-		
-		currentSimulatorSequence++;		
-		
-		
-		
-		
-		this.setTitle("Simulator (" + currentSimulatorSequence + "/" + totalSimulatorSequences + ")");
-		this.mainSimulatorTextArea.setText(logText);
-		this.repaint();
-		
-		if(currentSimulatorSequence == totalSimulatorSequences)
-		{
-			JOptionPane.showMessageDialog(null, "The simulator has finished!","Simulation Complete!", JOptionPane.INFORMATION_MESSAGE);
-			stepSimulatorButton.setEnabled(false);
-			runSimulatorButton.setEnabled(false);
-		}
-	}
 	
 	/**
 	 * Event Method: Called when the stepSimulator Button is clicked
 	 * @author MVezina
 	 */
 	void stepSimulator_Click() {
-		simulationStep();
+		simulator.simulationStep();
+
+		// Set the title
+		this.setTitle("Simulator (" + simulator.getCurrentSimulatorSequence() + "/" + simulator.getTotalSimulatorSequences()  + ")");
+		
+		// Set the log textbox
+		this.mainSimulatorTextArea.setText(logText);
+		
+		// Repaint the frame
+		this.repaint();
+		
+		if(simulator.getCurrentSimulatorSequence() == simulator.getTotalSimulatorSequences())
+		{
+			JOptionPane.showMessageDialog(null, "The simulator has finished!","Simulation Complete!", JOptionPane.INFORMATION_MESSAGE);
+			stepSimulatorButton.setEnabled(false);
+			runSimulatorButton.setEnabled(false);
+		}
 		
 	}
 	
@@ -583,17 +524,24 @@ public class SimulatorGUI extends JFrame implements ListDataListener, MouseListe
 	 */
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if(e.getClickCount() == 2)
+		
+		
+		
+		if(e.getButton() == MouseEvent.BUTTON3)
 		{
+			
+			
 			// If a double click action is sent on a jlist, we want to open the graph view for the selected user
 			if(e.getSource() == consumersJList && consumersJList.getSelectedValue() != null)
 			{
-				new GraphGUI(consumersJList.getSelectedValue());
+				System.out.println("Consumer Clicked");
+				userPopupMenu.show(consumersJList, e.getX(), e.getY());
+			//	new GraphGUI(consumersJList.getSelectedValue());
 			}
 			
 			if(e.getSource() == producersJList && producersJList.getSelectedValue() != null)
 			{
-				new GraphGUI(producersJList.getSelectedValue());
+				//new GraphGUI(producersJList.getSelectedValue());
 			}
 		}
 		

@@ -5,7 +5,7 @@
  */
 package nullSquad.strategies;
 
-import nullSquad.network.Producer;
+import nullSquad.filesharingsystem.users.*;
 
 /**
  * This interface will be used to implement all Producer Payoff Strategies

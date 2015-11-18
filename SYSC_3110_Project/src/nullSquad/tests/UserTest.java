@@ -4,29 +4,35 @@
  * Student Number: 100925246
  * Team: nullSquad
  */
-package nullSquad.network;
+package nullSquad.tests;
 
 import static org.junit.Assert.*;
+
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import nullSquad.document.Document;
-import nullSquad.network.FileSharingSystem;
+import nullSquad.filesharingsystem.users.*;
+import nullSquad.filesharingsystem.document.*;
+import nullSquad.filesharingsystem.*;
 
 public class UserTest {
 	public User user1;
 	public User user2;
 	public User user3;
 	FileSharingSystem network;
+	List<String> tags ;
 	
 	@Before
 	public void setUp() throws Exception {
 		user1 = new Producer("TestUser1","TEST");
 		user2 = new Consumer("TestUser2","TEST");
 		user3 = new Consumer("TestUser3","TEST");
-		network = new FileSharingSystem();
+		
+		
+		network = new FileSharingSystem(null);
 	}
 
 	@After

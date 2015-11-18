@@ -14,7 +14,6 @@ public class SetupDialog{
 	private JFormattedTextField numConsumersTextField;
 	private JTextField tagsTextField;
 	private JFormattedTextField numSimulationIterationsTextField;
-	private JFormattedTextField simSeedTextField;
 	
 	/**
 	 * Initialize the SetupDialog
@@ -37,7 +36,6 @@ public class SetupDialog{
 		
 		numFormatter.setMinimum(1);
 		this.numSimulationIterationsTextField = new JFormattedTextField(numFormatter);
-		this.simSeedTextField = new JFormattedTextField(numFormatter);
 		
 		// Initialize the tagsTextField
 		this.tagsTextField = new JTextField();
@@ -45,15 +43,7 @@ public class SetupDialog{
 		showDialog(parent);
 	}
 	
-	/**
-	 * Get the entered simulation seed
-	 * @return The Simulation Seed
-	 * @author MVezina
-	 */
-	public int getSimulationSeed()
-	{		
-		return Integer.parseInt(simSeedTextField.getText().replaceAll(",", "").trim());
-	}
+
 	
 	/**
 	 * Returns The total number of simulation iterations to run
@@ -131,8 +121,6 @@ public class SetupDialog{
 			tagsTextField,
 			new JLabel("Maximum Steps to Run: "),
 			numSimulationIterationsTextField,
-			new JLabel("Simulator Seed: "),
-			simSeedTextField,
 		};
 		
 		// Continue showing the dialog until valid entries are prevalent
@@ -153,7 +141,6 @@ public class SetupDialog{
 				success &= isEntryValid(numConsumersTextField);
 				success &= isEntryValid(numSimulationIterationsTextField);
 				success &= isEntryValid(tagsTextField);
-				success &= isEntryValid(simSeedTextField);
 				
 				
 				// If there is an invalid field, we want to continue getting input until the input is valid

@@ -3,7 +3,7 @@
  * 
  * @author MVezina
  */
-package nullSquad.document;
+package nullSquad.filesharingsystem.document;
 
 
 /**

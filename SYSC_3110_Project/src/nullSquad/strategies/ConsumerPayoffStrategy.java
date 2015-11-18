@@ -7,8 +7,8 @@ package nullSquad.strategies;
 
 import java.util.List;
 
-import nullSquad.document.Document;
-import nullSquad.network.Consumer;
+import nullSquad.filesharingsystem.users.*;
+import nullSquad.filesharingsystem.document.*;
 
 /**
  * This interface will be used to implement all Consumer Payoff Strategies

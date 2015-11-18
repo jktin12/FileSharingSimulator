@@ -6,11 +6,11 @@
  *         Team: noSquad
  */
 
-package nullSquad.network;
+package nullSquad.filesharingsystem.users;
 
 import java.util.*;
-
-import nullSquad.document.Document;
+import nullSquad.filesharingsystem.*;
+import nullSquad.filesharingsystem.document.*;
 
 /**
  * Abstract class that represents a User
@@ -73,6 +73,7 @@ public abstract class User
 	 * Subclasses will override this method, but must call this first
 	 * 
 	 * @param net The main network for the simulation
+	 * @param kResults The number of results to search for
 	 * @author MVezina
 	 */
 	public abstract void act(FileSharingSystem net, int kResults);
@@ -98,7 +99,7 @@ public abstract class User
 	 * @return Whether or not the document was added successfully
 	 * @author MVezina
 	 */
-	protected boolean likeDocument(Document doc)
+	public boolean likeDocument(Document doc)
 	{
 		if (doc == null)
 			return false;
@@ -122,7 +123,7 @@ public abstract class User
 	 * @return Returns whether or not the document was unliked successfully
 	 * @author MVezina
 	 */
-	protected boolean unlikeDocument(Document doc)
+	public boolean unlikeDocument(Document doc)
 	{
 		if (doc == null)
 			return false;
@@ -180,7 +181,7 @@ public abstract class User
 	 * @return Returns whether or not the user was followed successfully
 	 * @author MVezina
 	 */
-	protected boolean followUser(User user)
+	public boolean followUser(User user)
 	{
 
 		if (user == null)
@@ -266,7 +267,7 @@ public abstract class User
 	 * @return Whether or not the user was unfollowed successfully
 	 * @author MVezina
 	 */
-	protected boolean unfollowUser(User user)
+	public boolean unfollowUser(User user)
 	{
 		// Check to see if the user was successfully unfollowed
 		if (!user.removeFollower(this))

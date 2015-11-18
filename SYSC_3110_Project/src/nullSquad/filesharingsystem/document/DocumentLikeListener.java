@@ -1,7 +1,7 @@
 /**
  * 
  */
-package nullSquad.document;
+package nullSquad.filesharingsystem.document;
 
 /**
  * Document Like Listener Interface
