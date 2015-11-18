@@ -6,11 +6,16 @@
  *         Team: noSquad
  */
 
-package nullSquad.network;
+package nullSquad.filesharingsystem.users;
+
+import nullSquad.filesharingsystem.*;
+import nullSquad.filesharingsystem.document.*;
+
 
 import java.util.*;
-import nullSquad.document.*;
 import nullSquad.simulator.SimulatorGUI;
+import nullSquad.strategies.DefaultProducerActStrategy;
+import nullSquad.strategies.ProducerActStrategy;
 import nullSquad.strategies.ProducerPayoffStrategy;
 
 /**
@@ -28,15 +33,32 @@ public class Producer extends User implements ProducerPayoffStrategy,
 
 	// The Producer Payoff Strategy to be used
 	private ProducerPayoffStrategy	payoffStrategy;
+	private ProducerActStrategy actStrategy;
+	
 
+	public Producer(ProducerPayoffStrategy payoffStrat, ProducerActStrategy actStrat, String userName,
+			String taste)
+	{
+		this(userName, taste);
+
+		this.payoffStrategy = payoffStrat;
+		this.actStrategy = actStrat;
+	}
+	
 	public Producer(ProducerPayoffStrategy payoffStrat, String userName,
 			String taste)
 	{
 		this(userName, taste);
 
-		// Set the payoff strategy if it is not null
-		if (payoffStrat != null)
-			this.payoffStrategy = payoffStrat;
+		this.payoffStrategy = payoffStrat;
+	}
+	
+	public Producer(ProducerActStrategy actStrat, String userName,
+			String taste)
+	{
+		this(userName, taste);
+
+		this.actStrategy = actStrat;
 	}
 
 	/**
@@ -53,7 +75,8 @@ public class Producer extends User implements ProducerPayoffStrategy,
 
 		// Sets the default payoff strategy to the interface implementation in
 		// this class
-		this.payoffStrategy = this;
+		this.payoffStrategy = this;		
+		this.actStrategy = new DefaultProducerActStrategy();
 	}
 
 	/**
@@ -73,10 +96,9 @@ public class Producer extends User implements ProducerPayoffStrategy,
 
 	/**
 	 * The Producer Acts By:
-	 * - Creates a new document (has same taste as Producer)
-	 * - Likes newly created document
-	 * - Searches network for top K documents
-	 * - Likes documents with own taste
+	 * - Produces a new document
+	 * - Runs the specified producer act strategy
+	 * - Updates the payoff
 	 */
 	@Override
 	public void act(FileSharingSystem net, int kResults)
@@ -88,9 +110,25 @@ public class Producer extends User implements ProducerPayoffStrategy,
 			return;
 		}
 
+		
+
+		produceDocument(net);
+
+		// Call the producer act strategy
+		this.actStrategy.act(this, net, kResults);
+		
+		this.payoffHistory.add(calculatePayoff());
+	}
+
+	/**
+	 * Produces and uploads a new document to the network
+	 * @param net The network to upload the document to
+	 * @author MVezina
+	 */
+	private void produceDocument(FileSharingSystem net) {
 		// Create a new document
 		Document newDoc = new Document("Document " + this.taste + " (" + Calendar.getInstance().getTime() + ")", this.taste, this);
-
+				
 		// Add new document to document produced
 		docsProduced.add(newDoc);
 
@@ -99,23 +137,6 @@ public class Producer extends User implements ProducerPayoffStrategy,
 
 		// The document is now added to the network
 		net.addDocument(newDoc);
-
-		// Search the network for top 10 documents
-		for (Document d : net.search(this, kResults))
-		{
-			// Like all documents with the same taste as this User
-			if (d.getTag().equals(taste))
-			{
-				this.likeDocument(d);
-
-				// Follow all users who like this document
-				for (User u : d.getUserLikes())
-				{
-					this.followUser(u);
-				}
-			}
-		}
-		this.payoffHistory.add(calculatePayoff());
 	}
 
 	/**

@@ -6,9 +6,10 @@
  *         Team: noSquad
  */
 
-package nullSquad.network;
+package nullSquad.filesharingsystem.users;
 
-import nullSquad.document.*;
+import nullSquad.filesharingsystem.*;
+import nullSquad.filesharingsystem.document.*;
 import nullSquad.simulator.SimulatorGUI;
 import nullSquad.strategies.*;
 

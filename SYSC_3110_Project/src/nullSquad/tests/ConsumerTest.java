@@ -1,15 +1,17 @@
-package nullSquad.network;
+package nullSquad.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
+import nullSquad.filesharingsystem.*;
+import java.util.*;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import nullSquad.document.Document;
+import nullSquad.filesharingsystem.users.*;
+import nullSquad.filesharingsystem.document.*;
 
 public class ConsumerTest {
 
@@ -18,7 +20,7 @@ public class ConsumerTest {
 	User producer1;
 	private Document docA, docB, docC, docD, docE, docF;
 	String programmingTag, booksTag, musicTag, sportsTag;
-
+	List<String> tags ;
 	
 	
 	@Before
@@ -28,10 +30,16 @@ public class ConsumerTest {
 		musicTag = "Music";
 		sportsTag = "Sports";
 		
+		tags = new ArrayList<>();
+		tags.add(programmingTag);
+		tags.add(booksTag);
+		tags.add(musicTag);
+		tags.add(sportsTag);
+		
 		consumer1 = new Consumer("Bob", programmingTag);
 		consumer2 = new Consumer("Bob", programmingTag);
-		network1 = new FileSharingSystem();
-		network2 = new FileSharingSystem();
+		network1 = new FileSharingSystem(tags);
+		network2 = new FileSharingSystem(tags);
 		producer1 = new Producer("Jim", programmingTag);
 		docA = new Document("docA", programmingTag, (Producer)producer1);
 		docB = new Document("docB", booksTag, (Producer)producer1);

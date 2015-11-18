@@ -6,12 +6,12 @@
  *         Team: nullSquad
  */
 
-package nullSquad.network;
+package nullSquad.filesharingsystem;
 
-import nullSquad.document.*;
+import nullSquad.filesharingsystem.users.*;
+import nullSquad.filesharingsystem.document.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,15 +28,18 @@ public class FileSharingSystem
 	private int				nextAvailableDocID	= 1;
 	private DefaultListModel<User>		usersListModel;
 	private DefaultListModel<Document>	documentsListModel;
-
+	private List<String>	tags;
+	
 	/**
 	 * @author Justin Krol
 	 *         Creates a Network with a list of users and a list of documents
+	 *         @param tags The list of tags that can be associated with a user or document
 	 */
-	public FileSharingSystem()
+	public FileSharingSystem(List<String> tags)
 	{
 		usersListModel = new DefaultListModel<>();
 		documentsListModel = new DefaultListModel<>();
+		this.tags = tags;
 	}
 
 	/**
@@ -79,6 +82,12 @@ public class FileSharingSystem
 				// System.out.println("User is not currently registered on the network");
 				return false;
 			}
+			
+			
+			// Remove all documents
+			
+		//	user.
+			
 			usersListModel.removeElement(user);
 			return true;
 		}
@@ -87,15 +96,16 @@ public class FileSharingSystem
 	}
 	
 	/**
-	 * Searches the network for the top k documents
-	 * 
+	 * Default Search: Searches for the specified tag
 	 * @param user The user that will search the network
+	 * @param tag The tag to search for
 	 * @param topK Number of results to be returned
 	 * @return The top K results from the network
 	 * @author MVezina
 	 */
-	public List<Document> search(User user, int topK)
+	public List<Document> search(User user, String tag, int topK)
 	{
+
 		List<Document> documentList = new ArrayList<>();
 		
 		// Copy the documents over to the list
@@ -117,7 +127,7 @@ public class FileSharingSystem
 			if (!doc.getUserLikes().contains(user))
 			{
 				// If tag matches users taste
-				if (doc.getTag().equals(user.getTaste()))
+				if (doc.getTag().equals(tag))
 				{
 					topKDocuments.add(doc);
 					continue;
@@ -155,10 +165,31 @@ public class FileSharingSystem
 			Collections.reverse(topKDocuments);
 			topKDocuments = topKDocuments.subList(0, topK);
 		}
+		
+		
+		// We want to update the payoff for all of the producers every time their documents are returned
+		for(Document d : topKDocuments)
+		{
+			d.getProducer().calculatePayoff();
+		}
 
 		// After all documents have been checked, return the list of topK
 		// documents
-		return topKDocuments;
+		return topKDocuments;	
+	}
+	
+	
+	/**
+	 * Searches for the documents that match the taste of the user
+	 * 
+	 * @param user The user that will search the network
+	 * @param topK Number of results to be returned
+	 * @return The top K results from the network
+	 * @author MVezina
+	 */
+	public List<Document> search(User user, int topK)
+	{
+		return search(user,user.getTaste(),topK);
 	}
 
 	/**
@@ -268,6 +299,10 @@ public class FileSharingSystem
 		}
 		
 		return userList;
+	}
+
+	public List<String> getTags() {
+		return tags;
 	}
 
 }
