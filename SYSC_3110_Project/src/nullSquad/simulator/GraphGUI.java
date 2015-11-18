@@ -5,12 +5,13 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 
+import nullSquad.filesharingsystem.users.*;
+
 import javax.swing.*;
 
 import org.jfree.chart.*;
 import org.jfree.data.xy.DefaultXYDataset;
 
-import nullSquad.network.*;
 
 public class GraphGUI extends JFrame{
 
@@ -41,7 +42,7 @@ public class GraphGUI extends JFrame{
 		
 		refreshChartData();
 		// Create an XY Line Chart
-		chart = ChartFactory.createXYLineChart("User Payoff Over Time", "Time (Simulation Iterations)", "User Payoff", xyDataset);
+		chart = ChartFactory.createXYLineChart("User Payoff Over Time", "Steps (Simulation Iterations)", "User Payoff", xyDataset);
 		
 		
 		// Draw the Initial Chart
