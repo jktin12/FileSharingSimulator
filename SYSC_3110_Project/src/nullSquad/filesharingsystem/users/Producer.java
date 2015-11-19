@@ -127,7 +127,7 @@ public class Producer extends User implements ProducerPayoffStrategy,
 	 */
 	private void produceDocument(FileSharingSystem net) {
 		// Create a new document
-		Document newDoc = new Document("Document " + this.taste + " (" + Calendar.getInstance().getTime() + ")", this.taste, this);
+		Document newDoc = new Document("Document " + this.taste + " (" + (new Random()).nextInt(500) + ")", this.taste, this);
 				
 		// Add new document to document produced
 		docsProduced.add(newDoc);
@@ -137,6 +137,8 @@ public class Producer extends User implements ProducerPayoffStrategy,
 
 		// The document is now added to the network
 		net.addDocument(newDoc);
+		
+		
 	}
 
 	/**
