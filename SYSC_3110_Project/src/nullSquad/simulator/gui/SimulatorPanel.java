@@ -2,6 +2,10 @@ package nullSquad.simulator.gui;
 
 import javax.swing.*;
 
+/**
+ * Representation of the Simulator Tab Panel
+ * @author MVezina
+ */
 public class SimulatorPanel extends JPanel {
 
 
