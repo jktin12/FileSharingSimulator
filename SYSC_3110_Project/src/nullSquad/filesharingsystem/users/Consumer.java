@@ -12,6 +12,7 @@ import nullSquad.filesharingsystem.*;
 import nullSquad.filesharingsystem.document.*;
 import nullSquad.simulator.SimulatorGUI;
 import nullSquad.strategies.*;
+import nullSquad.strategies.payoff.ConsumerPayoffStrategy;
 
 import java.util.*;
 

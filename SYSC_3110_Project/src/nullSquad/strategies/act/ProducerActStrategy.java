@@ -1,4 +1,4 @@
-package nullSquad.strategies;
+package nullSquad.strategies.act;
 
 import nullSquad.filesharingsystem.*;
 import nullSquad.filesharingsystem.users.*;

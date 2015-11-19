@@ -3,7 +3,7 @@
  * 
  * @author MVezina
  */
-package nullSquad.strategies;
+package nullSquad.strategies.payoff;
 
 import java.util.List;
 

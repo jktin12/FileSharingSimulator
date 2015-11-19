@@ -1,4 +1,4 @@
-package nullSquad.strategies;
+package nullSquad.strategies.act;
 
 import java.util.List;
 import java.util.Random;

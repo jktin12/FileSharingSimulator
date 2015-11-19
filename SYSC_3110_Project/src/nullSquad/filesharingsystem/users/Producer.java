@@ -14,9 +14,9 @@ import nullSquad.filesharingsystem.document.*;
 
 import java.util.*;
 import nullSquad.simulator.SimulatorGUI;
-import nullSquad.strategies.DefaultProducerActStrategy;
-import nullSquad.strategies.ProducerActStrategy;
-import nullSquad.strategies.ProducerPayoffStrategy;
+import nullSquad.strategies.act.DefaultProducerActStrategy;
+import nullSquad.strategies.act.ProducerActStrategy;
+import nullSquad.strategies.payoff.ProducerPayoffStrategy;
 
 /**
  * Producer class that extends User and implements the default

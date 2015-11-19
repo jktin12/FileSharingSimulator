@@ -3,7 +3,7 @@
  * 
  * @author MVezina
  */
-package nullSquad.strategies;
+package nullSquad.strategies.payoff;
 
 import nullSquad.filesharingsystem.users.*;
 

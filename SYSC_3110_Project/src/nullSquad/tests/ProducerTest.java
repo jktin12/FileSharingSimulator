@@ -15,9 +15,9 @@ import java.util.List;
 
 import org.junit.*;
 import nullSquad.filesharingsystem.users.*;
+import nullSquad.strategies.payoff.ProducerPayoffStrategy;
 import nullSquad.filesharingsystem.document.*;
 import nullSquad.filesharingsystem.*;
-import nullSquad.strategies.ProducerPayoffStrategy;
 
 public class ProducerTest {
 
