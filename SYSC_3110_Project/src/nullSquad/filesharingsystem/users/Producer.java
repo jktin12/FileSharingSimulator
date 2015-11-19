@@ -10,10 +10,10 @@ package nullSquad.filesharingsystem.users;
 
 import nullSquad.filesharingsystem.*;
 import nullSquad.filesharingsystem.document.*;
-
+import nullSquad.simulator.gui.SimulatorGUI;
 
 import java.util.*;
-import nullSquad.simulator.SimulatorGUI;
+
 import nullSquad.strategies.act.DefaultProducerActStrategy;
 import nullSquad.strategies.act.ProducerActStrategy;
 import nullSquad.strategies.payoff.ProducerPayoffStrategy;

@@ -4,6 +4,7 @@ import java.util.Random;
 
 import nullSquad.filesharingsystem.*;
 import nullSquad.filesharingsystem.users.*;
+import nullSquad.simulator.gui.SimulatorGUI;
 
 public class Simulator {
 

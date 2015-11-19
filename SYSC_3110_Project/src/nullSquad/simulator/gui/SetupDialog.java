@@ -1,4 +1,4 @@
-package nullSquad.simulator;
+package nullSquad.simulator.gui;
 
 import java.awt.Color;
 import java.text.NumberFormat;
