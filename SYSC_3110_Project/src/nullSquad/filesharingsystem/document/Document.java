@@ -134,7 +134,7 @@ public class Document implements Comparable<Document>
 	 */
 	public String toString()
 	{		
-		return ("Name: " + this.name + "\nDocument ID: " + docID + "\nTag: " + this.tag + "\nProducer: " + this.producer.getUserName() + "\nDate Uploaded: " + this.dateUploaded);
+		return ("Name: " + this.name + "\nDocument ID: " + docID + "\nTag: " + this.tag + "\nProducer: " + this.producer.getUserName() + "\nDate Uploaded: " + this.dateUploaded + "\nNumber of Likes: " + this.getUserLikes().size());
 		
 	}
 	
