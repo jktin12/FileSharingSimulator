@@ -39,16 +39,19 @@ public class Simulator {
 		
 		// Generate a random number so the simulation can get a random user
 		User randomUser = network.getUsers().get(randomNumber.nextInt(network.getUsers().size()));
-		SimulatorGUI.appendLog("User: " + randomUser.getUserName() + " has been called to act!\n");
+		
+		String startText = " === " + randomUser.getUserName() + " has been called to act: === ";
+		SimulatorGUI.appendLog(startText);
 		
 		randomUser.act(network, 10);
+		
+		SimulatorGUI.appendLog("\n");
 		
 		// Add the payoff iteration for each user
 		for(User u : network.getUsers())
 		{
 			u.addIterationPayoff(currentSimulatorSequence);
 		}
-		
 		
 		
 		currentSimulatorSequence++;		

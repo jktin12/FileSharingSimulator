@@ -74,16 +74,17 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 
 		// Calculates the payoff of the search results
 		int payoff = calculatePayoff(documentResults);
-		SimulatorGUI.appendLog("User: " + userName + " has Searched.\nThe documents returned by the search resulted in a payoff of: " + payoff + "\n");
-
+		
+		
+		SimulatorGUI.appendLog("Search: Returned " + documentResults.size() + " documents (Result Payoff: " + payoff + ")");
+		
 		// Like all documents that match the users taste
 		for (Document d : documentResults)
 		{
 			if (d.getTag().equals(taste))
 			{
 				// Likes the document
-				if (this.likeDocument(d))
-					SimulatorGUI.appendLog("User: " + userID + " has liked Document ID: " + d.getDocumentID() + " (" + d.getDocumentName() + ") because the tag matches the user's taste!\n");
+				this.likeDocument(d);
 			}
 		}
 

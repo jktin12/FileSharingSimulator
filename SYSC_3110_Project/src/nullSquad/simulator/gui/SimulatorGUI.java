@@ -47,7 +47,7 @@ public class SimulatorGUI extends JFrame {
 	 * @param t The text to be appended
 	 */
 	public static void appendLog(String t) {
-		logText += t + "\n";
+		logText += t + '\n';
 	}
 
 	/**
@@ -81,7 +81,7 @@ public class SimulatorGUI extends JFrame {
 		this.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
 
 		// Set the minimum and preferred sizes
-		this.setMinimumSize(new Dimension(680, 400));
+		this.setMinimumSize(new Dimension(640, 430));
 		this.setPreferredSize(this.getMinimumSize());
 
 		// Center the frame on the screen

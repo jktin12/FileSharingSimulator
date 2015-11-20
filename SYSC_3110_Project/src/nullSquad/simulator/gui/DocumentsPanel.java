@@ -2,7 +2,6 @@ package nullSquad.simulator.gui;
 
 
 import java.awt.Component;
-import java.awt.Dimension;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -52,12 +51,12 @@ public class DocumentsPanel extends JPanel implements ListCellRenderer<Document>
 		
 		// Set the scroll pane for the documents
 		documentListScrollPane = new JScrollPane(documentsJList);
-		documentListScrollPane.setMaximumSize(new Dimension(documentListScrollPane.getMaximumSize().width, Integer.MAX_VALUE));
+		//documentListScrollPane.setMaximumSize(new Dimension(documentListScrollPane.getMaximumSize().width, Integer.MAX_VALUE));
 		
 		// Document Statistics Panel
 		documentStatsListPanel = new JPanel();
 		documentStatsListPanel.setBorder(BorderFactory.createTitledBorder("Document Stats"));
-		documentStatsListPanel.setPreferredSize(new Dimension(100, Integer.MAX_VALUE));
+		//documentStatsListPanel.setPreferredSize(new Dimension(100, Integer.MAX_VALUE));
 		
 
 		// Add the stats label to the info panel

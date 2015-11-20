@@ -289,13 +289,13 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 	private void jList_MouseClicked(MouseEvent e)
 	{
 
-		if (e.getButton() == MouseEvent.BUTTON3)
+		if (e.getClickCount() == 2)
 		{
 
 			// If a double click action is sent on a jlist, we want to open the
 			// graph view for the selected user
 			if (e.getSource() == consumersJList && consumersJList.getSelectedValue() != null)
-			{
+			{				
 				new GraphGUI(consumersJList.getSelectedValue());
 			}
 
@@ -411,6 +411,30 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 	/**
 	 * Item added to allUsersListModel
 	 */
+
+	@Override
+	public Component getListCellRendererComponent(JList<? extends User> list, User value, int index, boolean isSelected, boolean cellHasFocus)
+	{
+		// Create a new label to represent a cell in the document list
+		JLabel label = new JLabel(value.getUserName() + "   (ID: " + value.getUserID() + ")");
+		label.setOpaque(true);
+
+		// Set the background and foreground colors (based on whether or not an
+		// item is selected)
+		if (isSelected)
+		{
+			label.setBackground(list.getSelectionBackground());
+			label.setForeground(list.getSelectionForeground());
+		}
+		else
+		{
+			label.setBackground(list.getBackground());
+			label.setForeground(list.getForeground());
+		}
+
+		return label;
+	}
+
 	@Override
 	public void intervalAdded(ListDataEvent e)
 	{
@@ -433,44 +457,33 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 
 	}
 
-	
-	
-	@Override
-	public Component getListCellRendererComponent(JList<? extends User> list, User value, int index, boolean isSelected, boolean cellHasFocus)
-	{
-		// Create a new label to represent a cell in the document list
-		JLabel label = new JLabel(value.getUserName() + "   (ID: " + value.getUserID() + ")");
-		label.setOpaque(true);
-		
-		// Set the background and foreground colors
-		if(isSelected)
-		{
-			label.setBackground(list.getSelectionBackground());
-			label.setForeground(list.getSelectionForeground());
-		}
-		else
-		{
-			label.setBackground(list.getBackground());
-			label.setForeground(list.getForeground());
-		}
-		
-		return label;
-	}
-	
-	/**
-	 * The following are Empty implementations from ListDataListener Interface
-	 * (No ListDataAdapter was available)
-	 */
 	@Override
 	public void intervalRemoved(ListDataEvent e)
 	{
+		// Remove a user from the associated Producer / Consumer JLists whenever
+		// a user is removed from the network list model
+
+		User removedUser = (allUsersListModel.getElementAt(e.getIndex0()));
+
+		if (removedUser instanceof Producer)
+		{
+			// Remove from producer list
+			producerListModel.removeElement((Producer) removedUser);
+		}
+		else if (removedUser instanceof Consumer)
+		{
+			// Remove from consumer list
+			consumersListModel.removeElement((Consumer) removedUser);
+		}
+
 	}
 
+	/**
+	 * Empty Implementation from ListDataListener
+	 */
 	@Override
 	public void contentsChanged(ListDataEvent e)
 	{
 	}
-
-	
 
 }
