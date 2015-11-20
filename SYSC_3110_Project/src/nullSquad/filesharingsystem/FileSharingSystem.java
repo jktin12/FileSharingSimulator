@@ -7,6 +7,7 @@
 package nullSquad.filesharingsystem;
 
 import nullSquad.filesharingsystem.users.*;
+import nullSquad.simulator.gui.SimulatorGUI;
 import nullSquad.filesharingsystem.document.*;
 
 import java.util.ArrayList;
@@ -85,10 +86,40 @@ public class FileSharingSystem
 			}
 
 			// Remove all documents
+			if (user instanceof Producer)
+			{
+				Producer producer = (Producer) user;
 
-			// TODO: Remove everything associated with user
+				// Remove all produced documents
+				for (Document d : producer.getDocumentsProduced())
+				{
+					this.removeDocument(d);
+				}
+			}
+
+			// Unlike all documents
+			for (Document d : user.getLikedDocuments())
+			{
+				user.unlikeDocument(d);
+			}
+
+			// Unfollow all users
+			for (User u : user.getFollowing())
+			{
+				user.unfollowUser(u);
+			}
+
+			// Remove all followers
+			for (User u : user.getFollowers())
+			{
+				u.unfollowUser(user);
+			}
+
+			System.out.println(user);
 
 			usersListModel.removeElement(user);
+
+			SimulatorGUI.appendLog("Network: User " + user.getUserName() + " has been removed from the network");
 			return true;
 		}
 
@@ -96,7 +127,7 @@ public class FileSharingSystem
 	}
 
 	/**
-	 * Default Search: Searches for the specified tag
+	 * Default Search Method: Searches for the specified tag
 	 * 
 	 * @param user The user that will search the network
 	 * @param tag The tag to search for
@@ -107,19 +138,24 @@ public class FileSharingSystem
 	public List<Document> search(User user, String tag, int topK)
 	{
 		// If topK is invalid (ex: -1), change it to the absolute value
-		if(topK < 0)
+		if (topK < 0)
 			topK = Math.abs(topK);
-		
+
+		SimulatorGUI.appendLog("User: " + user.getUserName() + " has Searched for " + topK + " documents with Tag: " + tag);
+
 		List<Document> documentList = new ArrayList<>();
 
-		// Copy the documents from the list model over to a list so it can be
-		// ranked
+		// Copy the documents (matching tag) from the list model over to a list
+		// so it can be ranked
 		for (int i = 0; i < documentsListModel.getSize(); i++)
 		{
-			documentList.add((documentsListModel.getElementAt(i)));
+			if (documentsListModel.getElementAt(i).getTag().equals(tag))
+			{
+				documentList.add((documentsListModel.getElementAt(i)));
+			}
 		}
 
-		// Sort the top documents using the selected strategy as a comparater
+		// Sort the top documents using the selected strategy as a comparator
 		Collections.sort(documentList, user.getSearchStrategyEnum().getStrategy());
 
 		// Since Collections.sort() sorts from worst -> greatest, we need to
@@ -171,11 +207,14 @@ public class FileSharingSystem
 				System.out.println("Document has already been added to the network");
 				return false;
 			}
+
 			doc.setDocumentID(nextAvailableDocID++);
 			documentsListModel.addElement(doc);
+			SimulatorGUI.appendLog("Network: Document '" + doc.getDocumentName() + "' has been uploaded");
+
 			return true;
 		}
-		// System.out.println("No document object to add (null)");
+
 		return false;
 	}
 
@@ -197,6 +236,13 @@ public class FileSharingSystem
 				// network");
 				return false;
 			}
+
+			// Remove the document from all users 'likes'
+			for (User u : doc.getUserLikes())
+			{
+				u.unlikeDocument(doc);
+			}
+
 			documentsListModel.removeElement(doc);
 			return true;
 		}
