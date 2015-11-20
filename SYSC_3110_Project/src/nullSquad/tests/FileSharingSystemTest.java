@@ -32,13 +32,15 @@ public class FileSharingSystemTest {
         musicTag = "Music";
         sportsTag = "Sports";
         
-        
+       
         tags = new ArrayList<>();
 		tags.add(programmingTag);
 		tags.add(bookTag);
 		tags.add(musicTag);
 		tags.add(sportsTag);
         
+		 network = new FileSharingSystem(tags);
+		
 		consumer1 = new Consumer("John", programmingTag);
 		producer1 = new Producer("Jim", programmingTag);
 		docA = new Document("docA", programmingTag, (Producer)producer1);
@@ -86,15 +88,8 @@ public class FileSharingSystemTest {
 		
 		assertEquals(5, network.search(consumer1, 6).size());
 		assertEquals(4, network.search(consumer1, 4).size());
+		assertEquals(1, network.search(consumer1, -1).size());
 		
-		List<Document> list;
-		list = new ArrayList<>();
-		list= network.search(consumer1, 2);
-		System.out.println(list.get(0));
-		System.out.println(list.get(1));
-		
-		assertEquals(programmingTag, network.search(consumer1, 2).get(0).getTag());
-		assertEquals(programmingTag, network.search(consumer1, 2).get(1).getTag());
 	}
 
 	@Test
