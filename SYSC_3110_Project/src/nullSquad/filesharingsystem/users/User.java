@@ -11,9 +11,7 @@ package nullSquad.filesharingsystem.users;
 import java.util.*;
 import nullSquad.filesharingsystem.*;
 import nullSquad.filesharingsystem.document.*;
-import nullSquad.strategies.ranking.DocumentPopularityStrategy;
 import nullSquad.strategies.ranking.RankingStrategyEnum;
-import nullSquad.strategies.ranking.SearchRankingStrategy;
 
 /**
  * Abstract class that represents a User
