@@ -14,8 +14,7 @@ import nullSquad.simulator.gui.SimulatorGUI;
 
 import java.util.*;
 
-import nullSquad.strategies.act.DefaultProducerActStrategy;
-import nullSquad.strategies.act.ProducerActStrategy;
+import nullSquad.strategies.act.ProducerActStrategyEnum;
 import nullSquad.strategies.payoff.ProducerPayoffStrategy;
 
 /**
@@ -25,36 +24,31 @@ import nullSquad.strategies.payoff.ProducerPayoffStrategy;
  * 
  * @author MVezina
  */
-public class Producer extends User implements ProducerPayoffStrategy,
-		DocumentLikeListener
+public class Producer extends User implements ProducerPayoffStrategy, DocumentLikeListener
 {
 	// The list of documents that the producer has produced
-	private List<Document>			docsProduced;
+	private List<Document> docsProduced;
 
 	// The Producer Payoff Strategy to be used
-	private ProducerPayoffStrategy	payoffStrategy;
-	private ProducerActStrategy actStrategy;
-	
+	private ProducerPayoffStrategy payoffStrategy;
+	private ProducerActStrategyEnum actStrategy;
 
-	public Producer(ProducerPayoffStrategy payoffStrat, ProducerActStrategy actStrat, String userName,
-			String taste)
+	public Producer(ProducerPayoffStrategy payoffStrat, ProducerActStrategyEnum actStrat, String userName, String taste)
 	{
 		this(userName, taste);
 
 		this.payoffStrategy = payoffStrat;
 		this.actStrategy = actStrat;
 	}
-	
-	public Producer(ProducerPayoffStrategy payoffStrat, String userName,
-			String taste)
+
+	public Producer(ProducerPayoffStrategy payoffStrat, String userName, String taste)
 	{
 		this(userName, taste);
 
 		this.payoffStrategy = payoffStrat;
 	}
-	
-	public Producer(ProducerActStrategy actStrat, String userName,
-			String taste)
+
+	public Producer(ProducerActStrategyEnum actStrat, String userName, String taste)
 	{
 		this(userName, taste);
 
@@ -75,8 +69,8 @@ public class Producer extends User implements ProducerPayoffStrategy,
 
 		// Sets the default payoff strategy to the interface implementation in
 		// this class
-		this.payoffStrategy = this;		
-		this.actStrategy = new DefaultProducerActStrategy();
+		this.payoffStrategy = this;
+		this.actStrategy = ProducerActStrategyEnum.Default;
 	}
 
 	/**
@@ -87,10 +81,10 @@ public class Producer extends User implements ProducerPayoffStrategy,
 	public boolean addFollower(User user)
 	{
 		boolean res = super.addFollower(user);
-		
+
 		if (res)
 			SimulatorGUI.appendLog(this.getUserName() + " has been followed by " + user.getUserName() + ". Updated Producer Payoff: " + calculatePayoff() + "\n");
-		
+
 		return res;
 	};
 
@@ -110,25 +104,27 @@ public class Producer extends User implements ProducerPayoffStrategy,
 			return;
 		}
 
-		
-
+		// Create a new document and upload to the network
 		produceDocument(net);
 
 		// Call the producer act strategy
-		this.actStrategy.act(this, net, kResults);
-		
+		this.actStrategy.getStrategy().act(this, net, kResults);
+
+		//TODO: Delete
 		this.payoffHistory.add(calculatePayoff());
 	}
 
 	/**
 	 * Produces and uploads a new document to the network
+	 * 
 	 * @param net The network to upload the document to
 	 * @author MVezina
 	 */
-	private void produceDocument(FileSharingSystem net) {
+	private void produceDocument(FileSharingSystem net)
+	{
 		// Create a new document
 		Document newDoc = new Document("Document " + this.taste + " (" + (new Random()).nextInt(500) + ")", this.taste, this);
-				
+
 		// Add new document to document produced
 		docsProduced.add(newDoc);
 
@@ -137,8 +133,7 @@ public class Producer extends User implements ProducerPayoffStrategy,
 
 		// The document is now added to the network
 		net.addDocument(newDoc);
-		
-		
+
 	}
 
 	/**
@@ -184,6 +179,25 @@ public class Producer extends User implements ProducerPayoffStrategy,
 		return this.docsProduced;
 	}
 
+	/**
+	 * Sets the act strategy
+	 * @param producerActStrategy
+	 */
+	public void setActStrategyEnum(ProducerActStrategyEnum producerActStrategy)
+	{
+		if (producerActStrategy == null)
+			return;
+		this.actStrategy = producerActStrategy;
+	}
+
+	/**
+	 * @return Producer act strategy enum
+	 */
+	public ProducerActStrategyEnum getActStrategyEnum()
+	{
+		return this.actStrategy;
+	}
+
 	@Override
 	public String toString()
 	{
@@ -208,7 +222,6 @@ public class Producer extends User implements ProducerPayoffStrategy,
 		return (this.docsProduced.size() == p.docsProduced.size());
 
 	}
-	
 
 	/**
 	 * DocumentLiked Event Handler
@@ -225,8 +238,9 @@ public class Producer extends User implements ProducerPayoffStrategy,
 	}
 
 	@Override
-	public void addIterationPayoff(int currentIteration) {
-		if(currentIteration == getPayoffHistory().size())		
+	public void addIterationPayoff(int currentIteration)
+	{
+		if (currentIteration == getPayoffHistory().size())
 		{
 			payoffHistory.add(calculatePayoff());
 		}

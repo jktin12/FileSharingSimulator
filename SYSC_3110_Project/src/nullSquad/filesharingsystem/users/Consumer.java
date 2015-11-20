@@ -1,9 +1,7 @@
 /**
  * Title: SYSC 3110 Project
  * 
- * @author MVezina
- *         Student Number: 100934579
- *         Team: noSquad
+ * @author MVezina Student Number: 100934579 Team: noSquad
  */
 
 package nullSquad.filesharingsystem.users;
@@ -17,8 +15,8 @@ import java.util.*;
 
 /**
  * Producer class that extends User and implements the default
- * ProducerPayoffStrategy
- * This class represents a Producer that belongs to a network
+ * ProducerPayoffStrategy This class represents a Producer that belongs to a
+ * network
  * 
  * @author MVezina
  */
@@ -26,8 +24,10 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 {
 
 	// The Consumer Payoff Strategy to be used
-	private ConsumerPayoffStrategy	payoffStrategy;
-
+	private ConsumerPayoffStrategy payoffStrategy;
+	private int currentPayoff;
+	
+	
 	/**
 	 * Calls the default constructor and sets the Consumer Payoff Strategy
 	 * 
@@ -35,8 +35,7 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 	 * @param userName The name of the user
 	 * @param taste The taste of the user
 	 */
-	public Consumer(ConsumerPayoffStrategy payoffStrat, String userName,
-			String taste)
+	public Consumer(ConsumerPayoffStrategy payoffStrat, String userName, String taste)
 	{
 		// Call the default Constructor
 		this(userName, taste);
@@ -56,6 +55,7 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 	public Consumer(String userName, String taste)
 	{
 		super(userName, taste);
+		this.currentPayoff = 0;	
 		this.payoffStrategy = this;
 	}
 
@@ -86,7 +86,10 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 					SimulatorGUI.appendLog("User: " + userID + " has liked Document ID: " + d.getDocumentID() + " (" + d.getDocumentName() + ") because the tag matches the user's taste!\n");
 			}
 		}
-		payoffHistory.add(payoff);
+
+		// Set the current payoff for the user
+		this.currentPayoff += payoff;
+		
 	}
 
 	/**
@@ -108,11 +111,11 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 	public int consumerPayoffStrategy(Consumer consumer, List<Document> documentSearchResults)
 	{
 		int totalPayoff = 0;
-		if(documentSearchResults == null)
+		if (documentSearchResults == null)
 		{
 			return totalPayoff;
 		}
-		
+
 		for (Document d : documentSearchResults)
 		{
 			// One point is associated with if the user's taste matches the
@@ -128,8 +131,7 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 	}
 
 	/**
-	 * Override toString
-	 * Returns User Type and super class String representation
+	 * Override toString Returns User Type and super class String representation
 	 */
 	@Override
 	public String toString()
@@ -139,8 +141,8 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 	}
 
 	/**
-	 * Override equals
-	 * Determines whether or not the object and this consumer are equal
+	 * Override equals Determines whether or not the object and this consumer
+	 * are equal
 	 */
 	@Override
 	public boolean equals(Object o)
@@ -152,18 +154,12 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 	}
 
 	@Override
-	public void addIterationPayoff(int currentIteration) {
-		
-		if(currentIteration == 0)
-		{
-			this.payoffHistory.add(calculatePayoff(null));
-			return;
-		}
-		
+	public void addIterationPayoff(int currentIteration)
+	{
 		// Only add a payoff iteration if the history is not updated
-		if(currentIteration == getPayoffHistory().size())
-		{	// For the Consumer, we just want to set the previous iteration payoff 
-			this.payoffHistory.add(getPayoffHistory().get(currentIteration-1));
+		if (currentIteration == getPayoffHistory().size())
+		{ 
+			this.payoffHistory.add(currentPayoff);
 		}
 	}
 

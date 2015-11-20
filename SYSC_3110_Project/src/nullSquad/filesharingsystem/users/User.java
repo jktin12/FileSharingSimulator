@@ -12,6 +12,7 @@ import java.util.*;
 import nullSquad.filesharingsystem.*;
 import nullSquad.filesharingsystem.document.*;
 import nullSquad.strategies.ranking.DocumentPopularityStrategy;
+import nullSquad.strategies.ranking.RankingStrategyEnum;
 import nullSquad.strategies.ranking.SearchRankingStrategy;
 
 /**
@@ -19,7 +20,8 @@ import nullSquad.strategies.ranking.SearchRankingStrategy;
  * 
  * @author MVezina
  */
-public abstract class User {
+public abstract class User
+{
 	protected int userID;
 	protected String userName;
 	protected List<User> followers;
@@ -27,18 +29,19 @@ public abstract class User {
 	protected List<Document> likedDocuments;
 	protected String taste;
 	protected List<Integer> payoffHistory;
-	private SearchRankingStrategy searchStrategy;
+	private RankingStrategyEnum searchStrategy;
 
 	/**
 	 * Creates a user with the specified taste
 	 * 
 	 * @param userName
-	 *            The user's name
+	 *        The user's name
 	 * @param taste
-	 *            The taste of the user
+	 *        The taste of the user
 	 * @author MVezina
 	 */
-	public User(String userName, String taste) {
+	public User(String userName, String taste)
+	{
 		if (userName == null)
 			userName = "";
 
@@ -52,11 +55,12 @@ public abstract class User {
 		following = new ArrayList<>();
 		likedDocuments = new ArrayList<>();
 		payoffHistory = new ArrayList<>();
-		this.setSearchStrategy(new DocumentPopularityStrategy());
+		this.setSearchStrategy(RankingStrategyEnum.DocumentPopularity);
 
 	}
 
-	public User(SearchRankingStrategy rankingStrategy, String userName, String taste) {
+	public User(RankingStrategyEnum rankingStrategy, String userName, String taste)
+	{
 		this(userName, taste);
 		this.setSearchStrategy(rankingStrategy);
 	}
@@ -65,7 +69,7 @@ public abstract class User {
 	 * Adds the current iteration payoff to the payoff History
 	 * 
 	 * @param currentIteration
-	 *            The current iteration of the simulator
+	 *        The current iteration of the simulator
 	 * @author MVezina
 	 */
 	public abstract void addIterationPayoff(int currentIteration);
@@ -76,7 +80,8 @@ public abstract class User {
 	 * @return The List of integers representing the user's payoff
 	 * @author MVezina
 	 */
-	public List<Integer> getPayoffHistory() {
+	public List<Integer> getPayoffHistory()
+	{
 		return payoffHistory;
 	}
 
@@ -85,9 +90,9 @@ public abstract class User {
 	 * Subclasses will override this method, but must call this first
 	 * 
 	 * @param net
-	 *            The main network for the simulation
+	 *        The main network for the simulation
 	 * @param kResults
-	 *            The number of results to search for
+	 *        The number of results to search for
 	 * @author MVezina
 	 */
 	public abstract void act(FileSharingSystem net, int kResults);
@@ -96,10 +101,11 @@ public abstract class User {
 	 * Registers the user with the specified network
 	 * 
 	 * @param net
-	 *            The network to register the user on
+	 *        The network to register the user on
 	 * @author MVezina
 	 */
-	public void registerUser(FileSharingSystem net) {
+	public void registerUser(FileSharingSystem net)
+	{
 		// Registers this user with the network
 		// Registering a user returns the userID
 		if (userID <= 0)
@@ -110,11 +116,12 @@ public abstract class User {
 	 * Called When the User wants to like a document
 	 * 
 	 * @param doc
-	 *            The Document that the user is going to like
+	 *        The Document that the user is going to like
 	 * @return Whether or not the document was added successfully
 	 * @author MVezina
 	 */
-	public boolean likeDocument(Document doc) {
+	public boolean likeDocument(Document doc)
+	{
 		if (doc == null)
 			return false;
 
@@ -134,11 +141,12 @@ public abstract class User {
 	 * Unlikes a document
 	 * 
 	 * @param doc
-	 *            the document to be unliked
+	 *        the document to be unliked
 	 * @return Returns whether or not the document was unliked successfully
 	 * @author MVezina
 	 */
-	public boolean unlikeDocument(Document doc) {
+	public boolean unlikeDocument(Document doc)
+	{
 		if (doc == null)
 			return false;
 
@@ -156,11 +164,12 @@ public abstract class User {
 	 * Adds a user to the list of followers
 	 * 
 	 * @param user
-	 *            The user to add the list of followers
+	 *        The user to add the list of followers
 	 * @return Whether or not the follower was added
 	 * @author MVezina
 	 */
-	public boolean addFollower(User user) {
+	public boolean addFollower(User user)
+	{
 		if (user == null || user.equals(this))
 			return false;
 
@@ -176,11 +185,12 @@ public abstract class User {
 	 * Removes the Follower from the list of followers
 	 * 
 	 * @param user
-	 *            The User to remove as a follower
+	 *        The User to remove as a follower
 	 * @return Whether or not the follower was removed successfully
 	 * @author MVezina
 	 */
-	public boolean removeFollower(User user) {
+	public boolean removeFollower(User user)
+	{
 		if (user == null)
 			return false;
 
@@ -192,11 +202,12 @@ public abstract class User {
 	 * Follows the specified user
 	 * 
 	 * @param user
-	 *            the user to be followed
+	 *        the user to be followed
 	 * @return Returns whether or not the user was followed successfully
 	 * @author MVezina
 	 */
-	public boolean followUser(User user) {
+	public boolean followUser(User user)
+	{
 
 		if (user == null)
 			return false;
@@ -210,11 +221,18 @@ public abstract class User {
 		return this.following.add(user);
 	}
 
-	public SearchRankingStrategy getSearchStrategy() {
+	public RankingStrategyEnum getSearchStrategyEnum()
+	{
 		return searchStrategy;
 	}
 
-	public void setSearchStrategy(SearchRankingStrategy searchStrategy) {
+	/**
+	 * Sets the Search Strategy
+	 * 
+	 * @param searchStrategy The Search Ranking Strategy to use
+	 */
+	public void setSearchStrategy(RankingStrategyEnum searchStrategy)
+	{
 		if (searchStrategy != null)
 			this.searchStrategy = searchStrategy;
 	}
@@ -225,7 +243,8 @@ public abstract class User {
 	 * @return the user ID
 	 * @author MVezina
 	 */
-	public int getUserID() {
+	public int getUserID()
+	{
 		return this.userID;
 	}
 
@@ -235,7 +254,8 @@ public abstract class User {
 	 * @return the user name
 	 * @author MVezina
 	 */
-	public String getUserName() {
+	public String getUserName()
+	{
 		return this.userName;
 	}
 
@@ -243,7 +263,8 @@ public abstract class User {
 	 * @return The taste of the user
 	 * @author MVezina
 	 */
-	public String getTaste() {
+	public String getTaste()
+	{
 		return this.taste;
 	}
 
@@ -253,7 +274,8 @@ public abstract class User {
 	 * @return The list of followers
 	 * @author MVezina
 	 */
-	public List<User> getFollowers() {
+	public List<User> getFollowers()
+	{
 		return this.followers;
 	}
 
@@ -263,7 +285,8 @@ public abstract class User {
 	 * @return The list of users being followed by this user
 	 * @author MVezina
 	 */
-	public List<User> getFollowing() {
+	public List<User> getFollowing()
+	{
 		return this.following;
 	}
 
@@ -273,7 +296,8 @@ public abstract class User {
 	 * @return The List of documents liked by this user
 	 * @author MVezina
 	 */
-	public List<Document> getLikedDocuments() {
+	public List<Document> getLikedDocuments()
+	{
 		return this.likedDocuments;
 	}
 
@@ -281,11 +305,12 @@ public abstract class User {
 	 * Unfollows the specified user
 	 * 
 	 * @param user
-	 *            The user to unfollow
+	 *        The user to unfollow
 	 * @return Whether or not the user was unfollowed successfully
 	 * @author MVezina
 	 */
-	public boolean unfollowUser(User user) {
+	public boolean unfollowUser(User user)
+	{
 		// Check to see if the user was successfully unfollowed
 		if (!user.removeFollower(this))
 			return false;
@@ -299,12 +324,13 @@ public abstract class User {
 	 * objects are the same
 	 * 
 	 * @param o
-	 *            The object to compare to
+	 *        The object to compare to
 	 * @return Returns whether or not two objects are the same
 	 * @author MVezina
 	 */
 	@Override
-	public boolean equals(Object o) {
+	public boolean equals(Object o)
+	{
 		// If the address of the two objects is the same, they are equivalent
 		if (this == o)
 			return true;
@@ -325,9 +351,7 @@ public abstract class User {
 
 		// else compare by other fields (number of following, number of
 		// followers, taste of user, number of liked documents
-		return (this.userName.equals(u.userName) && this.likedDocuments.size() == u.getLikedDocuments().size()
-				&& this.followers.size() == u.getFollowers().size() && this.following.size() == u.getFollowing().size()
-				&& this.taste.equals(u.getTaste()));
+		return (this.userName.equals(u.userName) && this.likedDocuments.size() == u.getLikedDocuments().size() && this.followers.size() == u.getFollowers().size() && this.following.size() == u.getFollowing().size() && this.taste.equals(u.getTaste()));
 
 	}
 
@@ -338,10 +362,9 @@ public abstract class User {
 	 * @author MVezina
 	 */
 	@Override
-	public String toString() {
-		return "User ID: " + this.userID + "\nUser Name: " + this.userName + "\nTaste: " + this.taste + "\nFollowers: "
-				+ followers.size() + "\nFollowing: " + this.following.size() + "\nNumber of Documents Liked: "
-				+ this.likedDocuments.size();
+	public String toString()
+	{
+		return "User ID: " + this.userID + "\nUser Name: " + this.userName + "\nTaste: " + this.taste + "\nFollowers: " + followers.size() + "\nFollowing: " + this.following.size() + "\nNumber of Documents Liked: " + this.likedDocuments.size();
 	}
 
 }
