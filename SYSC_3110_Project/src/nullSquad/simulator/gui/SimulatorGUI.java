@@ -201,9 +201,11 @@ public class SimulatorGUI extends JFrame {
 		this.repaint();
 
 		if (simulator.getCurrentSimulatorSequence() == simulator.getTotalSimulatorSequences()) {
-			JOptionPane.showMessageDialog(null, "The simulator has finished!", "Simulation Complete!", JOptionPane.INFORMATION_MESSAGE);
 			stepSimulatorButton.setEnabled(false);
 			runSimulatorButton.setEnabled(false);
+			
+			JOptionPane.showMessageDialog(null, "The simulator has finished!", "Simulation Complete!", JOptionPane.INFORMATION_MESSAGE);
+			
 		}
 
 	}

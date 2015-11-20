@@ -1,6 +1,8 @@
 package nullSquad.simulator.gui;
 
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -8,14 +10,18 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 import nullSquad.filesharingsystem.users.*;
-
+import nullSquad.strategies.act.ProducerActStrategyEnum;
+import nullSquad.strategies.ranking.RankingStrategyEnum;
 
 /**
  * Representation of the Users Tab Panel
+ * 
  * @author MVezina
  */
-public class UsersPanel extends JPanel implements ListDataListener {
+public class UsersPanel extends JPanel implements ListDataListener, ListCellRenderer<User>
+{
 
+	// All SubPanels
 	private JScrollPane consumersListScrollPane;
 	private JScrollPane producersListScrollPane;
 	private JPanel userListPanel;
@@ -33,19 +39,38 @@ public class UsersPanel extends JPanel implements ListDataListener {
 	private JPanel userStatsListPanel;
 	private JLabel userStatsLabel;
 
-	
+	// Panel for all user options
+	private JPanel userOptionPanel;
+
+	// Panel for Producer Act Control
+	private JPanel actStrategySelectionPanel;
+	private ButtonGroup actStrategySelectionButtonGroup;
+	private JRadioButton producerActStrategyARadioButton;
+	private JRadioButton producerActStrategyBRadioButton;
+
+	// Panel for Strategy Control
+	private JPanel rankStrategySelectionPanel;
+	private ButtonGroup rankStrategySelectionButtonGroup;
+	private JRadioButton documentPopularityStrategyRadioButton;
+	private JRadioButton followSimilarityStrategyRadioButton;
+	private JRadioButton likeSimilarityStrategyRadioButton;
+	private JRadioButton userDistanceStrategyRadioButton;
+	private JRadioButton userPopularityStrategyRadioButton;
+
 	/**
 	 * Creates the Users panel and all associated components
+	 * 
 	 * @author MVezina
 	 */
-	public UsersPanel(DefaultListModel<User> allUsersListModel) {
-	
+	public UsersPanel(DefaultListModel<User> allUsersListModel)
+	{
+
 		// Set the users list model
 		this.allUsersListModel = allUsersListModel;
 		this.allUsersListModel.addListDataListener(this);
-		
+
 		// Set the documents List model
-		
+
 		// Create the users tab panel
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -53,14 +78,23 @@ public class UsersPanel extends JPanel implements ListDataListener {
 		consumersListModel = new DefaultListModel<Consumer>();
 		producerListModel = new DefaultListModel<Producer>();
 
+		// Create the Strategy Selection Panel
+		rankStrategySelectionPanel = new JPanel();
+		rankStrategySelectionPanel.setBorder(BorderFactory.createTitledBorder("Ranking Strategy"));
+
+		// Create the strategy selection button group
+		rankStrategySelectionButtonGroup = new ButtonGroup();
+
 		// Create the user stats panel
-		userStatsListPanel = new JPanel();
+		userStatsListPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		userStatsListPanel.setBorder(BorderFactory.createTitledBorder("User Stats"));
-		userStatsListPanel.setPreferredSize(new Dimension(300, 150));
+		userStatsListPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
 
 		// Add the stats label to the info panel
 		userStatsLabel = new JLabel("No User is Selected!");
 		userStatsListPanel.add(userStatsLabel);
+		userOptionPanel = new JPanel();
+		userOptionPanel.setLayout(new BoxLayout(userOptionPanel, BoxLayout.X_AXIS));
 
 		// Create the panel for the consumer list
 		consumerListPanel = new JPanel();
@@ -76,12 +110,15 @@ public class UsersPanel extends JPanel implements ListDataListener {
 
 		// Create the producers JList
 		producersJList = new JList<>(producerListModel);
+		producersJList.setCellRenderer(this);
 		producersJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		// Create a default mouse adapter for the users lists
-		MouseAdapter userListMouseAdapter = new MouseAdapter() {
+		MouseAdapter userListMouseAdapter = new MouseAdapter()
+		{
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void mouseClicked(MouseEvent e)
+			{
 				jList_MouseClicked(e);
 			}
 		};
@@ -91,22 +128,15 @@ public class UsersPanel extends JPanel implements ListDataListener {
 		producersJList.addListSelectionListener((ListSelectionEvent lse) -> producersJList_selectionChanged(lse));
 
 		producersListScrollPane = new JScrollPane(producersJList);
-		
-		//TODO Remove:
-		producersListScrollPane.addMouseListener(userListMouseAdapter);
-		
-		
-		producersListScrollPane.setPreferredSize(new Dimension(300, 150));
 
 		// Create the Consumers JList
 		consumersJList = new JList<>(consumersListModel);
+		consumersJList.setCellRenderer(this);
 		consumersJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		consumersJList.addListSelectionListener((ListSelectionEvent lse) -> consumersJList_selectionChanged(lse));
 		consumersJList.addMouseListener(userListMouseAdapter);
-	//	consumersJList.setComponentPopupMenu(userPopupMenu);
 
 		consumersListScrollPane = new JScrollPane(consumersJList);
-		consumersListScrollPane.setPreferredSize(new Dimension(300, 150));
 
 		// Add list labels and add scrollable list panes to the corresponding
 		// list panels
@@ -120,46 +150,158 @@ public class UsersPanel extends JPanel implements ListDataListener {
 		userListPanel.add(Box.createRigidArea(new Dimension(5, 0)));
 		userListPanel.add(consumerListPanel);
 
+		/* ===== Initialization of all the strategy radio buttons ===== */
+		documentPopularityStrategyRadioButton = new JRadioButton(RankingStrategyEnum.DocumentPopularity.toString());
+		documentPopularityStrategyRadioButton.addActionListener(al -> rankStrategyRadioButton_Clicked(RankingStrategyEnum.DocumentPopularity));
+
+		userPopularityStrategyRadioButton = new JRadioButton(RankingStrategyEnum.UserPopularity.toString());
+		userPopularityStrategyRadioButton.addActionListener(al -> rankStrategyRadioButton_Clicked(RankingStrategyEnum.UserPopularity));
+
+		likeSimilarityStrategyRadioButton = new JRadioButton(RankingStrategyEnum.LikeSimilarity.toString());
+		likeSimilarityStrategyRadioButton.addActionListener(al -> rankStrategyRadioButton_Clicked(RankingStrategyEnum.LikeSimilarity));
+
+		followSimilarityStrategyRadioButton = new JRadioButton(RankingStrategyEnum.FollowSimiliarity.toString());
+		followSimilarityStrategyRadioButton.addActionListener(al -> rankStrategyRadioButton_Clicked(RankingStrategyEnum.FollowSimiliarity));
+
+		userDistanceStrategyRadioButton = new JRadioButton(RankingStrategyEnum.UserDistance.toString());
+		userDistanceStrategyRadioButton.addActionListener(al -> rankStrategyRadioButton_Clicked(RankingStrategyEnum.UserDistance));
+		/* ===== END of Initialization of all the strategy radio buttons ===== */
+
+		// Set the layout of the selection panel and the maximum size
+		rankStrategySelectionPanel.setLayout(new BoxLayout(rankStrategySelectionPanel, BoxLayout.Y_AXIS));
+		rankStrategySelectionPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+
+		// Add all of the radio buttons into the button group
+		rankStrategySelectionButtonGroup.add(documentPopularityStrategyRadioButton);
+		rankStrategySelectionButtonGroup.add(userPopularityStrategyRadioButton);
+		rankStrategySelectionButtonGroup.add(likeSimilarityStrategyRadioButton);
+		rankStrategySelectionButtonGroup.add(followSimilarityStrategyRadioButton);
+		rankStrategySelectionButtonGroup.add(userDistanceStrategyRadioButton);
+
+		// Add all of the buttons to the selection panel
+		rankStrategySelectionPanel.add(documentPopularityStrategyRadioButton);
+		rankStrategySelectionPanel.add(userPopularityStrategyRadioButton);
+		rankStrategySelectionPanel.add(likeSimilarityStrategyRadioButton);
+		rankStrategySelectionPanel.add(followSimilarityStrategyRadioButton);
+		rankStrategySelectionPanel.add(userDistanceStrategyRadioButton);
+		rankStrategySelectionPanel.setVisible(false);
+
+		// Create the producer act strategy panel
+		actStrategySelectionPanel = new JPanel();
+		actStrategySelectionPanel.setBorder(BorderFactory.createTitledBorder("Producer Act Strategy"));
+		actStrategySelectionPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+		actStrategySelectionPanel.setLayout(new BoxLayout(actStrategySelectionPanel, BoxLayout.Y_AXIS));
+		actStrategySelectionPanel.setVisible(false);
+
+		// Create appropriate strategy buttons
+		producerActStrategyARadioButton = new JRadioButton(ProducerActStrategyEnum.Default.toString());
+		producerActStrategyARadioButton.addActionListener(al -> actStrategyRadioButton_Clicked(ProducerActStrategyEnum.Default));
+
+		producerActStrategyBRadioButton = new JRadioButton(ProducerActStrategyEnum.Simularity.toString());
+		producerActStrategyBRadioButton.addActionListener(al -> actStrategyRadioButton_Clicked(ProducerActStrategyEnum.Simularity));
+
+		// Add the radio buttons to the panel and a button group
+		actStrategySelectionButtonGroup = new ButtonGroup();
+		actStrategySelectionButtonGroup.add(producerActStrategyARadioButton);
+		actStrategySelectionButtonGroup.add(producerActStrategyBRadioButton);
+
+		actStrategySelectionPanel.add(producerActStrategyARadioButton);
+		actStrategySelectionPanel.add(producerActStrategyBRadioButton);
+
 		// Add panels to the main user tab panel
 		this.add(userListPanel);
-		this.add(userStatsListPanel);
+		userOptionPanel.add(userStatsListPanel);
+		userOptionPanel.add(rankStrategySelectionPanel);
+		userOptionPanel.add(actStrategySelectionPanel);
+		this.add(userOptionPanel);
+	}
+
+	/**
+	 * Set the selected producer act strategy
+	 * 
+	 * @param actStrategy The Act Strategy to
+	 */
+	private void actStrategyRadioButton_Clicked(ProducerActStrategyEnum actStrategy)
+	{
+		Producer producer = producersJList.getSelectedValue();
+
+		if (producer == null)
+			return;
+
+		producer.setActStrategyEnum(actStrategy);
+	}
+
+	/**
+	 * Sets the strategy for the currently selected user
+	 * 
+	 * @param rankingStrategy The strategy to set to the user
+	 */
+	private void rankStrategyRadioButton_Clicked(RankingStrategyEnum rankingStrategy)
+	{
+		// Gets the currently selected user
+		User selectedUser = getCurrentlySelectedUser();
+
+		// Checks to see if there is a selected user
+		if (selectedUser == null)
+			return;
+
+		// Sets the search ranking strategy
+		selectedUser.setSearchStrategy(rankingStrategy);
+	}
+
+	/**
+	 * Gets the currently selected user or NULL if no user is selected
+	 * 
+	 * @return
+	 */
+	private User getCurrentlySelectedUser()
+	{
+		if (producersJList.getSelectedValue() != null)
+			return producersJList.getSelectedValue();
+		else
+			return consumersJList.getSelectedValue();
 	}
 
 	/**
 	 * The Selection event method for the consumersJList
 	 * 
-	 * @param lse
+	 * @param lse The List Selection Event
 	 */
-	private void consumersJList_selectionChanged(ListSelectionEvent lse) {
-		if (!lse.getValueIsAdjusting() && lse.getSource() == consumersJList) {
-
-			if (consumersJList.getSelectedIndex() >= 0) {
+	private void consumersJList_selectionChanged(ListSelectionEvent lse)
+	{
+		if (!lse.getValueIsAdjusting() && lse.getSource() == consumersJList)
+		{
+			if (consumersJList.getSelectedIndex() >= 0)
+			{
+				// Clear the selection of the opposing list (Because we only
+				// want one user to be selected)
 				producersJList.getSelectionModel().clearSelection();
+
+				// Update the user stats label
 				updateUserStats(consumersJList.getSelectedValue());
 			}
-
 		}
-
 	}
 
 	/**
 	 * Mouse Click event
 	 */
-	public void jList_MouseClicked(MouseEvent e) {
+	private void jList_MouseClicked(MouseEvent e)
+	{
 
-		if (e.getButton() == MouseEvent.BUTTON3) {
+		if (e.getButton() == MouseEvent.BUTTON3)
+		{
 
 			// If a double click action is sent on a jlist, we want to open the
 			// graph view for the selected user
-			if (e.getSource() == consumersJList && consumersJList.getSelectedValue() != null) {
-				System.out.println("Consumer Clicked");
-				//TODO: Add Popup menu
-				//userPopupMenu.show(consumersJList, e.getX(), e.getY());
-				 new GraphGUI(consumersJList.getSelectedValue());
+			if (e.getSource() == consumersJList && consumersJList.getSelectedValue() != null)
+			{
+				new GraphGUI(consumersJList.getSelectedValue());
 			}
 
-			if (e.getSource() == producersJList && producersJList.getSelectedValue() != null) {
-				 new GraphGUI(producersJList.getSelectedValue());
+			if (e.getSource() == producersJList && producersJList.getSelectedValue() != null)
+			{
+				new GraphGUI(producersJList.getSelectedValue());
 			}
 		}
 
@@ -168,83 +310,167 @@ public class UsersPanel extends JPanel implements ListDataListener {
 	/**
 	 * The Selection Changed event method for the producersJList
 	 * 
-	 * @param lse
-	 *            The Event Object
+	 * @param lse The Event Object
 	 * @author MVezina
 	 */
-	private void producersJList_selectionChanged(ListSelectionEvent lse) {
-
-		if (!lse.getValueIsAdjusting() && lse.getSource() == producersJList) {
-			if (producersJList.getSelectedIndex() >= 0) {
+	private void producersJList_selectionChanged(ListSelectionEvent lse)
+	{
+		if (!lse.getValueIsAdjusting() && lse.getSource() == producersJList)
+		{
+			if (producersJList.getSelectedIndex() >= 0)
+			{
 				consumersJList.getSelectionModel().clearSelection();
-				;
 				updateUserStats(producersJList.getSelectedValue());
 			}
-
 		}
-
 	}
-	
+
 	/**
 	 * Update the currently Selected user stats
+	 * 
 	 * @param user The Currently Selected user
 	 * @author MVezina
 	 */
 	private void updateUserStats(User user)
 	{
-		if(user == null)
+		if (user == null)
 		{
 			userStatsLabel.setText("No User is Selected!");
+			rankStrategySelectionPanel.setVisible(false);
+			actStrategySelectionPanel.setVisible(false);
 			return;
 		}
-		
+
 		// HTML code is used in the statsLabel for text formatting
 		String userStats = "<html>";
 		String newLine = "<br>";
-				
-		userStats += ("<b>ID</b>: " + user.getUserID() + newLine);		
+
+		userStats += ("<b>ID</b>: " + user.getUserID() + newLine);
 		userStats += ("<b>Name</b>: " + user.getUserName() + newLine);
-		userStats += ("<b>User Type</b>: " + (user instanceof Producer ? "Producer" : "Consumer") + " (Payoff: " +  (user.getPayoffHistory().size() > 0 ? user.getPayoffHistory().get(user.getPayoffHistory().size()-1) : 0) + ")" + newLine);
+		userStats += ("<b>User Type</b>: " + (user instanceof Producer ? "Producer" : "Consumer") + " (Payoff: " + (user.getPayoffHistory().size() > 0 ? user.getPayoffHistory().get(user.getPayoffHistory().size() - 1) : 0) + ")" + newLine);
 		userStats += ("<b>Taste</b>: " + user.getTaste() + newLine);
 		userStats += ("<b>Followers</b>: " + user.getFollowers().size() + newLine);
 		userStats += ("<b>Following</b>: " + user.getFollowing().size() + newLine);
-		userStats += ("<b>Number of Documents Liked</b>: " + user.getLikedDocuments().size() + newLine);				
-		
+		userStats += ("<b>Number of Documents Liked</b>: " + user.getLikedDocuments().size() + newLine);
+
 		// Set the label text (ending it with a closing HTML tag)
 		userStatsLabel.setText(userStats + "</html>");
-		
+
+		// Determine which strategy is currently being used by the user
+		switch (user.getSearchStrategyEnum())
+		{
+			case DocumentPopularity:
+				documentPopularityStrategyRadioButton.setSelected(true);
+				break;
+			case FollowSimiliarity:
+				followSimilarityStrategyRadioButton.setSelected(true);
+				break;
+			case LikeSimilarity:
+				likeSimilarityStrategyRadioButton.setSelected(true);
+				break;
+			case UserDistance:
+				userDistanceStrategyRadioButton.setSelected(true);
+				break;
+			case UserPopularity:
+				userPopularityStrategyRadioButton.setSelected(true);
+				break;
+
+		}
+
+		// Determine which radio button is chosen when a producer is selected
+		if (user instanceof Producer)
+		{
+			// Create a temporary producer
+			Producer p = (Producer) user;
+
+			switch (p.getActStrategyEnum())
+			{
+				case Default:
+					producerActStrategyARadioButton.setSelected(true);
+					break;
+				case Simularity:
+					producerActStrategyBRadioButton.setSelected(true);
+					break;
+			}
+
+			// Set the act strategy selection panel to visible if a producer is
+			// selected
+			actStrategySelectionPanel.setVisible(true);
+		}
+		else
+		{
+			// Hide the producer act strategy selection panel if a producer was
+			// not selected
+			actStrategySelectionPanel.setVisible(false);
+		}
+
+		// Set the rank strategy to visible
+		rankStrategySelectionPanel.setVisible(true);
 	}
-	
-	
 
 	/**
 	 * Item added to allUsersListModel
 	 */
 	@Override
-	public void intervalAdded(ListDataEvent e) {
-		if(e.getSource() == allUsersListModel)
+	public void intervalAdded(ListDataEvent e)
+	{
+
+		if (e.getSource() == allUsersListModel)
 		{
+			// We want to add the newly added user object into the appropriate
+			// sub-list model
 			User newUser = allUsersListModel.getElementAt(e.getIndex0());
-			if(newUser instanceof Producer)
+
+			if (newUser instanceof Producer)
 			{
-				producerListModel.addElement((Producer)newUser);
+				producerListModel.addElement((Producer) newUser);
 			}
-			else if(newUser instanceof Consumer)
+			else if (newUser instanceof Consumer)
 			{
-				consumersListModel.addElement((Consumer)newUser);
-			}				
+				consumersListModel.addElement((Consumer) newUser);
+			}
+		}
+
+	}
+
+	
+	
+	@Override
+	public Component getListCellRendererComponent(JList<? extends User> list, User value, int index, boolean isSelected, boolean cellHasFocus)
+	{
+		// Create a new label to represent a cell in the document list
+		JLabel label = new JLabel(value.getUserName() + "   (ID: " + value.getUserID() + ")");
+		label.setOpaque(true);
+		
+		// Set the background and foreground colors
+		if(isSelected)
+		{
+			label.setBackground(list.getSelectionBackground());
+			label.setForeground(list.getSelectionForeground());
+		}
+		else
+		{
+			label.setBackground(list.getBackground());
+			label.setForeground(list.getForeground());
 		}
 		
+		return label;
 	}
 	
-
 	/**
 	 * The following are Empty implementations from ListDataListener Interface
 	 * (No ListDataAdapter was available)
 	 */
 	@Override
-	public void intervalRemoved(ListDataEvent e) {}
+	public void intervalRemoved(ListDataEvent e)
+	{
+	}
+
 	@Override
-	public void contentsChanged(ListDataEvent e) {}
+	public void contentsChanged(ListDataEvent e)
+	{
+	}
+
+	
 
 }
