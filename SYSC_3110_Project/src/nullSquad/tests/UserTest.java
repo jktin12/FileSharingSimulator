@@ -66,25 +66,25 @@ public class UserTest {
 
 	/**
 	 * @author Marc Tebo
-	 * Test function for the addFollower method
+	 * Test function for the followUser method
 	 */
 	@Test
-	public void testAddFollower() {
-		user1.addFollower(user2);
+	public void testFollowUser() {
+		user2.followUser(user1);
 
 		assertTrue(user1.getFollowers().contains(user2));
 	}
 
 	/**
 	 * @author Marc Tebo
-	 * Test function for the removeFollwer method
+	 * Test function for the unfollowUser method
 	 */
 	@Test
-	public void testRemoveFollower() {
-		user1.addFollower(user2);
+	public void testUnfollowUser() {
+		user2.followUser(user1);
 		assertTrue(user1.getFollowers().contains(user2));
 		
-		user1.removeFollower(user2);
+		user2.unfollowUser(user1);
 		assertTrue(!user1.getFollowers().contains(user2));
 	}
 

@@ -166,7 +166,7 @@ public abstract class User
 	 * @return Whether or not the follower was added
 	 * @author MVezina
 	 */
-	public boolean addFollower(User user)
+	protected boolean addFollower(User user)
 	{
 		if (user == null || user.equals(this))
 			return false;
@@ -187,7 +187,7 @@ public abstract class User
 	 * @return Whether or not the follower was removed successfully
 	 * @author MVezina
 	 */
-	public boolean removeFollower(User user)
+	protected boolean removeFollower(User user)
 	{
 		if (user == null)
 			return false;
