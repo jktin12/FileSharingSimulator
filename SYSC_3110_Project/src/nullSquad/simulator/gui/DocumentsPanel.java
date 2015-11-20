@@ -1,19 +1,22 @@
 package nullSquad.simulator.gui;
 
-
 import java.awt.Component;
 
 import javax.swing.*;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 
 import nullSquad.filesharingsystem.document.Document;
+import nullSquad.filesharingsystem.document.DocumentLikeEvent;
+import nullSquad.filesharingsystem.document.DocumentLikeListener;
 
 /**
  * Representation of the Documents Tab Panel
  * 
  * @author MVezina
  */
-public class DocumentsPanel extends JPanel implements ListCellRenderer<Document>
+public class DocumentsPanel extends JPanel implements ListCellRenderer<Document>, DocumentLikeListener, ListDataListener
 {
 
 	/* 'Documents' tab content */
@@ -25,7 +28,6 @@ public class DocumentsPanel extends JPanel implements ListCellRenderer<Document>
 	private JPanel documentStatsListPanel;
 	private JLabel documentStatsLabel;
 
-
 	/**
 	 * Creates the Documents panel and all associated components
 	 * 
@@ -36,34 +38,27 @@ public class DocumentsPanel extends JPanel implements ListCellRenderer<Document>
 
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		this.allDocumentsListModel = documentsListModel;
+		this.allDocumentsListModel.addListDataListener(this);
 
 		// Create the document list scroll pane
 		documentsJList = new JList<>(allDocumentsListModel);
 		documentsJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		documentsJList.addListSelectionListener((ListSelectionEvent e) -> documentJList_SelectionChanged(e));
-		
+
 		// Set the document cell renderer
 		documentsJList.setCellRenderer(this);
-		
-		// So that the JList doesn't auto-resize
-		documentsJList.setVisibleRowCount(-1);
-		documentsJList.setFixedCellWidth(100);
-		
+
 		// Set the scroll pane for the documents
 		documentListScrollPane = new JScrollPane(documentsJList);
-		//documentListScrollPane.setMaximumSize(new Dimension(documentListScrollPane.getMaximumSize().width, Integer.MAX_VALUE));
-		
+
 		// Document Statistics Panel
 		documentStatsListPanel = new JPanel();
 		documentStatsListPanel.setBorder(BorderFactory.createTitledBorder("Document Stats"));
-		//documentStatsListPanel.setPreferredSize(new Dimension(100, Integer.MAX_VALUE));
 		
 
 		// Add the stats label to the info panel
 		documentStatsLabel = new JLabel("No Document Selected!");
 		documentStatsListPanel.add(documentStatsLabel);
-
-		
 
 		// Add the info panel to the document tab panel
 		this.add(documentListScrollPane);
@@ -131,9 +126,9 @@ public class DocumentsPanel extends JPanel implements ListCellRenderer<Document>
 		// Create a new label to represent a cell in the document list
 		JLabel label = new JLabel("(ID: " + value.getDocumentID() + "): " + value.getDocumentName());
 		label.setOpaque(true);
-		
+
 		// Set the background and foreground colors
-		if(isSelected)
+		if (isSelected)
 		{
 			label.setBackground(list.getSelectionBackground());
 			label.setForeground(list.getSelectionForeground());
@@ -143,8 +138,37 @@ public class DocumentsPanel extends JPanel implements ListCellRenderer<Document>
 			label.setBackground(list.getBackground());
 			label.setForeground(list.getForeground());
 		}
-		
+
 		return label;
+	}
+
+	@Override
+	public void DocumentLiked(DocumentLikeEvent docLikeEvent)
+	{
+		// We want to update the selected document's stats label if a user likes the document
+		if (documentsJList.getSelectedValue() != null && documentsJList.getSelectedValue().equals(docLikeEvent.getDocument()))
+		{
+			updateDocumentStats(documentsJList.getSelectedValue());
+		}
+	}
+
+	@Override
+	public void intervalAdded(ListDataEvent e)
+	{
+		// Add this class as a document like listener for all documents
+		documentsJList.getModel().getElementAt(e.getIndex0()).addLikeListener(this);		
+	}
+
+	@Override
+	public void intervalRemoved(ListDataEvent e)
+	{
+		// Update document stats (Just incase the selected index was removed)
+		updateDocumentStats(documentsJList.getSelectedValue());	
+	}
+
+	@Override
+	public void contentsChanged(ListDataEvent e)
+	{
 	}
 
 }

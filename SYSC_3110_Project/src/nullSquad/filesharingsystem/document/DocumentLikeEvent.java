@@ -5,6 +5,8 @@
  */
 package nullSquad.filesharingsystem.document;
 
+import java.util.EventObject;
+
 import nullSquad.filesharingsystem.users.*;
 
 /**
@@ -12,13 +14,14 @@ import nullSquad.filesharingsystem.users.*;
  * 
  * @author MVezina
  */
-public class DocumentLikeEvent
+public class DocumentLikeEvent extends EventObject
 {
 	private Document documentSource;
 	private User user;
 
 	public DocumentLikeEvent(Document source, User user)
 	{
+		super(source);
 		this.documentSource = source;
 		this.user = user;
 	}

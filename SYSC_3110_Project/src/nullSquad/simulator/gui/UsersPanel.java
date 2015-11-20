@@ -18,7 +18,7 @@ import nullSquad.strategies.ranking.RankingStrategyEnum;
  * 
  * @author MVezina
  */
-public class UsersPanel extends JPanel implements ListDataListener, ListCellRenderer<User>
+public class UsersPanel extends JPanel implements ListDataListener, ListCellRenderer<User>, UserPayoffListener
 {
 
 	// All SubPanels
@@ -57,6 +57,9 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 	private JRadioButton userDistanceStrategyRadioButton;
 	private JRadioButton userPopularityStrategyRadioButton;
 
+	// Collection of graphs
+	
+	
 	/**
 	 * Creates the Users panel and all associated components
 	 * 
@@ -86,7 +89,7 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 		rankStrategySelectionButtonGroup = new ButtonGroup();
 
 		// Create the user stats panel
-		userStatsListPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		userStatsListPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		userStatsListPanel.setBorder(BorderFactory.createTitledBorder("User Stats"));
 		userStatsListPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
 
@@ -107,6 +110,7 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 		// Create the panel for all User lists
 		userListPanel = new JPanel();
 		userListPanel.setLayout(new BoxLayout(userListPanel, BoxLayout.X_AXIS));
+		userListPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
 
 		// Create the producers JList
 		producersJList = new JList<>(producerListModel);
@@ -128,6 +132,7 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 		producersJList.addListSelectionListener((ListSelectionEvent lse) -> producersJList_selectionChanged(lse));
 
 		producersListScrollPane = new JScrollPane(producersJList);
+		producersListScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
 		// Create the Consumers JList
 		consumersJList = new JList<>(consumersListModel);
@@ -137,6 +142,7 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 		consumersJList.addMouseListener(userListMouseAdapter);
 
 		consumersListScrollPane = new JScrollPane(consumersJList);
+		consumersListScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
 		// Add list labels and add scrollable list panes to the corresponding
 		// list panels
@@ -169,8 +175,9 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 
 		// Set the layout of the selection panel and the maximum size
 		rankStrategySelectionPanel.setLayout(new BoxLayout(rankStrategySelectionPanel, BoxLayout.Y_AXIS));
-		rankStrategySelectionPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
-
+		rankStrategySelectionPanel.setMaximumSize(new Dimension(rankStrategySelectionPanel.getMaximumSize().width, Integer.MAX_VALUE));
+		
+		
 		// Add all of the radio buttons into the button group
 		rankStrategySelectionButtonGroup.add(documentPopularityStrategyRadioButton);
 		rankStrategySelectionButtonGroup.add(userPopularityStrategyRadioButton);
@@ -189,7 +196,8 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 		// Create the producer act strategy panel
 		actStrategySelectionPanel = new JPanel();
 		actStrategySelectionPanel.setBorder(BorderFactory.createTitledBorder("Producer Act Strategy"));
-		actStrategySelectionPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+		actStrategySelectionPanel.setMaximumSize(new Dimension(actStrategySelectionPanel.getMaximumSize().width, Integer.MAX_VALUE));
+		actStrategySelectionPanel.setPreferredSize(new Dimension(185, actStrategySelectionPanel.getPreferredSize().height));
 		actStrategySelectionPanel.setLayout(new BoxLayout(actStrategySelectionPanel, BoxLayout.Y_AXIS));
 		actStrategySelectionPanel.setVisible(false);
 
@@ -208,6 +216,7 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 		actStrategySelectionPanel.add(producerActStrategyARadioButton);
 		actStrategySelectionPanel.add(producerActStrategyBRadioButton);
 
+		
 		// Add panels to the main user tab panel
 		this.add(userListPanel);
 		userOptionPanel.add(userStatsListPanel);
@@ -291,7 +300,6 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 
 		if (e.getClickCount() == 2)
 		{
-
 			// If a double click action is sent on a jlist, we want to open the
 			// graph view for the selected user
 			if (e.getSource() == consumersJList && consumersJList.getSelectedValue() != null)
@@ -300,7 +308,7 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 			}
 
 			if (e.getSource() == producersJList && producersJList.getSelectedValue() != null)
-			{
+			{			
 				new GraphGUI(producersJList.getSelectedValue());
 			}
 		}
@@ -353,6 +361,11 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 		userStats += ("<b>Following</b>: " + user.getFollowing().size() + newLine);
 		userStats += ("<b>Number of Documents Liked</b>: " + user.getLikedDocuments().size() + newLine);
 
+		if(user instanceof Producer)
+		{
+			userStats += ("<b>Number of Documents Produced</b>: " + ((Producer)user).getDocumentsProduced().size() + newLine);
+		}
+		
 		// Set the label text (ending it with a closing HTML tag)
 		userStatsLabel.setText(userStats + "</html>");
 
@@ -442,9 +455,10 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 		if (e.getSource() == allUsersListModel)
 		{
 			// We want to add the newly added user object into the appropriate
-			// sub-list model
+			// sub-list model and subscribe to payoff updates
 			User newUser = allUsersListModel.getElementAt(e.getIndex0());
-
+			newUser.addPayoffListener(this);
+			
 			if (newUser instanceof Producer)
 			{
 				producerListModel.addElement((Producer) newUser);
@@ -484,6 +498,16 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 	@Override
 	public void contentsChanged(ListDataEvent e)
 	{
+	}
+
+	@Override
+	public void payoffUpdated(UserPayoffEvent uPE)
+	{
+		// Update the stats label for the selected user when the payoff is updated
+		if(uPE.getUser() == this.getCurrentlySelectedUser())
+		{
+			updateUserStats(uPE.getUser());
+		}
 	}
 
 }

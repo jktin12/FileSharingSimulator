@@ -15,6 +15,9 @@ public class SetupDialog{
 	private JTextField tagsTextField;
 	private JFormattedTextField numSimulationIterationsTextField;
 	
+	// The maximum number of characters a string can have
+	private final static int TAG_MAX_LENGTH = 20;
+	
 	/**
 	 * Initialize the SetupDialog
 	 * @param parent The parent of the SetupDialog
@@ -25,7 +28,7 @@ public class SetupDialog{
 		// Set up a basic integer number formatter (JTextField input can only take in digits)
 		NumberFormatter numFormatter = new NumberFormatter(NumberFormat.getInstance());
 		numFormatter.setValueClass(Integer.class);
-		numFormatter.setMinimum(0);
+		numFormatter.setMinimum(1);
 		numFormatter.setMaximum(Integer.MAX_VALUE);
 		numFormatter.setAllowsInvalid(false);
 		
@@ -34,7 +37,7 @@ public class SetupDialog{
 		this.numConsumersTextField = new JFormattedTextField(numFormatter);
 		this.numProducersTextField = new JFormattedTextField(numFormatter);		
 		
-		numFormatter.setMinimum(1);
+		
 		this.numSimulationIterationsTextField = new JFormattedTextField(numFormatter);
 		
 		// Initialize the tagsTextField
@@ -82,7 +85,8 @@ public class SetupDialog{
 		List<String> list = new ArrayList<>();
 		for(String s : tagsTextField.getText().split(","))
 		{
-			list.add(s.trim());
+			// Truncanate the string based on the maximum length of a tag
+			list.add(s.trim().substring(0, Math.min(TAG_MAX_LENGTH, s.trim().length())));
 		}
 		
 		
@@ -126,12 +130,9 @@ public class SetupDialog{
 		// Continue showing the dialog until valid entries are prevalent
 		while(true)
 		{		
+			
 			// Show the dialog
-			if( JOptionPane.showConfirmDialog(parentFrame, components, "Simulator Setup", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.CANCEL_OPTION)
-			{
-				System.exit(0);
-			}
-			else
+			if( JOptionPane.showConfirmDialog(parentFrame, components, "Simulator Setup", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE) == JOptionPane.OK_OPTION)
 			{
 				// Whether or not ALL entries are valid
 				boolean success = true;
@@ -147,8 +148,10 @@ public class SetupDialog{
 				if(success)
 					break;
 				
-				
+				continue;
 			}
+			
+			System.exit(0);
 		}
 	}
 	

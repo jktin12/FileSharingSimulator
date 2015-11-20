@@ -157,7 +157,7 @@ public class FileSharingSystem
 
 		// Sort the top documents using the selected strategy as a comparator
 		Collections.sort(documentList, user.getSearchStrategyEnum().getStrategy());
-
+	
 		// Since Collections.sort() sorts from worst -> greatest, we need to
 		// reverse the list
 		Collections.reverse(documentList);

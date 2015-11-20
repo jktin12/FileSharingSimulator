@@ -37,6 +37,7 @@ public class SimulatorGUI extends JFrame {
 	/* Simulator Controls */
 	private JButton stepSimulatorButton;
 	private JButton runSimulatorButton;
+	private JButton restartButton;
 	private JPanel simulatorControlsPanel;
 
 	/* Simulator */
@@ -49,6 +50,15 @@ public class SimulatorGUI extends JFrame {
 	public static void appendLog(String t) {
 		logText += t + '\n';
 	}
+	
+	/**
+	 * Clears log text
+	 * @param t The text to be appended
+	 */
+	public static void clearLog() {
+		logText = "";
+	}
+	
 
 	/**
 	 * Constructor for creating a simulator GUI. Initializes all values and
@@ -132,6 +142,8 @@ public class SimulatorGUI extends JFrame {
 		// Create the documents panel
 		this.documentsPanel = new DocumentsPanel(allDocumentsListModel);
 
+		
+		
 		// Add tab panels to the tab pane
 		tabbedMenuPane.addTab("Simulator", simulatorPanel);
 		tabbedMenuPane.addTab("Documents", documentsPanel);
@@ -150,12 +162,18 @@ public class SimulatorGUI extends JFrame {
 		runSimulatorButton.addActionListener(click -> runSimulator_Click());
 		runSimulatorButton.setSize(new Dimension(90, 20));
 
+		
+		//restartButton JButton
+		restartButton = new JButton("Restart Simulation");
+		restartButton.addActionListener(click -> restartSimulation_Click());
+		
 		// Create a panel solely for simulator controls
 		simulatorControlsPanel = new JPanel();
 
 		// Add all controls to the panel
 		simulatorControlsPanel.add(stepSimulatorButton);
 		simulatorControlsPanel.add(runSimulatorButton);
+		simulatorControlsPanel.add(restartButton);
 		simulatorControlsPanel.setBorder(BorderFactory.createTitledBorder("Simulator Controls"));
 
 		this.add(mainTabPanel);
@@ -164,6 +182,27 @@ public class SimulatorGUI extends JFrame {
 	
 
 
+
+	private void restartSimulation_Click()
+	{
+		if(JOptionPane.showConfirmDialog(this, "Are you sure you want to restart the Simulation?","Restart?", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+		{
+			this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+			this.setVisible(false);
+			this.dispose();
+			
+			// Run a new simulation window
+			new SimulatorGUI("Simulator");
+			
+			// Clear the log
+			SimulatorGUI.clearLog();
+			
+		}
+		
+		
+		
+		
+	}
 
 	/**
 	 * Event Method: Called when the stepSimulator Button is clicked This will

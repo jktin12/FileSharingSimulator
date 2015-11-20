@@ -6,10 +6,10 @@ public class UserDistanceRankingStrategy implements SearchRankingStrategy
 {
 
 	@Override
-	public int compare(Document o1, Document o2)
+	public int compare(Document o1, Document o2) 
 	{
 		// TODO Implement
-		throw new UnsupportedOperationException("Not Implemented Yet");
+		return 0;
 	}
 
 }
