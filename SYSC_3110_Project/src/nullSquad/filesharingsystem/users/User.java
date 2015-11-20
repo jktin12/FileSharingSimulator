@@ -20,6 +20,8 @@ import nullSquad.strategies.ranking.RankingStrategyEnum;
  */
 public abstract class User
 {
+	private RankingStrategyEnum searchStrategy;
+	
 	protected int userID;
 	protected String userName;
 	protected List<User> followers;
@@ -27,7 +29,7 @@ public abstract class User
 	protected List<Document> likedDocuments;
 	protected String taste;
 	protected List<Integer> payoffHistory;
-	private RankingStrategyEnum searchStrategy;
+	protected List<UserPayoffListener> payoffListeners;
 
 	/**
 	 * Creates a user with the specified taste
@@ -53,6 +55,8 @@ public abstract class User
 		following = new ArrayList<>();
 		likedDocuments = new ArrayList<>();
 		payoffHistory = new ArrayList<>();
+		payoffListeners = new ArrayList<>();
+		
 		this.setSearchStrategy(RankingStrategyEnum.DocumentPopularity);
 
 	}
@@ -83,6 +87,20 @@ public abstract class User
 		return payoffHistory;
 	}
 
+	/**
+	 * Add Payoff Listener
+	 * @param payoffListener The Listener to add
+	 */
+	public void addPayoffListener(UserPayoffListener payoffListener)
+	{
+		// Do not add the listener if already contained in the list
+		if(payoffListener == null || this.payoffListeners.contains(payoffListener))
+			return;
+		
+		// Add the payoff listener
+		this.payoffListeners.add(payoffListener);
+	}
+	
 	/**
 	 * The action that is run by the user when the simulator calls it.
 	 * Subclasses will override this method, but must call this first

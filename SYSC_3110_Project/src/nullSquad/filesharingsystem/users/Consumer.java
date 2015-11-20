@@ -161,6 +161,12 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 		if (currentIteration == getPayoffHistory().size())
 		{ 
 			this.payoffHistory.add(currentPayoff);
+			
+			for(UserPayoffListener upl : this.payoffListeners)
+			{
+				upl.payoffUpdated(new UserPayoffEvent(this));
+			}
+			
 		}
 	}
 

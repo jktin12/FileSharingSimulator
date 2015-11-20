@@ -241,6 +241,12 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 		if (currentIteration == getPayoffHistory().size())
 		{
 			payoffHistory.add(calculatePayoff());
+			
+			// Update all payoff listeners
+			for(UserPayoffListener upl : this.payoffListeners)
+			{
+				upl.payoffUpdated(new UserPayoffEvent(this));
+			}
 		}
 	}
 
