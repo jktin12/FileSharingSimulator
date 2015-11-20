@@ -83,7 +83,7 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 		boolean res = super.addFollower(user);
 
 		if (res)
-			SimulatorGUI.appendLog(this.getUserName() + " has been followed by " + user.getUserName() + ". Updated Producer Payoff: " + calculatePayoff() + "\n");
+			SimulatorGUI.appendLog(this.getUserName() + " has been followed by " + user.getUserName() + ". Updated Producer Payoff: " + calculatePayoff());
 
 		return res;
 	};
@@ -109,9 +109,7 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 
 		// Call the producer act strategy
 		this.actStrategy.getStrategy().act(this, net, kResults);
-
-		//TODO: Delete
-		this.payoffHistory.add(calculatePayoff());
+		
 	}
 
 	/**
@@ -128,11 +126,11 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 		// Add new document to document produced
 		docsProduced.add(newDoc);
 
-		// Like your own document
-		this.likeDocument(newDoc);
-
 		// The document is now added to the network
 		net.addDocument(newDoc);
+		
+		// Like your own document
+		this.likeDocument(newDoc);
 
 	}
 
@@ -229,10 +227,10 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 	@Override
 	public void DocumentLiked(DocumentLikeEvent docLikeEvent)
 	{
-		if (docLikeEvent.getSource().getProducer().equals(this))
+		if (docLikeEvent.getDocument().getProducer().equals(this))
 		{
 			// Calculate and print the payoff
-			SimulatorGUI.appendLog("Producer: " + this.getUserName() + " Document has been liked! Current Payoff: " + calculatePayoff() + "\n");
+			SimulatorGUI.appendLog(docLikeEvent.getLikingUser().getUserName() + " has liked '" + docLikeEvent.getDocument().getDocumentName() + "'. " + docLikeEvent.getDocument().getProducer().getUserName() + " Payoff: "  + calculatePayoff());
 		}
 
 	}

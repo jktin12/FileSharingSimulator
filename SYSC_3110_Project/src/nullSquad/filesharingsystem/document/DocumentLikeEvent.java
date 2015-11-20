@@ -5,6 +5,7 @@
  */
 package nullSquad.filesharingsystem.document;
 
+import nullSquad.filesharingsystem.users.*;
 
 /**
  * Represents the event of a user liking a document
@@ -13,15 +14,28 @@ package nullSquad.filesharingsystem.document;
  */
 public class DocumentLikeEvent
 {
-	private Document	documentSource;
+	private Document documentSource;
+	private User user;
 
-	public DocumentLikeEvent(Document source)
+	public DocumentLikeEvent(Document source, User user)
 	{
 		this.documentSource = source;
+		this.user = user;
 	}
 
-	public Document getSource()
+	/**
+	 * @return The Document that was liked
+	 */
+	public Document getDocument()
 	{
 		return this.documentSource;
+	}
+
+	/**
+	 * @return The user who liked the document
+	 */
+	public User getLikingUser()
+	{
+		return user;
 	}
 }

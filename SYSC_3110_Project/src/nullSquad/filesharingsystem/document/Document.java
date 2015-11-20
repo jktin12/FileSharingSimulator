@@ -96,7 +96,7 @@ public class Document implements Comparable<Document>
 		// Iterate through all like listeners and notify that this document has been liked
 		for(DocumentLikeListener listener : likeListeners)
 		{
-			listener.DocumentLiked(new DocumentLikeEvent(this));
+			listener.DocumentLiked(new DocumentLikeEvent(this, user));
 		}
 		
 		return true;
