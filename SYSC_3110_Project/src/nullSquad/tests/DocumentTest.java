@@ -111,10 +111,12 @@ public class DocumentTest {
 	 */
 	@Test
 	public void testToString() {
-		assertEquals(doc.toString(),"Name: " + doc.getDocumentName()+ 
-				"\nDocument ID: " + doc.getDocumentID() + "\nTag: " + doc.getTag()
-				+ "\nProducer: " + doc.getProducer().getUserName() + 
-				"\nDate Uploaded: " + doc.getDateUploaded());
+		boolean result = true;
+		result &= this.doc.toString().contains(this.doc.getDocumentName());
+		result &= this.doc.toString().contains(this.doc.getTag());
+		result &= this.doc.toString().contains(this.doc.getUserLikes().size() + "");
+		
+		assertTrue(result);
 	}
 
 	/**
