@@ -1,9 +1,7 @@
 /**
  * Title: SYSC 3110 Project
  * 
- * @author MVezina
- *         Student Number: 100934579
- *         Team: noSquad
+ * @author MVezina Student Number: 100934579 Team: noSquad
  */
 
 package nullSquad.filesharingsystem.users;
@@ -21,7 +19,7 @@ import nullSquad.strategies.ranking.RankingStrategyEnum;
 public abstract class User
 {
 	private RankingStrategyEnum searchStrategy;
-	
+
 	protected int userID;
 	protected String userName;
 	protected List<User> followers;
@@ -34,10 +32,8 @@ public abstract class User
 	/**
 	 * Creates a user with the specified taste
 	 * 
-	 * @param userName
-	 *        The user's name
-	 * @param taste
-	 *        The taste of the user
+	 * @param userName The user's name
+	 * @param taste The taste of the user
 	 * @author MVezina
 	 */
 	public User(String userName, String taste)
@@ -56,7 +52,7 @@ public abstract class User
 		likedDocuments = new ArrayList<>();
 		payoffHistory = new ArrayList<>();
 		payoffListeners = new ArrayList<>();
-		
+
 		this.setSearchStrategy(RankingStrategyEnum.DocumentPopularity);
 
 	}
@@ -70,8 +66,7 @@ public abstract class User
 	/**
 	 * Adds the current iteration payoff to the payoff History
 	 * 
-	 * @param currentIteration
-	 *        The current iteration of the simulator
+	 * @param currentIteration The current iteration of the simulator
 	 * @author MVezina
 	 */
 	public abstract void addIterationPayoff(int currentIteration);
@@ -89,50 +84,47 @@ public abstract class User
 
 	/**
 	 * Add Payoff Listener
+	 * 
 	 * @param payoffListener The Listener to add
 	 */
 	public void addPayoffListener(UserPayoffListener payoffListener)
 	{
 		// Do not add the listener if already contained in the list
-		if(payoffListener == null || this.payoffListeners.contains(payoffListener))
+		if (payoffListener == null || this.payoffListeners.contains(payoffListener))
 			return;
-		
+
 		// Add the payoff listener
 		this.payoffListeners.add(payoffListener);
 	}
-	
+
 	/**
 	 * The action that is run by the user when the simulator calls it.
 	 * Subclasses will override this method, but must call this first
 	 * 
-	 * @param net
-	 *        The main network for the simulation
-	 * @param kResults
-	 *        The number of results to search for
+	 * @param fileSharingSystem The main FileSharingSystem for the simulation
+	 * @param kResults The number of results to search for
 	 * @author MVezina
 	 */
-	public abstract void act(FileSharingSystem net, int kResults);
+	public abstract void act(FileSharingSystem fileSharingSystem, int kResults);
 
 	/**
-	 * Registers the user with the specified network
+	 * Registers the user with the specified FileSharingSystem
 	 * 
-	 * @param net
-	 *        The network to register the user on
+	 * @param fileSharingSystem The FileSharingSystem to register the user on
 	 * @author MVezina
 	 */
-	public void registerUser(FileSharingSystem net)
+	public void registerUser(FileSharingSystem fileSharingSystem)
 	{
-		// Registers this user with the network
+		// Registers this user with the file sharing system
 		// Registering a user returns the userID
 		if (userID <= 0)
-			this.userID = net.registerUser(this);
+			this.userID = fileSharingSystem.registerUser(this);
 	}
 
 	/**
 	 * Called When the User wants to like a document
 	 * 
-	 * @param doc
-	 *        The Document that the user is going to like
+	 * @param doc The Document that the user is going to like
 	 * @return Whether or not the document was added successfully
 	 * @author MVezina
 	 */
@@ -156,8 +148,7 @@ public abstract class User
 	/**
 	 * Unlikes a document
 	 * 
-	 * @param doc
-	 *        the document to be unliked
+	 * @param doc the document to be unliked
 	 * @return Returns whether or not the document was unliked successfully
 	 * @author MVezina
 	 */
@@ -179,8 +170,7 @@ public abstract class User
 	/**
 	 * Adds a user to the list of followers
 	 * 
-	 * @param user
-	 *        The user to add the list of followers
+	 * @param user The user to add the list of followers
 	 * @return Whether or not the follower was added
 	 * @author MVezina
 	 */
@@ -200,8 +190,7 @@ public abstract class User
 	/**
 	 * Removes the Follower from the list of followers
 	 * 
-	 * @param user
-	 *        The User to remove as a follower
+	 * @param user The User to remove as a follower
 	 * @return Whether or not the follower was removed successfully
 	 * @author MVezina
 	 */
@@ -217,8 +206,7 @@ public abstract class User
 	/**
 	 * Follows the specified user
 	 * 
-	 * @param user
-	 *        the user to be followed
+	 * @param user the user to be followed
 	 * @return Returns whether or not the user was followed successfully
 	 * @author MVezina
 	 */
@@ -320,8 +308,7 @@ public abstract class User
 	/**
 	 * Unfollows the specified user
 	 * 
-	 * @param user
-	 *        The user to unfollow
+	 * @param user The user to unfollow
 	 * @return Whether or not the user was unfollowed successfully
 	 * @author MVezina
 	 */
@@ -339,8 +326,7 @@ public abstract class User
 	 * Overrides the equals method (from Object) Checks to see if two user
 	 * objects are the same
 	 * 
-	 * @param o
-	 *        The object to compare to
+	 * @param o The object to compare to
 	 * @return Returns whether or not two objects are the same
 	 * @author MVezina
 	 */

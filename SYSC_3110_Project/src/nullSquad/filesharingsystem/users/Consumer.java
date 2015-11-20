@@ -16,7 +16,7 @@ import java.util.*;
 /**
  * Producer class that extends User and implements the default
  * ProducerPayoffStrategy This class represents a Producer that belongs to a
- * network
+ * file sharing system
  * 
  * @author MVezina
  */
@@ -26,8 +26,7 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 	// The Consumer Payoff Strategy to be used
 	private ConsumerPayoffStrategy payoffStrategy;
 	private int currentPayoff;
-	
-	
+
 	/**
 	 * Calls the default constructor and sets the Consumer Payoff Strategy
 	 * 
@@ -55,12 +54,12 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 	public Consumer(String userName, String taste)
 	{
 		super(userName, taste);
-		this.currentPayoff = 0;	
+		this.currentPayoff = 0;
 		this.payoffStrategy = this;
 	}
 
 	@Override
-	public void act(FileSharingSystem net, int kResults)
+	public void act(FileSharingSystem fileSharingSystem, int kResults)
 	{
 		// Ensure the user has been registered
 		if (userID < 1)
@@ -70,14 +69,13 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 		}
 
 		// Searches for the top k results (k = random number between 1-10)
-		List<Document> documentResults = net.search(this, (new Random()).nextInt(10) + 1);
+		List<Document> documentResults = fileSharingSystem.search(this, (new Random()).nextInt(10) + 1);
 
 		// Calculates the payoff of the search results
 		int payoff = calculatePayoff(documentResults);
-		
-		
+
 		SimulatorGUI.appendLog("Search: Returned " + documentResults.size() + " documents (Result Payoff: " + payoff + ")");
-		
+
 		// Like all documents that match the users taste
 		for (Document d : documentResults)
 		{
@@ -90,7 +88,7 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 
 		// Set the current payoff for the user
 		this.currentPayoff += payoff;
-		
+
 	}
 
 	/**
@@ -98,7 +96,7 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 	 * This method will be used to call the strategy and perform any pre/post
 	 * operations
 	 * 
-	 * @param documents the documents returned by the network search
+	 * @param documents the documents returned by the file sharing System search
 	 * @return the value of the calculated payoff
 	 * @author MVezina
 	 */
@@ -159,14 +157,14 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 	{
 		// Only add a payoff iteration if the history is not updated
 		if (currentIteration == getPayoffHistory().size())
-		{ 
+		{
 			this.payoffHistory.add(currentPayoff);
-			
-			for(UserPayoffListener upl : this.payoffListeners)
+
+			for (UserPayoffListener upl : this.payoffListeners)
 			{
 				upl.payoffUpdated(new UserPayoffEvent(this));
 			}
-			
+
 		}
 	}
 

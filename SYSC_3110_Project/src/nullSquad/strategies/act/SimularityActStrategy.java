@@ -12,21 +12,21 @@ public class SimularityActStrategy implements ProducerActStrategy {
 
 	
 	@Override
-	public void act(Producer producer, FileSharingSystem network, int kResults) {
+	public void act(Producer producer, FileSharingSystem fileSharingSystem, int kResults) {
 		
 		// Select a new taste from available tags
-		String newTaste = network.getTags().get((new Random()).nextInt(network.getTags().size()));
+		String newTaste = fileSharingSystem.getTags().get((new Random()).nextInt(fileSharingSystem.getTags().size()));
 		
 		// Keep finding new tags until the tag does not match the producers taste
 		// Make sure that the number of tags is greater than 1!
-		while(newTaste.equals(producer.getTaste()) && network.getTags().size() > 1)
+		while(newTaste.equals(producer.getTaste()) && fileSharingSystem.getTags().size() > 1)
 		{
-			newTaste = network.getTags().get((new Random()).nextInt(network.getTags().size()));
+			newTaste = fileSharingSystem.getTags().get((new Random()).nextInt(fileSharingSystem.getTags().size()));
 		}
 		
 		
-		// Search the network for the new tag
-		List<Document> documentResults = network.search(producer, newTaste, kResults);
+		// Search the file sharing system for the new tag
+		List<Document> documentResults = fileSharingSystem.search(producer, newTaste, kResults);
 		SimulatorGUI.appendLog("Search: Returned " + documentResults.size() + " documents");
 		
 		for(Document d : documentResults)

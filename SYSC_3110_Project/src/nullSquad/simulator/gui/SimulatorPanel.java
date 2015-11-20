@@ -1,6 +1,5 @@
 package nullSquad.simulator.gui;
 
-
 import javax.swing.*;
 
 /**
@@ -33,6 +32,7 @@ public class SimulatorPanel extends JPanel
 	 * Sets the Log Text Area Text
 	 * 
 	 * @param logText
+	 * @author MVezina
 	 */
 	public void setLogText(String logText)
 	{

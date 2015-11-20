@@ -17,7 +17,7 @@ import java.util.List;
 import javax.swing.DefaultListModel;
 
 /**
- * Represents the network
+ * Represents the FileSharingSystem
  * 
  * @author Justin Krol
  */
@@ -30,8 +30,8 @@ public class FileSharingSystem
 	private List<String> tags;
 
 	/**
-	 * @author Justin Krol Creates a Network with a list of users and a list of
-	 *         documents
+	 * @author Justin Krol Creates a File Sharing System with a list of users
+	 *         and a list of documents
 	 * @param tags The list of tags that can be associated with a user or
 	 *        document
 	 */
@@ -43,9 +43,9 @@ public class FileSharingSystem
 	}
 
 	/**
-	 * @author Justin Krol Add a user to the network if it has not already been
-	 *         added
-	 * @param user who will be added to the network
+	 * @author Justin Krol Add a user to the File Sharing System if it has not
+	 *         already been added
+	 * @param user who will be added to the File Sharing System
 	 * @return userID if the user could be added, -1 if the user could not
 	 *         because it was already registered or the user argument was null
 	 */
@@ -56,7 +56,7 @@ public class FileSharingSystem
 			if (usersListModel.contains(user))
 			{
 				// System.out.println("User has already been added to the
-				// network");
+				// File Sharing System");
 				return -1;
 			}
 			usersListModel.addElement(user);
@@ -68,8 +68,9 @@ public class FileSharingSystem
 	}
 
 	/**
-	 * @author Justin Krol Remove a user from the network if it is registered
-	 * @param user who will be removed from the network
+	 * @author Justin Krol Remove a user from the File Sharing System if it is
+	 *         registered
+	 * @param user who will be removed from the File Sharing System
 	 * @return true if the user could be removed, false if the user could not
 	 *         because it was not registered or the user argument was null
 	 */
@@ -81,7 +82,7 @@ public class FileSharingSystem
 			if (!usersListModel.contains(user))
 			{
 				// System.out.println("User is not currently registered on the
-				// network");
+				// File Sharing System");
 				return false;
 			}
 
@@ -119,7 +120,7 @@ public class FileSharingSystem
 
 			usersListModel.removeElement(user);
 
-			SimulatorGUI.appendLog("Network: User " + user.getUserName() + " has been removed from the network");
+			SimulatorGUI.appendLog("File Sharing System: User " + user.getUserName() + " has been removed from the File Sharing System");
 			return true;
 		}
 
@@ -129,10 +130,10 @@ public class FileSharingSystem
 	/**
 	 * Default Search Method: Searches for the specified tag
 	 * 
-	 * @param user The user that will search the network
+	 * @param user The user that will search the File Sharing System
 	 * @param tag The tag to search for
 	 * @param topK Number of results to be returned
-	 * @return The top K results from the network
+	 * @return The top K results from the File Sharing System
 	 * @author MVezina
 	 */
 	public List<Document> search(User user, String tag, int topK)
@@ -157,7 +158,7 @@ public class FileSharingSystem
 
 		// Sort the top documents using the selected strategy as a comparator
 		Collections.sort(documentList, user.getSearchStrategyEnum().getStrategy());
-	
+
 		// Since Collections.sort() sorts from worst -> greatest, we need to
 		// reverse the list
 		Collections.reverse(documentList);
@@ -180,9 +181,9 @@ public class FileSharingSystem
 	/**
 	 * Searches for the documents that match the taste of the user
 	 * 
-	 * @param user The user that will search the network
+	 * @param user The user that will search the File Sharing System
 	 * @param topK Number of results to be returned
-	 * @return The top K results from the network
+	 * @return The top K results from the File Sharing System
 	 * @author MVezina
 	 */
 	public List<Document> search(User user, int topK)
@@ -191,9 +192,9 @@ public class FileSharingSystem
 	}
 
 	/**
-	 * @author Justin Krol Add a document to the network if it has not already
-	 *         been added
-	 * @param doc The Document that will be added to the network
+	 * @author Justin Krol Add a document to the File Sharing System if it has
+	 *         not already been added
+	 * @param doc The Document that will be added to the File Sharing System
 	 * @return true if the document could be added, false if the document could
 	 *         not because it was already added or the document argument was
 	 *         null
@@ -204,13 +205,13 @@ public class FileSharingSystem
 		{
 			if (documentsListModel.contains(doc))
 			{
-				System.out.println("Document has already been added to the network");
+				System.out.println("Document has already been added to the File Sharing System");
 				return false;
 			}
 
 			doc.setDocumentID(nextAvailableDocID++);
 			documentsListModel.addElement(doc);
-			SimulatorGUI.appendLog("Network: Document '" + doc.getDocumentName() + "' has been uploaded");
+			SimulatorGUI.appendLog("File Sharing System: Document '" + doc.getDocumentName() + "' has been uploaded");
 
 			return true;
 		}
@@ -219,12 +220,12 @@ public class FileSharingSystem
 	}
 
 	/**
-	 * @author Justin Krol Remove a document from the network if it has been
-	 *         added
-	 * @param doc The document that will be removed from the network
+	 * @author Justin Krol Remove a document from the File Sharing System if it
+	 *         has been added
+	 * @param doc The document that will be removed from the File Sharing System
 	 * @return true if the document could be removed, false if the document
-	 *         could not because it was not on the network or the document
-	 *         argument was null
+	 *         could not because it was not on the File Sharing System or the
+	 *         document argument was null
 	 */
 	public boolean removeDocument(Document doc)
 	{
@@ -233,7 +234,7 @@ public class FileSharingSystem
 			if (!documentsListModel.contains(doc))
 			{
 				// System.out.println("User is not currently registered on the
-				// network");
+				// File Sharing System");
 				return false;
 			}
 
@@ -308,7 +309,7 @@ public class FileSharingSystem
 	}
 
 	/**
-	 * Add a new tag to the network
+	 * Add a new tag to the File Sharing System
 	 * 
 	 * @param newTag The new tag to add
 	 */
@@ -321,9 +322,9 @@ public class FileSharingSystem
 	}
 
 	/**
-	 * Add a new tag to the network
+	 * Add a new tag to the File Sharing System
 	 * 
-	 * @param newTag The new tag to add
+	 * @param tag The new tag to add
 	 */
 	public boolean removeTag(String tag)
 	{

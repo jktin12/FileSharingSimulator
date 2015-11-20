@@ -57,14 +57,14 @@ public class SimulatorTest {
 
 	@Test
 	public void testGetNetwork() {
-		assertEquals(simulator.getNetwork(),network);
+		assertEquals(simulator.getFileSharingSystem(),network);
 	}
 
 	@Test
 	public void testSimulator() {
 		assertEquals(simulator.getTotalSimulatorSequences(),totalSimulatorSequencesTest);
 		assertEquals(simulator.getCurrentSimulatorSequence(),currentSimulatorSequenceTest);
-		assertEquals(simulator.getNetwork(),network);
+		assertEquals(simulator.getFileSharingSystem(),network);
 	}
 
 	@Test

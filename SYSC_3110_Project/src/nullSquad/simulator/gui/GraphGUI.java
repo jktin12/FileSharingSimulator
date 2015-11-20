@@ -11,7 +11,6 @@ import nullSquad.filesharingsystem.users.*;
 import javax.swing.*;
 
 import org.jfree.chart.*;
-import org.jfree.data.xy.DefaultXYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -20,7 +19,6 @@ public class GraphGUI extends JFrame implements UserPayoffListener
 
 	private JFreeChart chart;
 	private User userInfo;
-	private DefaultXYDataset xyDataset;
 	private XYSeriesCollection xySeriesCollection;
 
 	/**
@@ -44,8 +42,6 @@ public class GraphGUI extends JFrame implements UserPayoffListener
 		// Create a series collection
 		xySeriesCollection = new XYSeriesCollection();
 
-		// Create a XY Dataset
-		xyDataset = new DefaultXYDataset();
 
 		// Create (refresh) chart data
 		refreshChartData();

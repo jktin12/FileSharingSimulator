@@ -54,7 +54,6 @@ public class DocumentsPanel extends JPanel implements ListCellRenderer<Document>
 		// Document Statistics Panel
 		documentStatsListPanel = new JPanel();
 		documentStatsListPanel.setBorder(BorderFactory.createTitledBorder("Document Stats"));
-		
 
 		// Add the stats label to the info panel
 		documentStatsLabel = new JLabel("No Document Selected!");
@@ -145,7 +144,8 @@ public class DocumentsPanel extends JPanel implements ListCellRenderer<Document>
 	@Override
 	public void DocumentLiked(DocumentLikeEvent docLikeEvent)
 	{
-		// We want to update the selected document's stats label if a user likes the document
+		// We want to update the selected document's stats label if a user likes
+		// the document
 		if (documentsJList.getSelectedValue() != null && documentsJList.getSelectedValue().equals(docLikeEvent.getDocument()))
 		{
 			updateDocumentStats(documentsJList.getSelectedValue());
@@ -156,14 +156,14 @@ public class DocumentsPanel extends JPanel implements ListCellRenderer<Document>
 	public void intervalAdded(ListDataEvent e)
 	{
 		// Add this class as a document like listener for all documents
-		documentsJList.getModel().getElementAt(e.getIndex0()).addLikeListener(this);		
+		documentsJList.getModel().getElementAt(e.getIndex0()).addLikeListener(this);
 	}
 
 	@Override
 	public void intervalRemoved(ListDataEvent e)
 	{
 		// Update document stats (Just incase the selected index was removed)
-		updateDocumentStats(documentsJList.getSelectedValue());	
+		updateDocumentStats(documentsJList.getSelectedValue());
 	}
 
 	@Override

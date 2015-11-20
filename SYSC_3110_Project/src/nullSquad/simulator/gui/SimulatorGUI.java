@@ -13,10 +13,10 @@ import nullSquad.filesharingsystem.document.*;
 
 /**
  * @author MVezina
- *
  */
 @SuppressWarnings("serial")
-public class SimulatorGUI extends JFrame {
+public class SimulatorGUI extends JFrame
+{
 
 	// The log text
 	private static String logText = "Welcome to the Simulator!\n\n";
@@ -37,7 +37,7 @@ public class SimulatorGUI extends JFrame {
 	/* Simulator Controls */
 	private JButton stepSimulatorButton;
 	private JButton runSimulatorButton;
-	private JButton restartButton;
+	private JButton restartSimulationButton;
 	private JPanel simulatorControlsPanel;
 
 	/* Simulator */
@@ -45,32 +45,35 @@ public class SimulatorGUI extends JFrame {
 
 	/**
 	 * Appends text t to log text
+	 * 
 	 * @param t The text to be appended
 	 */
-	public static void appendLog(String t) {
+	public static void appendLog(String t)
+	{
 		logText += t + '\n';
 	}
-	
+
 	/**
 	 * Clears log text
-	 * @param t The text to be appended
 	 */
-	public static void clearLog() {
+	public static void clearLog()
+	{
 		logText = "";
 	}
-	
 
 	/**
 	 * Constructor for creating a simulator GUI. Initializes all values and
 	 * components
 	 * 
-	 * @param frameTitle
-	 *            The title of the GUI frame
+	 * @param frameTitle The title of the GUI frame
 	 */
-	public SimulatorGUI(String frameTitle) {
-		
+	public SimulatorGUI(String frameTitle)
+	{
 		// Create Frame with specified frame title
 		super(frameTitle);
+
+		// Ensure the Log is cleared
+		SimulatorGUI.clearLog();
 
 		// Run the setup dialog
 		SetupDialog sD = new SetupDialog(this);
@@ -84,8 +87,7 @@ public class SimulatorGUI extends JFrame {
 
 		/* Set & Initialize Frame Properties / Components */
 
-		this.setTitle("Simulator (" + simulator.getCurrentSimulatorSequence() + "/"
-				+ simulator.getTotalSimulatorSequences() + ")");
+		this.setTitle("Simulator (" + simulator.getCurrentSimulatorSequence() + "/" + simulator.getTotalSimulatorSequences() + ")");
 
 		// Set the frame layout
 		this.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
@@ -120,7 +122,8 @@ public class SimulatorGUI extends JFrame {
 	 * 
 	 * @author MVezina
 	 */
-	private void InitializeFrameComponents() {
+	private void InitializeFrameComponents()
+	{
 
 		mainTabPanel = new JPanel(new CardLayout());
 
@@ -130,20 +133,18 @@ public class SimulatorGUI extends JFrame {
 		// Create all of the tab panels
 		simulatorPanel = new SimulatorPanel();
 
-		// Obtain the users list model from the network
-		DefaultListModel<User> allUsersListModel = simulator.getNetwork().getUsersListModel();
+		// Obtain the users list model from the file sharing system
+		DefaultListModel<User> allUsersListModel = simulator.getFileSharingSystem().getUsersListModel();
 
 		// Create the users panel
 		this.usersPanel = new UsersPanel(allUsersListModel);
-	
-		// Obtain the documents list model from the network
-		DefaultListModel<Document> allDocumentsListModel = simulator.getNetwork().getDocumentsListModel();
-	
+
+		// Obtain the documents list model from the file sharing system
+		DefaultListModel<Document> allDocumentsListModel = simulator.getFileSharingSystem().getDocumentsListModel();
+
 		// Create the documents panel
 		this.documentsPanel = new DocumentsPanel(allDocumentsListModel);
 
-		
-		
 		// Add tab panels to the tab pane
 		tabbedMenuPane.addTab("Simulator", simulatorPanel);
 		tabbedMenuPane.addTab("Documents", documentsPanel);
@@ -162,46 +163,43 @@ public class SimulatorGUI extends JFrame {
 		runSimulatorButton.addActionListener(click -> runSimulator_Click());
 		runSimulatorButton.setSize(new Dimension(90, 20));
 
-		
-		//restartButton JButton
-		restartButton = new JButton("Restart Simulation");
-		restartButton.addActionListener(click -> restartSimulation_Click());
-		
+		// restartButton JButton
+		restartSimulationButton = new JButton("Restart Simulation");
+		restartSimulationButton.addActionListener(click -> restartSimulation_Click());
+
 		// Create a panel solely for simulator controls
 		simulatorControlsPanel = new JPanel();
 
 		// Add all controls to the panel
 		simulatorControlsPanel.add(stepSimulatorButton);
 		simulatorControlsPanel.add(runSimulatorButton);
-		simulatorControlsPanel.add(restartButton);
+		simulatorControlsPanel.add(restartSimulationButton);
 		simulatorControlsPanel.setBorder(BorderFactory.createTitledBorder("Simulator Controls"));
 
 		this.add(mainTabPanel);
 		this.add(simulatorControlsPanel);
 	}
-	
 
-
-
+	/**
+	 * Restart Simulation button click event
+	 * 
+	 * @author MVezina
+	 */
 	private void restartSimulation_Click()
 	{
-		if(JOptionPane.showConfirmDialog(this, "Are you sure you want to restart the Simulation?","Restart?", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+		if (JOptionPane.showConfirmDialog(this, "Are you sure you want to restart the Simulation?", "Restart?", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
 		{
+			// Ensure the application does not exit on closing
 			this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+			// Hide and dispose the form and all of its components
 			this.setVisible(false);
 			this.dispose();
-			
-			// Run a new simulation window
+
+			// Create and run a new simulation
 			new SimulatorGUI("Simulator");
-			
-			// Clear the log
-			SimulatorGUI.clearLog();
-			
 		}
-		
-		
-		
-		
+
 	}
 
 	/**
@@ -210,9 +208,11 @@ public class SimulatorGUI extends JFrame {
 	 * 
 	 * @author MVezina
 	 */
-	void runSimulator_Click() {
+	void runSimulator_Click()
+	{
 
-		while (simulator.getTotalSimulatorSequences() - simulator.getCurrentSimulatorSequence() > 0) {
+		while (simulator.getTotalSimulatorSequences() - simulator.getCurrentSimulatorSequence() > 0)
+		{
 			stepSimulator_Click();
 		}
 	}
@@ -222,12 +222,12 @@ public class SimulatorGUI extends JFrame {
 	 * 
 	 * @author MVezina
 	 */
-	void stepSimulator_Click() {
+	void stepSimulator_Click()
+	{
 		simulator.simulationStep();
 
 		// Set the title
-		this.setTitle("Simulator (" + simulator.getCurrentSimulatorSequence() + "/"
-				+ simulator.getTotalSimulatorSequences() + ")");
+		this.setTitle("Simulator (" + simulator.getCurrentSimulatorSequence() + "/" + simulator.getTotalSimulatorSequences() + ")");
 
 		// Set the log text box
 		simulatorPanel.setLogText(logText);
@@ -235,17 +235,18 @@ public class SimulatorGUI extends JFrame {
 		// Repaint the frame
 		this.repaint();
 
-		if (simulator.getCurrentSimulatorSequence() == simulator.getTotalSimulatorSequences()) {
+		if (simulator.getCurrentSimulatorSequence() == simulator.getTotalSimulatorSequences())
+		{
 			stepSimulatorButton.setEnabled(false);
 			runSimulatorButton.setEnabled(false);
-			
+
 			JOptionPane.showMessageDialog(null, "The simulator has finished!", "Simulation Complete!", JOptionPane.INFORMATION_MESSAGE);
-			
 		}
 
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args)
+	{
 		new SimulatorGUI("Simulator");
 	}
 

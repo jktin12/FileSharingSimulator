@@ -57,9 +57,6 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 	private JRadioButton userDistanceStrategyRadioButton;
 	private JRadioButton userPopularityStrategyRadioButton;
 
-	// Collection of graphs
-	
-	
 	/**
 	 * Creates the Users panel and all associated components
 	 * 
@@ -71,8 +68,6 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 		// Set the users list model
 		this.allUsersListModel = allUsersListModel;
 		this.allUsersListModel.addListDataListener(this);
-
-		// Set the documents List model
 
 		// Create the users tab panel
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -176,8 +171,7 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 		// Set the layout of the selection panel and the maximum size
 		rankStrategySelectionPanel.setLayout(new BoxLayout(rankStrategySelectionPanel, BoxLayout.Y_AXIS));
 		rankStrategySelectionPanel.setMaximumSize(new Dimension(rankStrategySelectionPanel.getMaximumSize().width, Integer.MAX_VALUE));
-		
-		
+
 		// Add all of the radio buttons into the button group
 		rankStrategySelectionButtonGroup.add(documentPopularityStrategyRadioButton);
 		rankStrategySelectionButtonGroup.add(userPopularityStrategyRadioButton);
@@ -216,7 +210,6 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 		actStrategySelectionPanel.add(producerActStrategyARadioButton);
 		actStrategySelectionPanel.add(producerActStrategyBRadioButton);
 
-		
 		// Add panels to the main user tab panel
 		this.add(userListPanel);
 		userOptionPanel.add(userStatsListPanel);
@@ -261,7 +254,8 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 	/**
 	 * Gets the currently selected user or NULL if no user is selected
 	 * 
-	 * @return
+	 * @return The Currently selected user from both Producer/Consumer JLists
+	 *         (or null if none have a selected value)
 	 */
 	private User getCurrentlySelectedUser()
 	{
@@ -303,12 +297,12 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 			// If a double click action is sent on a jlist, we want to open the
 			// graph view for the selected user
 			if (e.getSource() == consumersJList && consumersJList.getSelectedValue() != null)
-			{				
+			{
 				new GraphGUI(consumersJList.getSelectedValue());
 			}
 
 			if (e.getSource() == producersJList && producersJList.getSelectedValue() != null)
-			{			
+			{
 				new GraphGUI(producersJList.getSelectedValue());
 			}
 		}
@@ -361,11 +355,11 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 		userStats += ("<b>Following</b>: " + user.getFollowing().size() + newLine);
 		userStats += ("<b>Number of Documents Liked</b>: " + user.getLikedDocuments().size() + newLine);
 
-		if(user instanceof Producer)
+		if (user instanceof Producer)
 		{
-			userStats += ("<b>Number of Documents Produced</b>: " + ((Producer)user).getDocumentsProduced().size() + newLine);
+			userStats += ("<b>Number of Documents Produced</b>: " + ((Producer) user).getDocumentsProduced().size() + newLine);
 		}
-		
+
 		// Set the label text (ending it with a closing HTML tag)
 		userStatsLabel.setText(userStats + "</html>");
 
@@ -458,7 +452,7 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 			// sub-list model and subscribe to payoff updates
 			User newUser = allUsersListModel.getElementAt(e.getIndex0());
 			newUser.addPayoffListener(this);
-			
+
 			if (newUser instanceof Producer)
 			{
 				producerListModel.addElement((Producer) newUser);
@@ -475,7 +469,7 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 	public void intervalRemoved(ListDataEvent e)
 	{
 		// Remove a user from the associated Producer / Consumer JLists whenever
-		// a user is removed from the network list model
+		// a user is removed from the file sharing system list model
 
 		User removedUser = (allUsersListModel.getElementAt(e.getIndex0()));
 
@@ -503,8 +497,9 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 	@Override
 	public void payoffUpdated(UserPayoffEvent uPE)
 	{
-		// Update the stats label for the selected user when the payoff is updated
-		if(uPE.getUser() == this.getCurrentlySelectedUser())
+		// Update the stats label for the selected user when the payoff is
+		// updated
+		if (uPE.getUser() == this.getCurrentlySelectedUser())
 		{
 			updateUserStats(uPE.getUser());
 		}

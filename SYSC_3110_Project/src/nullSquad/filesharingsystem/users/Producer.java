@@ -1,9 +1,7 @@
 /**
  * Title: SYSC 3110 Project
  * 
- * @author MVezina
- *         Student Number: 100934579
- *         Team: noSquad
+ * @author MVezina Student Number: 100934579 Team: noSquad
  */
 
 package nullSquad.filesharingsystem.users;
@@ -19,8 +17,8 @@ import nullSquad.strategies.payoff.ProducerPayoffStrategy;
 
 /**
  * Producer class that extends User and implements the default
- * ProducerPayoffStrategy
- * This class represents a Producer that belongs to a network
+ * ProducerPayoffStrategy This class represents a Producer that belongs to a
+ * file sharing system
  * 
  * @author MVezina
  */
@@ -33,6 +31,15 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 	private ProducerPayoffStrategy payoffStrategy;
 	private ProducerActStrategyEnum actStrategy;
 
+	/**
+	 * Constructor that sets the Producer Payoff Strategy and Producer Act
+	 * Strategy
+	 * 
+	 * @param payoffStrat The Payoff strategy to use
+	 * @param actStrat The Producer Act Strategy to use
+	 * @param userName The User name of the producer
+	 * @param taste The taste of the producer
+	 */
 	public Producer(ProducerPayoffStrategy payoffStrat, ProducerActStrategyEnum actStrat, String userName, String taste)
 	{
 		this(userName, taste);
@@ -41,6 +48,13 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 		this.actStrategy = actStrat;
 	}
 
+	/**
+	 * Constructor that sets the Producer Payoff Strategy
+	 * 
+	 * @param payoffStrat The Payoff strategy to use
+	 * @param userName The User name of the producer
+	 * @param taste The taste of the producer
+	 */
 	public Producer(ProducerPayoffStrategy payoffStrat, String userName, String taste)
 	{
 		this(userName, taste);
@@ -48,16 +62,22 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 		this.payoffStrategy = payoffStrat;
 	}
 
+	/**
+	 * Constructor that sets the Producer Act Strategy
+	 * 
+	 * @param actStrat The act strategy to use
+	 * @param userName The User name of the producer
+	 * @param taste The taste of the producer
+	 */
 	public Producer(ProducerActStrategyEnum actStrat, String userName, String taste)
 	{
 		this(userName, taste);
-
 		this.actStrategy = actStrat;
 	}
 
 	/**
-	 * Default Constructor.
-	 * Creates a producer with the specified userID and taste
+	 * Default Constructor. Creates a producer with the specified userID and
+	 * taste
 	 * 
 	 * @param userName the userID of the new user
 	 * @param taste the taste of the user
@@ -74,28 +94,28 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 	}
 
 	/**
-	 * The Producer Override of addFollower(..):
-	 * - Requires re-calculation of Payoff after adding a follower
+	 * The Producer Override of addFollower(..): - Requires re-calculation of
+	 * Payoff after adding a follower
 	 */
 	@Override
 	public boolean addFollower(User user)
 	{
-		boolean res = super.addFollower(user);
-
-		if (res)
+		// If added a follower succeeds, Append text to the log and return the
+		// status
+		if (super.addFollower(user))
+		{
 			SimulatorGUI.appendLog(this.getUserName() + " has been followed by " + user.getUserName() + ". Updated Producer Payoff: " + calculatePayoff());
-
-		return res;
+			return true;
+		}
+		return false;
 	};
 
 	/**
-	 * The Producer Acts By:
-	 * - Produces a new document
-	 * - Runs the specified producer act strategy
-	 * - Updates the payoff
+	 * The Producer Acts By: - Produces a new document - Runs the specified
+	 * producer act strategy - Updates the payoff
 	 */
 	@Override
-	public void act(FileSharingSystem net, int kResults)
+	public void act(FileSharingSystem fileSharingSystem, int kResults)
 	{
 		// Ensure the user has been registered
 		if (userID <= 0)
@@ -104,21 +124,22 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 			return;
 		}
 
-		// Create a new document and upload to the network
-		produceDocument(net);
+		// Create a new document and upload to the file sharing system
+		produceDocument(fileSharingSystem);
 
 		// Call the producer act strategy
-		this.actStrategy.getStrategy().act(this, net, kResults);
-		
+		this.actStrategy.getStrategy().act(this, fileSharingSystem, kResults);
+
 	}
 
 	/**
-	 * Produces and uploads a new document to the network
+	 * Produces and uploads a new document to the file sharing system
 	 * 
-	 * @param net The network to upload the document to
+	 * @param fileSharingSystem The file sharing system to upload the document
+	 *        to
 	 * @author MVezina
 	 */
-	private void produceDocument(FileSharingSystem net)
+	private void produceDocument(FileSharingSystem fileSharingSystem)
 	{
 		// Create a new document
 		Document newDoc = new Document("Document " + this.taste + " (" + (new Random()).nextInt(500) + ")", this.taste, this);
@@ -126,9 +147,9 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 		// Add new document to document produced
 		docsProduced.add(newDoc);
 
-		// The document is now added to the network
-		net.addDocument(newDoc);
-		
+		// The document is now added to the file sharing system
+		fileSharingSystem.addDocument(newDoc);
+
 		// Like your own document
 		this.likeDocument(newDoc);
 
@@ -147,9 +168,8 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 
 	/**
 	 * The Default Producer payoff method uses followers/likes to calculate
-	 * payoff.
-	 * One point is given for every person who likes the producer's documents
-	 * Two points are given for every follower the producer has
+	 * payoff. One point is given for every person who likes the producer's
+	 * documents Two points are given for every follower the producer has
 	 * 
 	 * @author MVezina
 	 */
@@ -179,6 +199,7 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 
 	/**
 	 * Sets the act strategy
+	 * 
 	 * @param producerActStrategy
 	 */
 	public void setActStrategyEnum(ProducerActStrategyEnum producerActStrategy)
@@ -221,16 +242,15 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 
 	}
 
-	/**
-	 * DocumentLiked Event Handler
-	 */
 	@Override
 	public void DocumentLiked(DocumentLikeEvent docLikeEvent)
 	{
+		// Check to see if the document containing the event is owned by this
+		// producer
 		if (docLikeEvent.getDocument().getProducer().equals(this))
 		{
 			// Calculate and print the payoff
-			SimulatorGUI.appendLog(docLikeEvent.getLikingUser().getUserName() + " has liked '" + docLikeEvent.getDocument().getDocumentName() + "'. " + docLikeEvent.getDocument().getProducer().getUserName() + " Payoff: "  + calculatePayoff());
+			SimulatorGUI.appendLog(docLikeEvent.getLikingUser().getUserName() + " has liked '" + docLikeEvent.getDocument().getDocumentName() + "'. " + docLikeEvent.getDocument().getProducer().getUserName() + " Payoff: " + calculatePayoff());
 		}
 
 	}
@@ -238,13 +258,17 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 	@Override
 	public void addIterationPayoff(int currentIteration)
 	{
+
+		// Ensures the number of iterations matches the size of the payoff list
 		if (currentIteration == getPayoffHistory().size())
 		{
+			// Add payoff to list
 			payoffHistory.add(calculatePayoff());
-			
+
 			// Update all payoff listeners
-			for(UserPayoffListener upl : this.payoffListeners)
+			for (UserPayoffListener upl : this.payoffListeners)
 			{
+				// Call all listener methods
 				upl.payoffUpdated(new UserPayoffEvent(this));
 			}
 		}
