@@ -1,5 +1,6 @@
 package nullSquad.simulator.gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -11,118 +12,146 @@ import javax.swing.*;
 
 import org.jfree.chart.*;
 import org.jfree.data.xy.DefaultXYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
-
-public class GraphGUI extends JFrame{
+public class GraphGUI extends JFrame implements UserPayoffListener
+{
 
 	private JFreeChart chart;
 	private User userInfo;
 	private DefaultXYDataset xyDataset;
-	
-	
+	private XYSeriesCollection xySeriesCollection;
+
 	/**
 	 * Create a GUI that shows a graph for the specified user's payoff history
+	 * 
 	 * @param user The user to show the Payoff history for
 	 */
-	public GraphGUI(User user) 
+	public GraphGUI(User user)
 	{
-		super("History of Payoff For User: " + user.getUserName());
-		
-		
+		super(user.getUserName() + "'s Payoff History (Over " + user.getPayoffHistory().size() + " Steps)");
+
 		this.userInfo = user;
 		this.pack();
-		
+
+		// Set size
 		this.setMinimumSize(new Dimension(500, 500));
-		//this.setResizable(false);
+
+		// Center the graph
 		this.setLocationRelativeTo(null);
-		
-		
+
+		// Create a series collection
+		xySeriesCollection = new XYSeriesCollection();
+
 		// Create a XY Dataset
 		xyDataset = new DefaultXYDataset();
-		
+
+		// Create (refresh) chart data
 		refreshChartData();
+
 		// Create an XY Line Chart
-		chart = ChartFactory.createXYLineChart("User Payoff Over Time", "Steps (Simulation Iterations)", "User Payoff", xyDataset);
-		
-		
+		chart = ChartFactory.createXYLineChart("User Payoff Over Time", "Steps (Simulation Iterations)", "User Payoff", xySeriesCollection);
+		chart.getPlot().setBackgroundPaint(Color.WHITE);
+		chart.getPlot().setOutlinePaint(Color.BLACK);
+
 		// Draw the Initial Chart
-		chart.draw((Graphics2D)this.getGraphics(), (Rectangle2D)new Rectangle2D.Double(0, 0 , this.getWidth(), this.getHeight()));
-		
+		chart.draw((Graphics2D) this.getGraphics(), (Rectangle2D) new Rectangle2D.Double(0, 0, this.getWidth(), this.getHeight()));
+
 		// Set the content pane to a graphics panel for drawing the graph
 		this.setContentPane(new GraphPanel(this));
-		
+
+		// Show the frame
 		this.setVisible(true);
-		
+
+		// Subscribe to the user's UserPayoff events
+		user.addPayoffListener(this);
+
 	}
-	
+
 	/**
 	 * Sets the chart dataset
 	 */
 	private void refreshChartData()
 	{
 		// Get all payoff history (put into readable format for series)
-		double payoffHistory[][] = getUserPayoffData();
-		
-		if(payoffHistory == null)
+		XYSeries payoffHistory = getUserPayoffData();
+
+		if (payoffHistory == null)
 			return;
-		
-		// Add a new XY Series (Using User Payoff Data)
-		xyDataset.addSeries("User: " + userInfo.getUserName(), payoffHistory);
-		
+
+		// Reupdate series
+		xySeriesCollection.removeAllSeries();
+		xySeriesCollection.addSeries(payoffHistory);
+
 	}
-	
+
 	/**
 	 * Put User Payoff history into a readable double 2D array for JFreeChart
+	 * 
 	 * @return A 2D double array of coordinates
 	 */
-	private double[][] getUserPayoffData()
+	private XYSeries getUserPayoffData()
 	{
-		if(userInfo == null)
+		XYSeries xySeries = new XYSeries("User: " + userInfo.getUserName());
+
+		if (userInfo == null)
 			return null;
-		
-		// 2D Array for X and Y coordinates
-		double payoffHistory[][] = new double[2][userInfo.getPayoffHistory().size()];
-		
-		
-		for(int i = 0; i < userInfo.getPayoffHistory().size(); i++)
+
+		// Set the title of the frame
+		this.setTitle(userInfo.getUserName() + "'s Payoff History (Over " + userInfo.getPayoffHistory().size() + " Steps)");
+
+		// Set the points of the data set
+		for (int i = 0; i < userInfo.getPayoffHistory().size(); i++)
 		{
-			payoffHistory[0][i] = i;
-			payoffHistory[1][i] = userInfo.getPayoffHistory().get(i);
+			xySeries.add(i, userInfo.getPayoffHistory().get(i));
 		}
-		
-		return payoffHistory;
+
+		return xySeries;
 	}
 
 	/**
 	 * Draws the chart using graphics
+	 * 
 	 * @param g Graphics to Draw to
 	 */
 	public void drawChart(Graphics g)
 	{
 		// Update all chart data
 		refreshChartData();
-		
+
 		// Paint the chart
-		if(chart != null)
-			chart.draw((Graphics2D)g, (Rectangle2D)new Rectangle2D.Double(0, 0 , g.getClipBounds().getWidth(), g.getClipBounds().getHeight()));
+		if (chart != null && g != null)
+			chart.draw((Graphics2D) g, (Rectangle2D) new Rectangle2D.Double(0, 0, g.getClipBounds().getWidth(), g.getClipBounds().getHeight()));
 	}
-	
+
+	@Override
+	public void payoffUpdated(UserPayoffEvent uPE)
+	{
+		if (userInfo.equals(uPE.getUser()))
+		{
+			this.repaint();
+		}
+
+	}
+
 }
 
 /**
  * Simple Class used to provide a drawing interface (content pane) for the graph
  * Calls the drawChart method from the given GraphGUI
+ * 
  * @author MVezina *
  */
 class GraphPanel extends JPanel
 {
 	private GraphGUI mainFrame;
-	
+
 	public GraphPanel(GraphGUI mainFrame)
 	{
 		this.mainFrame = mainFrame;
 	}
-	
+
 	@Override
 	public void paintComponent(Graphics g)
 	{
