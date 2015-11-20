@@ -109,6 +109,8 @@ public class SimulatorTest {
 		simulator.setCurrentSimulatorSequence(2);
 		currentSimulatorSequenceTest=2;
 		assertEquals(simulator.getCurrentSimulatorSequence(),currentSimulatorSequenceTest);
+		simulator.setCurrentSimulatorSequence(0);
+		currentSimulatorSequenceTest=0;
 	}
 
 	@Test
