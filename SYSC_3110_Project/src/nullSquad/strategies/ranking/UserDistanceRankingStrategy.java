@@ -1,15 +1,16 @@
 package nullSquad.strategies.ranking;
 
+import java.util.List;
+
 import nullSquad.filesharingsystem.document.Document;
+import nullSquad.filesharingsystem.users.User;
 
-public class UserDistanceRankingStrategy implements SearchRankingStrategy
+public class UserDistanceRankingStrategy implements DocumentRankingStrategy
 {
-
 	@Override
-	public int compare(Document o1, Document o2) 
+	public List<Document> rankDocuments(List<Document> allDocuments, User user, String tag, int topK)
 	{
-		// TODO Implement
-		return 0;
+		// TODO Auto-generated method stub
+		return null;
 	}
-
 }

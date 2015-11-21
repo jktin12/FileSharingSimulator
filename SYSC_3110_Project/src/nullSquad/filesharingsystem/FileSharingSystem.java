@@ -11,7 +11,6 @@ import nullSquad.simulator.gui.SimulatorGUI;
 import nullSquad.filesharingsystem.document.*;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
@@ -150,24 +149,12 @@ public class FileSharingSystem
 		// so it can be ranked
 		for (int i = 0; i < documentsListModel.getSize(); i++)
 		{
-			if (documentsListModel.getElementAt(i).getTag().equals(tag))
-			{
-				documentList.add((documentsListModel.getElementAt(i)));
-			}
+			documentList.add((documentsListModel.getElementAt(i)));
 		}
 
-		// Sort the top documents using the selected strategy as a comparator
-		Collections.sort(documentList, user.getSearchStrategyEnum().getStrategy());
+		List<Document> topKDocuments = user.getSearchStrategyEnum().getStrategy().rankDocuments(documentList, user, tag, topK);
 
-		// Since Collections.sort() sorts from worst -> greatest, we need to
-		// reverse the list
-		Collections.reverse(documentList);
-
-		// Return the topK documents as a sublist of all the ordered documents
-		// If there are only documents.size() elements available.. Only return
-		// the top documents.size() documents
-		List<Document> topKDocuments = documentList.subList(0, Math.min(topK, documentList.size()));
-
+		
 		// We want to update the payoff for all of the producers every time
 		// their documents are returned
 		for (Document d : topKDocuments)

@@ -9,7 +9,7 @@ package nullSquad.filesharingsystem.users;
 import java.util.*;
 import nullSquad.filesharingsystem.*;
 import nullSquad.filesharingsystem.document.*;
-import nullSquad.strategies.ranking.RankingStrategyEnum;
+import nullSquad.strategies.ranking.DocumentRankingStrategyEnum;
 
 /**
  * Abstract class that represents a User
@@ -18,7 +18,7 @@ import nullSquad.strategies.ranking.RankingStrategyEnum;
  */
 public abstract class User
 {
-	private RankingStrategyEnum searchStrategy;
+	private DocumentRankingStrategyEnum searchStrategy;
 
 	protected int userID;
 	protected String userName;
@@ -53,11 +53,11 @@ public abstract class User
 		payoffHistory = new ArrayList<>();
 		payoffListeners = new ArrayList<>();
 
-		this.setSearchStrategy(RankingStrategyEnum.DocumentPopularity);
+		this.setSearchStrategy(DocumentRankingStrategyEnum.DocumentPopularity);
 
 	}
 
-	public User(RankingStrategyEnum rankingStrategy, String userName, String taste)
+	public User(DocumentRankingStrategyEnum rankingStrategy, String userName, String taste)
 	{
 		this(userName, taste);
 		this.setSearchStrategy(rankingStrategy);
@@ -225,7 +225,7 @@ public abstract class User
 		return this.following.add(user);
 	}
 
-	public RankingStrategyEnum getSearchStrategyEnum()
+	public DocumentRankingStrategyEnum getSearchStrategyEnum()
 	{
 		return searchStrategy;
 	}
@@ -235,7 +235,7 @@ public abstract class User
 	 * 
 	 * @param searchStrategy The Search Ranking Strategy to use
 	 */
-	public void setSearchStrategy(RankingStrategyEnum searchStrategy)
+	public void setSearchStrategy(DocumentRankingStrategyEnum searchStrategy)
 	{
 		if (searchStrategy != null)
 			this.searchStrategy = searchStrategy;

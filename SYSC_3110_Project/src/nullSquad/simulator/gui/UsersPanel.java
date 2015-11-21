@@ -11,7 +11,7 @@ import javax.swing.event.*;
 
 import nullSquad.filesharingsystem.users.*;
 import nullSquad.strategies.act.ProducerActStrategyEnum;
-import nullSquad.strategies.ranking.RankingStrategyEnum;
+import nullSquad.strategies.ranking.DocumentRankingStrategyEnum;
 
 /**
  * Representation of the Users Tab Panel
@@ -152,20 +152,20 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 		userListPanel.add(consumerListPanel);
 
 		/* ===== Initialization of all the strategy radio buttons ===== */
-		documentPopularityStrategyRadioButton = new JRadioButton(RankingStrategyEnum.DocumentPopularity.toString());
-		documentPopularityStrategyRadioButton.addActionListener(al -> rankStrategyRadioButton_Clicked(RankingStrategyEnum.DocumentPopularity));
+		documentPopularityStrategyRadioButton = new JRadioButton(DocumentRankingStrategyEnum.DocumentPopularity.toString());
+		documentPopularityStrategyRadioButton.addActionListener(al -> rankStrategyRadioButton_Clicked(DocumentRankingStrategyEnum.DocumentPopularity));
 
-		userPopularityStrategyRadioButton = new JRadioButton(RankingStrategyEnum.UserPopularity.toString());
-		userPopularityStrategyRadioButton.addActionListener(al -> rankStrategyRadioButton_Clicked(RankingStrategyEnum.UserPopularity));
+		userPopularityStrategyRadioButton = new JRadioButton(DocumentRankingStrategyEnum.UserPopularity.toString());
+		userPopularityStrategyRadioButton.addActionListener(al -> rankStrategyRadioButton_Clicked(DocumentRankingStrategyEnum.UserPopularity));
 
-		likeSimilarityStrategyRadioButton = new JRadioButton(RankingStrategyEnum.LikeSimilarity.toString());
-		likeSimilarityStrategyRadioButton.addActionListener(al -> rankStrategyRadioButton_Clicked(RankingStrategyEnum.LikeSimilarity));
+		likeSimilarityStrategyRadioButton = new JRadioButton(DocumentRankingStrategyEnum.LikeSimilarity.toString());
+		likeSimilarityStrategyRadioButton.addActionListener(al -> rankStrategyRadioButton_Clicked(DocumentRankingStrategyEnum.LikeSimilarity));
 
-		followSimilarityStrategyRadioButton = new JRadioButton(RankingStrategyEnum.FollowSimiliarity.toString());
-		followSimilarityStrategyRadioButton.addActionListener(al -> rankStrategyRadioButton_Clicked(RankingStrategyEnum.FollowSimiliarity));
+		followSimilarityStrategyRadioButton = new JRadioButton(DocumentRankingStrategyEnum.FollowSimiliarity.toString());
+		followSimilarityStrategyRadioButton.addActionListener(al -> rankStrategyRadioButton_Clicked(DocumentRankingStrategyEnum.FollowSimiliarity));
 
-		userDistanceStrategyRadioButton = new JRadioButton(RankingStrategyEnum.UserDistance.toString());
-		userDistanceStrategyRadioButton.addActionListener(al -> rankStrategyRadioButton_Clicked(RankingStrategyEnum.UserDistance));
+		userDistanceStrategyRadioButton = new JRadioButton(DocumentRankingStrategyEnum.UserDistance.toString());
+		userDistanceStrategyRadioButton.addActionListener(al -> rankStrategyRadioButton_Clicked(DocumentRankingStrategyEnum.UserDistance));
 		/* ===== END of Initialization of all the strategy radio buttons ===== */
 
 		// Set the layout of the selection panel and the maximum size
@@ -238,7 +238,7 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 	 * 
 	 * @param rankingStrategy The strategy to set to the user
 	 */
-	private void rankStrategyRadioButton_Clicked(RankingStrategyEnum rankingStrategy)
+	private void rankStrategyRadioButton_Clicked(DocumentRankingStrategyEnum rankingStrategy)
 	{
 		// Gets the currently selected user
 		User selectedUser = getCurrentlySelectedUser();
