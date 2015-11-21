@@ -12,7 +12,7 @@ import nullSquad.simulator.gui.SimulatorGUI;
 
 import java.util.*;
 
-import nullSquad.strategies.act.ProducerActStrategyEnum;
+import nullSquad.strategies.act.ProducerActStrategy;
 import nullSquad.strategies.payoff.ProducerPayoffStrategy;
 
 /**
@@ -29,7 +29,7 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 
 	// The Producer Payoff Strategy to be used
 	private ProducerPayoffStrategy payoffStrategy;
-	private ProducerActStrategyEnum actStrategy;
+	private ProducerActStrategy.Strategy actStrategy;
 
 	/**
 	 * Constructor that sets the Producer Payoff Strategy and Producer Act
@@ -40,7 +40,7 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 	 * @param userName The User name of the producer
 	 * @param taste The taste of the producer
 	 */
-	public Producer(ProducerPayoffStrategy payoffStrat, ProducerActStrategyEnum actStrat, String userName, String taste)
+	public Producer(ProducerPayoffStrategy payoffStrat, ProducerActStrategy.Strategy actStrat, String userName, String taste)
 	{
 		this(userName, taste);
 
@@ -69,7 +69,7 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 	 * @param userName The User name of the producer
 	 * @param taste The taste of the producer
 	 */
-	public Producer(ProducerActStrategyEnum actStrat, String userName, String taste)
+	public Producer(ProducerActStrategy.Strategy actStrat, String userName, String taste)
 	{
 		this(userName, taste);
 		this.actStrategy = actStrat;
@@ -90,7 +90,7 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 		// Sets the default payoff strategy to the interface implementation in
 		// this class
 		this.payoffStrategy = this;
-		this.actStrategy = ProducerActStrategyEnum.Default;
+		this.actStrategy = ProducerActStrategy.Strategy.Default;
 	}
 
 	/**
@@ -202,7 +202,7 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 	 * 
 	 * @param producerActStrategy
 	 */
-	public void setActStrategyEnum(ProducerActStrategyEnum producerActStrategy)
+	public void setActStrategyEnum(ProducerActStrategy.Strategy producerActStrategy)
 	{
 		if (producerActStrategy == null)
 			return;
@@ -212,7 +212,7 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 	/**
 	 * @return Producer act strategy enum
 	 */
-	public ProducerActStrategyEnum getActStrategyEnum()
+	public ProducerActStrategy.Strategy getActStrategyEnum()
 	{
 		return this.actStrategy;
 	}

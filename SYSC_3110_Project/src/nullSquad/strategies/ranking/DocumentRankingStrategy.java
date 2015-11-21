@@ -13,6 +13,41 @@ import java.util.*;
 public interface DocumentRankingStrategy
 {
 	/**
+	 * Enumeration for all possible strategies
+	 * 
+	 * @author MVezina
+	 */
+	public enum Strategy
+	{
+		DocumentPopularity("Document Popularity", new DocumentPopularityStrategy()),
+		UserPopularity("User Popularity", new UserPopularityRankingStrategy()),
+		UserDistance("User Distance", new UserDistanceRankingStrategy()),
+		LikeSimilarity("Like Similarity", new LikesSimilarityRankingStrategy()),
+		FollowSimiliarity("Follow Similarity", new FollowSimilarityStrategy());
+
+		// Associate a search ranking strategy with each enum
+		private DocumentRankingStrategy docRankStrat;
+		private String stratName;
+
+		private Strategy(String name, DocumentRankingStrategy docRankStrat)
+		{
+			this.stratName = name;
+			this.docRankStrat = docRankStrat;
+		}
+
+		public String toString()
+		{
+			return stratName;
+		}
+
+		public DocumentRankingStrategy getStrategy()
+		{
+			return docRankStrat;
+		}
+
+	}
+
+	/**
 	 * Ranks the documents from Best->Worst. (Best Document Occurs First in the
 	 * list because we want it to be the first result)
 	 * 
