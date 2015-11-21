@@ -11,16 +11,13 @@ public class UserPopularityRankingStrategy implements DocumentRankingStrategy, C
 {
 
 	@Override
-	public List<Document> rankDocuments(List<Document> allDocuments, User user, String tag, int topK)
+	public List<Document> rankDocuments(List<Document> allDocuments, User user, int topK)
 	{
 		List<Document> rankedDocuments = new ArrayList<>();
 
 		for (Document d : allDocuments)
 		{
-			if (d.getTag().equals(tag))
-			{
-				rankedDocuments.add(d);
-			}
+			rankedDocuments.add(d);
 		}
 
 		// Go through all user likes and rank based on
@@ -32,6 +29,18 @@ public class UserPopularityRankingStrategy implements DocumentRankingStrategy, C
 	@Override
 	public int compare(Document document1, Document document2)
 	{
+		// If both are null, they are ranked the same
+		if (document1 == null && document2 == null)
+			return 0;
+
+		// If doc1 is null and doc2 isnt, doc2 is ranked higher
+		if (document1 == null && document2 != null)
+			return -1;
+
+		// If doc1 isnt null and doc2 is, doc1 is ranked higher
+		if (document1 != null && document2 == null)
+			return 1;
+
 		int avgUserPopularityDocument1 = 0, avgUserPopularityDocument2 = 0;
 
 		// Determine the overall popularity of all likers of document 1
@@ -50,7 +59,6 @@ public class UserPopularityRankingStrategy implements DocumentRankingStrategy, C
 
 		avgUserPopularityDocument2 /= document2.getUserLikes().size();
 
-		
 		// Return the difference of the two user popularity averages
 		return avgUserPopularityDocument1 - avgUserPopularityDocument2;
 	}

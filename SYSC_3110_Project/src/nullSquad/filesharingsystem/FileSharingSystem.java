@@ -149,10 +149,14 @@ public class FileSharingSystem
 		// so it can be ranked
 		for (int i = 0; i < documentsListModel.getSize(); i++)
 		{
-			documentList.add((documentsListModel.getElementAt(i)));
+			if(documentsListModel.getElementAt(i).getTag().equals(tag))
+			{
+				documentList.add((documentsListModel.getElementAt(i)));
+			}
+			
 		}
 
-		List<Document> topKDocuments = user.getSearchStrategyEnum().getStrategy().rankDocuments(documentList, user, tag, topK);
+		List<Document> topKDocuments = user.getSearchStrategyEnum().getStrategy().rankDocuments(documentList, user, topK);
 
 		
 		// We want to update the payoff for all of the producers every time

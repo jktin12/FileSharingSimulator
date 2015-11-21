@@ -8,7 +8,7 @@ import nullSquad.filesharingsystem.users.User;
 public class UserDistanceRankingStrategy implements DocumentRankingStrategy
 {
 	@Override
-	public List<Document> rankDocuments(List<Document> allDocuments, User user, String tag, int topK)
+	public List<Document> rankDocuments(List<Document> allDocuments, User user, int topK)
 	{
 		// TODO Auto-generated method stub
 		return null;

@@ -17,11 +17,17 @@ public class DocumentPopularityStrategy implements DocumentRankingStrategy, Comp
 {
 
 	@Override
-	public List<Document> rankDocuments(List<Document> allDocuments, User user, String tag, int topK)
+	public List<Document> rankDocuments(List<Document> allDocuments, User user, int topK)
 	{
 		// Copy the documents over to the new array to be ranked
 		List<Document> rankedDocuments = new ArrayList<>();
-		Collections.copy(rankedDocuments, allDocuments);
+		
+		
+		for (Document d : allDocuments)
+		{
+			rankedDocuments.add(d);
+		}
+
 		
 		// Sort the top documents using the selected strategy as a comparator
 		Collections.sort(rankedDocuments, this);
