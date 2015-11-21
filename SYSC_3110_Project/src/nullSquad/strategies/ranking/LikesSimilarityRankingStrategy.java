@@ -8,11 +8,12 @@ import java.util.List;
 import nullSquad.filesharingsystem.document.Document;
 import nullSquad.filesharingsystem.users.User;
 /**
- * @author Marc Tebo
+* @author Marc Tebo
 * Rank the documents by the “like” similarity 
 * (i.e., if we tend to “like” the same documents, I will 
 * trust you when you “like” documents I haven’t seen yet)
 */
+
 public class LikesSimilarityRankingStrategy implements DocumentRankingStrategy, Comparator<Document>
 {	
 	private User user;
@@ -40,7 +41,8 @@ public class LikesSimilarityRankingStrategy implements DocumentRankingStrategy, 
 	 * return 1 if doc1 is better, 0 if it is a tie, -1 if doc2 is better
 	 */
 	@Override
-	public int compare(Document doc1, Document doc2){
+	public int compare(Document doc1, Document doc2)
+	{
 		if(doc1 != null && doc2 == null){
 			return 1;
 		}
@@ -71,5 +73,4 @@ public class LikesSimilarityRankingStrategy implements DocumentRankingStrategy, 
 		
 		return likesSimilarityDoc1 - likesSimilarityDoc2;
 	}
-
 }
