@@ -1,6 +1,7 @@
 package nullSquad.strategies.ranking;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -11,7 +12,7 @@ public class UserPopularityRankingStrategy implements DocumentRankingStrategy, C
 {
 
 	@Override
-	public List<Document> rankDocuments(List<Document> allDocuments, User user, int topK)
+	public List<Document> rankDocuments(List<Document> allDocuments, User user)
 	{
 		List<Document> rankedDocuments = new ArrayList<>();
 
@@ -20,7 +21,12 @@ public class UserPopularityRankingStrategy implements DocumentRankingStrategy, C
 			rankedDocuments.add(d);
 		}
 
-		// Go through all user likes and rank based on
+		// Sort the top documents using the selected strategy as a comparator
+		Collections.sort(rankedDocuments, this);
+
+		// Since Collections.sort() sorts from worst -> greatest, we need to
+		// reverse the list
+		Collections.reverse(rankedDocuments);
 
 		return rankedDocuments;
 

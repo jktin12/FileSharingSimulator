@@ -137,6 +137,11 @@ public class FileSharingSystem
 	 */
 	public List<Document> search(User user, String tag, int topK)
 	{
+		// Return a blank list if topK = 0
+		if(topK == 0)
+			return new ArrayList<>();
+		
+		
 		// If topK is invalid (ex: -1), change it to the absolute value
 		if (topK < 0)
 			topK = Math.abs(topK);
@@ -155,18 +160,25 @@ public class FileSharingSystem
 			}
 			
 		}
-
-		List<Document> topKDocuments = user.getSearchStrategyEnum().getStrategy().rankDocuments(documentList, user, topK);
-
+		
+		// Get a list of ranked documents
+		List<Document> rankedDocuments = user.getSearchStrategyEnum().getStrategy().rankDocuments(documentList, user);
+		
+		// Only maintain the top k documents
+		if(rankedDocuments.size() > topK)
+		{			
+			rankedDocuments = rankedDocuments.subList(0, topK);
+		}
+		
 		
 		// We want to update the payoff for all of the producers every time
 		// their documents are returned
-		for (Document d : topKDocuments)
+		for (Document d : rankedDocuments)
 		{
 			d.getProducer().calculatePayoff();
 		}
 
-		return topKDocuments;
+		return rankedDocuments;
 	}
 
 	/**

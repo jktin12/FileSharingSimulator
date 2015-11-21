@@ -53,10 +53,9 @@ public interface DocumentRankingStrategy
 	 * 
 	 * @param allDocuments The documents to rank
 	 * @param user The User to rank by
-	 * @param topK The number of top ranked documents to return
 	 * @return The topK ranked documents based on the strategy
 	 * @author MVezina
 	 */
-	public List<Document> rankDocuments(List<Document> allDocuments, User user, int topK);
+	public List<Document> rankDocuments(List<Document> allDocuments, User user);
 
 }

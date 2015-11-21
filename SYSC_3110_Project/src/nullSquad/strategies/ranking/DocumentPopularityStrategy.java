@@ -17,7 +17,7 @@ public class DocumentPopularityStrategy implements DocumentRankingStrategy, Comp
 {
 
 	@Override
-	public List<Document> rankDocuments(List<Document> allDocuments, User user, int topK)
+	public List<Document> rankDocuments(List<Document> allDocuments, User user)
 	{
 		// Copy the documents over to the new array to be ranked
 		List<Document> rankedDocuments = new ArrayList<>();
@@ -36,10 +36,8 @@ public class DocumentPopularityStrategy implements DocumentRankingStrategy, Comp
 		// reverse the list
 		Collections.reverse(rankedDocuments);
 
-		// Return the topK documents as a sublist of all the ordered documents
-		// If there are only documents.size() elements available.. Only return
-		// the top documents.size() documents
-		return rankedDocuments.subList(0, Math.min(topK, rankedDocuments.size()));
+		// Return the ranked documents
+		return rankedDocuments;
 	}
 
 	public int compare(Document doc1, Document doc2)
