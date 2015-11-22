@@ -8,6 +8,13 @@ import java.util.List;
 import nullSquad.filesharingsystem.document.Document;
 import nullSquad.filesharingsystem.users.User;
 
+
+/**
+ * User Distance Ranking Strategy
+ * 
+ * @author Justin Krol
+ *
+ */
 public class UserDistanceRankingStrategy implements DocumentRankingStrategy, Comparator<Document>
 {
 	private User user;
@@ -52,8 +59,12 @@ public class UserDistanceRankingStrategy implements DocumentRankingStrategy, Com
 			return 1;
 
 		// Compare documents in terms of immediacy of friends
-		// check if the document is liked by an immediate friend.
-		// if not, check if any friends of friends like the document.
+		// Need to call getFriendDistance() on both documents.
+		// If using the recursive solution, use arguments:
+		//		user
+		//		document
+		//		depth (should be 1)
+		
 		int doc1_val = MAX_DEPTH_TO_SEARCH, doc2_val = MAX_DEPTH_TO_SEARCH;
 
 		doc1_val = getFriendDistance(user, doc1, 1);
@@ -71,13 +82,16 @@ public class UserDistanceRankingStrategy implements DocumentRankingStrategy, Com
 		{
 			return 0;
 		}
-		// can also try recursive or iterative breadth-first-search
-		// need to have a way to mark Users as "visited"
-		// how to implement this?
 	}
 
-	/*
+	/**
+	 * Iterative solution
+	 * 
 	 * Only checks friends and friends of friends.
+	 * pre: given user and document to check
+	 * post: returns 1 if one of the user's friends liked the document
+	 * 		 returns 2 if one of the friends of one of the user's friends liked the document
+	 * 		 returns 3 otherwise (i.e. distance is greater than 2)
 	 */
 	private int getFriendDistance(User user, Document doc){
 		int depth = 3;
@@ -99,8 +113,11 @@ public class UserDistanceRankingStrategy implements DocumentRankingStrategy, Com
 		return depth;
 	}
 	
-	/*
-	 * Recursive solution.
+	/**
+	 * Recursive solution
+	 * 
+	 * Checks up to the MAX_DEPTH_TO_SEARCH
+	 * 
 	 */
 	private int getFriendDistance(User user, Document doc, int depth){
 		int minDepth = MAX_DEPTH_TO_SEARCH;		//i.e. starts off greater than all other possible depths
