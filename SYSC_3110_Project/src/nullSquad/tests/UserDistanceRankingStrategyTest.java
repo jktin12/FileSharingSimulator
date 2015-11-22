@@ -1,10 +1,11 @@
-package nullSquad.strategies.ranking;
+package nullSquad.tests;
 
 import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import nullSquad.strategies.ranking.*;
 
 public class UserDistanceRankingStrategyTest {
 
