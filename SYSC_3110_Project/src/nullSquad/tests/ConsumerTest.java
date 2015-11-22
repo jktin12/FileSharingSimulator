@@ -13,6 +13,12 @@ import org.junit.Test;
 import nullSquad.filesharingsystem.users.*;
 import nullSquad.filesharingsystem.document.*;
 
+
+/**
+ * JUnit test class for Consumer
+ * 
+ * @author Justin Krol
+ */
 public class ConsumerTest {
 
 	FileSharingSystem network1, network2;
@@ -139,6 +145,15 @@ public class ConsumerTest {
 		
 		assertEquals(5, consumer3.calculatePayoff(network1.search(consumer3, 5)));
 */
+	}
+	
+	@Test
+	public void testAddIterationPayoff(){
+		Consumer consumer3 = new Consumer("Bob", programmingTag);
+		consumer3.addIterationPayoff(0);
+		assertEquals(1, consumer3.getPayoffHistory().size());
+		consumer3.addIterationPayoff(1);
+		assertEquals(2, consumer3.getPayoffHistory().size());
 	}
 
 }
