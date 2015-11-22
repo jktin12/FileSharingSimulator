@@ -1,4 +1,4 @@
-package nullSquad.strategies.ranking;
+package nullSquad.tests;
 
 import static org.junit.Assert.*;
 
