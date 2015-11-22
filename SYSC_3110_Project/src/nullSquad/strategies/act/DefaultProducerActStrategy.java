@@ -15,7 +15,12 @@ public class DefaultProducerActStrategy implements ProducerActStrategy{
 	
 	public void act(Producer producer, FileSharingSystem fileSharingSystem, int kResults)
 	{
+		if(fileSharingSystem == null || producer == null)
+			return;
+		
 		List<Document> documentResults = fileSharingSystem.search(producer, kResults);
+		
+		
 		
 		// Append Results to log
 		SimulatorGUI.appendLog("Search: Returned " + documentResults.size() + " documents");

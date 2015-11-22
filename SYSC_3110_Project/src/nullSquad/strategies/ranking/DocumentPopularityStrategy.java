@@ -21,14 +21,19 @@ public class DocumentPopularityStrategy implements DocumentRankingStrategy, Comp
 	{
 		// Copy the documents over to the new array to be ranked
 		List<Document> rankedDocuments = new ArrayList<>();
-		
-		
+
+		// Return an empty list if any of the fields are null or if the
+		// documents list is empty
+		if (allDocuments == null || user == null || allDocuments.isEmpty())
+			return rankedDocuments;
+
+		// Copy the items over from the passed in list so that we can sort and
+		// reverse without affecting the original passed-in list
 		for (Document d : allDocuments)
 		{
 			rankedDocuments.add(d);
 		}
 
-		
 		// Sort the top documents using the selected strategy as a comparator
 		Collections.sort(rankedDocuments, this);
 
@@ -42,8 +47,8 @@ public class DocumentPopularityStrategy implements DocumentRankingStrategy, Comp
 
 	public int compare(Document doc1, Document doc2)
 	{
-		// If both are null, they are ranked the same
-		if (doc1 == null && doc2 == null)
+		// If both are equal, they are ranked the same
+		if (doc1 == doc2)
 			return 0;
 
 		// If doc1 is null and doc2 isnt, doc2 is ranked higher

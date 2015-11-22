@@ -148,7 +148,8 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 		docsProduced.add(newDoc);
 
 		// The document is now added to the file sharing system
-		fileSharingSystem.addDocument(newDoc);
+		if (fileSharingSystem != null)
+			fileSharingSystem.addDocument(newDoc);
 
 		// Like your own document
 		this.likeDocument(newDoc);

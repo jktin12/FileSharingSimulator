@@ -6,6 +6,6 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({DocumentTest.class, ProducerTest.class, UserTest.class, FileSharingSystemTest.class})
+@SuiteClasses({DocumentTest.class, ProducerTest.class, UserTest.class, FileSharingSystemTest.class, UserPopularityRankingStrategyTest.class})
 public class AllTests {
 }

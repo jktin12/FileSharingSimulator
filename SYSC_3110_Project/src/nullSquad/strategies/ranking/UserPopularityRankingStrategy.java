@@ -35,8 +35,8 @@ public class UserPopularityRankingStrategy implements DocumentRankingStrategy, C
 	@Override
 	public int compare(Document document1, Document document2)
 	{
-		// If both are null, they are ranked the same
-		if (document1 == null && document2 == null)
+		// If both are equal, they are ranked the same
+		if (document1 == document2)
 			return 0;
 
 		// If doc1 is null and doc2 isnt, doc2 is ranked higher
@@ -55,7 +55,9 @@ public class UserPopularityRankingStrategy implements DocumentRankingStrategy, C
 			avgUserPopularityDocument1 += u.getFollowers().size();
 		}
 
-		avgUserPopularityDocument1 /= document1.getUserLikes().size();
+		// Prevent division by 0
+		if (document1.getUserLikes().size() != 0)
+			avgUserPopularityDocument1 /= document1.getUserLikes().size();
 
 		// Determine the overall popularity of all likers of document 1
 		for (User u : document2.getUserLikes())
@@ -63,7 +65,9 @@ public class UserPopularityRankingStrategy implements DocumentRankingStrategy, C
 			avgUserPopularityDocument2 += u.getFollowers().size();
 		}
 
-		avgUserPopularityDocument2 /= document2.getUserLikes().size();
+		// Prevent division by 0
+		if (document2.getUserLikes().size() != 0)
+			avgUserPopularityDocument2 /= document2.getUserLikes().size();
 
 		// Return the difference of the two user popularity averages
 		return avgUserPopularityDocument1 - avgUserPopularityDocument2;

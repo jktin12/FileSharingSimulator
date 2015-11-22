@@ -13,6 +13,11 @@ public class SimularityActStrategy implements ProducerActStrategy {
 	
 	@Override
 	public void act(Producer producer, FileSharingSystem fileSharingSystem, int kResults) {
+	
+		// Ensure the fss or producer parameters are not null
+		if(fileSharingSystem == null || producer == null)
+			return;
+		
 		
 		// Select a new taste from available tags
 		String newTaste = fileSharingSystem.getTags().get((new Random()).nextInt(fileSharingSystem.getTags().size()));
