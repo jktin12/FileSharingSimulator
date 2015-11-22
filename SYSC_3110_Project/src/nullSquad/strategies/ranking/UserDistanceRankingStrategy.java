@@ -54,9 +54,10 @@ public class UserDistanceRankingStrategy implements DocumentRankingStrategy, Com
 		// Compare documents in terms of immediacy of friends
 		// check if the document is liked by an immediate friend.
 		// if not, check if any friends of friends like the document.
-		int doc1_val = 5, doc2_val = 5;
+		int doc1_val = MAX_DEPTH_TO_SEARCH, doc2_val = MAX_DEPTH_TO_SEARCH;
 
-		//doc1_val = getFriendDistance();
+		doc1_val = getFriendDistance(user, doc1, 1);
+		doc2_val = getFriendDistance(user, doc2, 1);
 		
 		if (doc1_val < doc2_val)
 		{
@@ -73,7 +74,6 @@ public class UserDistanceRankingStrategy implements DocumentRankingStrategy, Com
 		// can also try recursive or iterative breadth-first-search
 		// need to have a way to mark Users as "visited"
 		// how to implement this?
-
 	}
 
 	/*
