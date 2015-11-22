@@ -1,3 +1,4 @@
+
 package nullSquad.strategies.ranking;
 
 import java.util.ArrayList;
@@ -7,21 +8,16 @@ import java.util.List;
 
 import nullSquad.filesharingsystem.document.Document;
 import nullSquad.filesharingsystem.users.User;
-/**
-* @author Marc Tebo
-* Rank the documents by the “like” similarity 
-* (i.e., if we tend to “like” the same documents, I will 
-* trust you when you “like” documents I haven’t seen yet)
-*/
 
-public class LikesSimilarityRankingStrategy implements DocumentRankingStrategy, Comparator<Document>
-{	
+/**
+ * Class that implements a follow similarity strategy
+ * 
+ * @author Raymond Wu
+ */
+public class LikesSimilarityRankingStrategy implements DocumentRankingStrategy,  Comparator<Document>
+{
 	private User user;
 	
-	/**
-	 * @author Marc Tebo
-	 * return list of documents ranked off of "like" similarity
-	 */
 	@Override
 	public List<Document> rankDocuments(List<Document> allDocuments, User user)
 	{
@@ -35,42 +31,42 @@ public class LikesSimilarityRankingStrategy implements DocumentRankingStrategy, 
 		return rankedDocuments;
 	}
 	
-	/**
-	 * @author Marc Tebo
-	 * Comparing documents based on "like" similarity
-	 * return 1 if doc1 is better, 0 if it is a tie, -1 if doc2 is better
-	 */
 	@Override
 	public int compare(Document doc1, Document doc2)
 	{
+		
 		if(doc1 != null && doc2 == null){
 			return 1;
 		}
 		
-		if(doc1 == null && doc2 == null){
+		if ((doc1 == null && doc2 == null) || (doc1.equals(doc2))) {
 			return 0;
 		}
 		
 		if(doc1 == null & doc2 != null){
 			return -1;
 		}
-		
-		int likesSimilarityDoc1 = 0;
-		int likesSimilarityDoc2 = 0;
-		
-		for(User u: user.getFollowing()){
-			
-			// For each user following the current user, if the user likes
-			// the document, give the document a point
-			
-			if(doc1.getUserLikes().contains(u)){
-				likesSimilarityDoc1++;
+	
+		return docLikeScore(doc1) - docLikeScore(doc2);
+	
+	}
+	
+	private int docLikeScore(Document doc){
+		int score;
+		int highestScore=0;
+		for (User u:doc.getUserLikes()){
+			score=0;
+			for (Document aDoc: u.getLikedDocuments()){
+				if (user.getLikedDocuments().contains(aDoc)){
+					score+=1;
+				}
 			}
-			if(doc2.getUserLikes().contains(u)){
-				likesSimilarityDoc2++;
+			if (score > highestScore){
+				highestScore=score;
 			}
 		}
-		
-		return likesSimilarityDoc1 - likesSimilarityDoc2;
+		return highestScore;
 	}
+	
+
 }
