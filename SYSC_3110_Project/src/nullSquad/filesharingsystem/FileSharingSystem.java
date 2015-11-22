@@ -1,5 +1,5 @@
 /**
- * Title: SYSC 3110 Project
+  * Title: SYSC 3110 Project
  * 
  * @author Justin Krol Student Number: 100941980 Team: nullSquad
  */
@@ -341,7 +341,7 @@ public class FileSharingSystem
 	 */
 	public void addTag(String newTag)
 	{
-		if (!tags.contains(newTag.trim()) && newTag.trim().isEmpty())
+		if (!tags.contains(newTag.trim()) && !newTag.trim().isEmpty())
 		{
 			tags.add(newTag.trim());
 		}

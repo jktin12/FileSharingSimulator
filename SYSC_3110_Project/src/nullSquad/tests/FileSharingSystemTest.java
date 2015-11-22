@@ -149,5 +149,21 @@ public class FileSharingSystemTest {
 		network.deactivateUser(producer1);
 		assertTrue(!network.getUsers().contains(producer1));
 	}
+	
+	@Test
+	public void testAddTag(){
+		String tag1 = "Test";
+		network.addTag(tag1);
+		assertTrue(network.getTags().contains(tag1));
+	}
+	
+	@Test
+	public void testRemoveTag(){
+		String tag1 = "Test";
+		network.addTag(tag1);
+		assertTrue(network.getTags().contains(tag1));
+		network.removeTag(tag1);
+		assertTrue(!network.getTags().contains(tag1));
+	}
 
 }
