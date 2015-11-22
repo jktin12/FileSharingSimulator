@@ -13,6 +13,9 @@
 
 *.docx
 
+.metadata/.plugins/*
+.recommenders/*
+
 *.prefs
 
 
