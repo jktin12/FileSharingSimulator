@@ -11,7 +11,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import nullSquad.filesharingsystem.FileSharingSystem;
 import nullSquad.filesharingsystem.document.Document;
 import nullSquad.filesharingsystem.users.*;
 import nullSquad.strategies.ranking.UserPopularityRankingStrategy;
@@ -28,6 +27,10 @@ public class UserPopularityRankingStrategyTest
 	private Consumer user3;
 	private Consumer user4;
 
+	private List<Document> allDocuments;
+
+	Document doc1, doc2;
+
 	/**
 	 * @throws java.lang.Exception
 	 * @author MVezina
@@ -36,48 +39,40 @@ public class UserPopularityRankingStrategyTest
 	public void setUp() throws Exception
 	{
 		producer1 = new Producer("PRODUCER1", "TEST");
-		
-		List<String> tags = new ArrayList<>();
-		
-		FileSharingSystem fss = new FileSharingSystem(tags);
-		
-		// Call producer act so that they create two documents
-		producer1.act(fss, 0);
-		producer1.act(fss, 0);
 
-		if (producer1.getDocumentsProduced().size() == 2)
-		{
-			Document doc1 = producer1.getDocumentsProduced().get(0);
-			Document doc2 = producer1.getDocumentsProduced().get(1);
-			
-			
-			user1 = new Consumer("USER1", "TEST");
-			user2 = new Consumer("USER2", "TEST");
-			user3 = new Consumer("USER3", "TEST");
-			user4 = new Consumer("USER4", "TEST");
-			
-			user2.followUser(user1);
-			//user2.followUser(user3);
-			
-			user3.followUser(user1);
-			
-			user4.followUser(user1);
-			//user4.followUser(user2);
-			
-			user1.likeDocument(doc1);
-			user2.likeDocument(doc2);
-			user3.likeDocument(doc2);
-			user4.likeDocument(doc2);
-			
-			UserPopularityRankingStrategy asd = new UserPopularityRankingStrategy();
-			List<Document> ranked = asd.rankDocuments(producer1.getDocumentsProduced(), user1);
-			System.out.println(doc1);
-			System.out.println(doc2);
-			
-			assertEquals(ranked.get(0), doc1);
-			assertEquals(ranked.get(1), doc2);
-		}
-		
+		String tag = "TestTag";
+
+		doc1 = new Document("Document1", tag, producer1);
+		doc2 = new Document("Document2", tag, producer1);
+
+		user1 = new Consumer("USER1", tag);
+		user2 = new Consumer("USER2", tag);
+		user3 = new Consumer("USER3", tag);
+		user4 = new Consumer("USER4", tag);
+
+		user1.followUser(user2);
+		user1.followUser(user3);
+		user1.followUser(user4);
+
+		user2.followUser(user3);
+		user2.followUser(user4);
+
+		user3.followUser(user2);
+		user3.followUser(user4);
+
+		user4.followUser(user1);
+		user4.followUser(user2);
+		user4.followUser(user3);
+
+		user1.likeDocument(doc1);
+		user1.likeDocument(doc2);
+		user2.likeDocument(doc2);
+		user3.likeDocument(doc2);
+		user4.likeDocument(doc2);
+
+		allDocuments = new ArrayList<>();
+		allDocuments.add(doc1);
+		allDocuments.add(doc2);
 
 	}
 
@@ -89,7 +84,14 @@ public class UserPopularityRankingStrategyTest
 	@Test
 	public void testRankDocuments()
 	{
-		fail("Not yet implemented");
+		List<Document> ranked = (new UserPopularityRankingStrategy()).rankDocuments(allDocuments, null);
+
+		// Ensure lists are same size
+		assertEquals(ranked.size(), allDocuments.size());
+		assertEquals(allDocuments.size(), 2);
+
+		assertEquals(ranked.get(0), doc2);
+		assertEquals(ranked.get(1), doc1);
 	}
 
 }

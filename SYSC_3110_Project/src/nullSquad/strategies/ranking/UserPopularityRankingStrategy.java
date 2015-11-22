@@ -21,6 +21,11 @@ public class UserPopularityRankingStrategy implements DocumentRankingStrategy, C
 	{
 		List<Document> rankedDocuments = new ArrayList<>();
 
+		if (allDocuments == null || allDocuments.isEmpty())
+		{
+			return rankedDocuments;
+		}
+
 		for (Document d : allDocuments)
 		{
 			rankedDocuments.add(d);
@@ -52,30 +57,26 @@ public class UserPopularityRankingStrategy implements DocumentRankingStrategy, C
 		if (document1 != null && document2 == null)
 			return 1;
 
-		int avgUserPopularityDocument1 = 0, avgUserPopularityDocument2 = 0;
-
-		// Determine the overall popularity of all likers of document 1
-		for (User u : document1.getUserLikes())
-		{
-			avgUserPopularityDocument1 += u.getFollowers().size();
-		}
-
-		// Prevent division by 0
-		if (document1.getUserLikes().size() != 0)
-			avgUserPopularityDocument1 /= document1.getUserLikes().size();
-
-		// Determine the overall popularity of all likers of document 1
-		for (User u : document2.getUserLikes())
-		{
-			avgUserPopularityDocument2 += u.getFollowers().size();
-		}
-
-		// Prevent division by 0
-		if (document2.getUserLikes().size() != 0)
-			avgUserPopularityDocument2 /= document2.getUserLikes().size();
-
+	
 		// Return the difference of the two user popularity averages
-		return avgUserPopularityDocument1 - avgUserPopularityDocument2;
+		return (int) (getAverageUserPopularity(document1) - getAverageUserPopularity(document2));
+	}
+
+	private float getAverageUserPopularity(Document d)
+	{
+		float avgUserPopularity = 0;
+		
+		// Determine the overall popularity of all likers of document 1
+		for (User u : d.getUserLikes())
+		{
+			avgUserPopularity += u.getFollowers().size();
+		}
+
+		// Prevent division by 0
+		if (d.getUserLikes().size() != 0)
+			avgUserPopularity /= d.getUserLikes().size();
+		
+		return avgUserPopularity;
 	}
 
 }

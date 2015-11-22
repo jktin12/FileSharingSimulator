@@ -49,13 +49,8 @@ public class FileSharingSystemTest {
 		docD = new Document("docD", sportsTag, (Producer)producer1);
 		docE = new Document("docE", programmingTag, (Producer)producer1);
 
-/*		documents = new ArrayList<Document>();
-		documents.add(docA);
-		documents.add(docB);
-		documents.add(docC);
-		documents.add(docD);
-		documents.add(docE);
-*/
+		consumer1.likeDocument(docB);
+		
 	}
 
 	@After
@@ -80,13 +75,12 @@ public class FileSharingSystemTest {
 
 	@Test
 	public void testSearch() {
-		network.addDocument(docA);
-		network.addDocument(docB);
-		network.addDocument(docC);
-		network.addDocument(docD);
-		network.addDocument(docE);
+		assertTrue(network.addDocument(docA));
+		assertTrue(network.addDocument(docB));
+		assertTrue(network.addDocument(docC));
+		assertTrue(network.addDocument(docD));
 		
-		assertEquals(5, network.search(consumer1, 6).size());
+		assertEquals(4, network.search(consumer1, 6).size());		
 		assertEquals(4, network.search(consumer1, 4).size());
 		assertEquals(1, network.search(consumer1, -1).size());
 		
@@ -96,8 +90,11 @@ public class FileSharingSystemTest {
 	public void testAddDocument() {
 		assertTrue(network.addDocument(docA));
 		assertTrue(network.getAllDocuments().contains(docA));
+		assertEquals(network.getAllDocuments().size(),1);
+		
 		assertTrue(network.addDocument(docB));
 		assertTrue(network.getAllDocuments().contains(docB));
+		assertEquals(network.getAllDocuments().size(),2);
 	}
 
 	@Test
@@ -110,10 +107,12 @@ public class FileSharingSystemTest {
 
 	@Test
 	public void testGetAllDocuments() {
-		network.addDocument(docA);
-		network.addDocument(docB);
-		network.addDocument(docC);
-		network.addDocument(docD);
+		assertTrue(network.addDocument(docA));
+		assertTrue(network.addDocument(docB));
+		assertTrue(network.addDocument(docC));
+		assertTrue(network.addDocument(docD));
+		
+		
 		assertTrue(network.getAllDocuments().contains(docA));
 		assertTrue(network.getAllDocuments().contains(docB));
 		assertTrue(network.getAllDocuments().contains(docC));

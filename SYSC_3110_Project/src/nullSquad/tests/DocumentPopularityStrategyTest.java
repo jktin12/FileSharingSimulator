@@ -69,7 +69,9 @@ public class DocumentPopularityStrategyTest
 	{
 		List<Document> rankedDocs = (new DocumentPopularityStrategy()).rankDocuments(allDocuments, null);
 		
-		assertEquals(rankedDocs.size(), 3);
+		assertEquals(rankedDocs.size(), allDocuments.size());
+		assertEquals(allDocuments.size(), 3);
+		
 		assertEquals(rankedDocs.get(0), doc2);
 		assertEquals(rankedDocs.get(1), doc3);
 		assertEquals(rankedDocs.get(2), doc1);

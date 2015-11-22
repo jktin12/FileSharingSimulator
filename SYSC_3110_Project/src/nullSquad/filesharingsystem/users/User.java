@@ -314,12 +314,8 @@ public abstract class User
 	 */
 	public boolean unfollowUser(User user)
 	{
-		// Check to see if the user was successfully unfollowed
-		if (!user.removeFollower(this))
-			return false;
-
 		// Remove user from following list
-		return this.following.remove(user);
+		return user.removeFollower(this) && this.following.remove(user);
 	}
 
 	/**
