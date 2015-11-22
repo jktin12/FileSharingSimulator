@@ -11,6 +11,7 @@ import nullSquad.simulator.gui.SimulatorGUI;
 import nullSquad.filesharingsystem.document.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
@@ -75,55 +76,46 @@ public class FileSharingSystem
 	 */
 	public boolean deactivateUser(User user)
 	{
-		if (user != null)
+		if (user == null || !usersListModel.contains(user))
+			return false;
+
+		// Remove all documents
+		if (user instanceof Producer)
 		{
+			Producer producer = (Producer) user;
 
-			if (!usersListModel.contains(user))
+			// Remove all produced documents
+			for (Document d : producer.getDocumentsProduced())
 			{
-				// System.out.println("User is not currently registered on the
-				// File Sharing System");
-				return false;
+				this.removeDocument(d);
 			}
-
-			// Remove all documents
-			if (user instanceof Producer)
-			{
-				Producer producer = (Producer) user;
-
-				// Remove all produced documents
-				for (Document d : producer.getDocumentsProduced())
-				{
-					this.removeDocument(d);
-				}
-			}
-
-			// Unlike all documents
-			for (Document d : user.getLikedDocuments())
-			{
-				user.unlikeDocument(d);
-			}
-
-			// Unfollow all users
-			for (User u : user.getFollowing())
-			{
-				user.unfollowUser(u);
-			}
-
-			// Remove all followers
-			for (User u : user.getFollowers())
-			{
-				u.unfollowUser(user);
-			}
-
-			System.out.println(user);
-
-			usersListModel.removeElement(user);
-
-			SimulatorGUI.appendLog("File Sharing System: User " + user.getUserName() + " has been removed from the File Sharing System");
-			return true;
 		}
 
-		return false;
+		// Unlike all documents
+		// DO NOT USE FOREACH LOOP - ConcurrencyException
+		// (Modifies the list that is being iterated)
+		for (int i = 0; i < user.getLikedDocuments().size(); i++)
+		{
+			user.unlikeDocument(user.getLikedDocuments().get(i));
+		}
+
+		// Unfollow all users
+		for (int i = 0; i < user.getFollowing().size(); i++)
+		{
+			user.unfollowUser(user.getFollowing().get(i));
+		}
+
+		// Remove all followers
+		for (int i = 0; i < user.getFollowers().size(); i++)
+		{
+			user.unfollowUser(user.getFollowing().get(i));
+		}
+
+		usersListModel.removeElement(user);
+
+		SimulatorGUI.appendLog("File Sharing System: User " + user.getUserName() + " has been removed from the File Sharing System");
+		return true;
+
 	}
 
 	/**
@@ -138,10 +130,9 @@ public class FileSharingSystem
 	public List<Document> search(User user, String tag, int topK)
 	{
 		// Return a blank list if topK = 0
-		if(topK == 0)
+		if (topK == 0)
 			return new ArrayList<>();
-		
-		
+
 		// If topK is invalid (ex: -1), change it to the absolute value
 		if (topK < 0)
 			topK = Math.abs(topK);
@@ -151,23 +142,55 @@ public class FileSharingSystem
 		List<Document> documentList = new ArrayList<>();
 
 		// Copy the documents (matching tag) from the list model over to a list
-		// so it can be ranked
+		// so it can be ranked. (We want to rank matching tags first)
 		for (int i = 0; i < documentsListModel.getSize(); i++)
 		{
-			if(documentsListModel.getElementAt(i).getTag().equals(tag))
+			if (documentsListModel.getElementAt(i).getTag().equals(tag))
 			{
 				documentList.add((documentsListModel.getElementAt(i)));
 			}
-			
+
 		}
-		
+
 		// Get a list of ranked documents
 		List<Document> rankedDocuments = user.getSearchStrategyEnum().getStrategy().rankDocuments(documentList, user);
-		
+
 		// Only maintain the top k documents
-		if(rankedDocuments.size() > topK)
-		{			
+		if (rankedDocuments.size() >= topK)
+		{
 			rankedDocuments = rankedDocuments.subList(0, topK);
+		
+		}
+		// If there are spots that need to be filled in to match topK
+		// and there are un-ranked documents, we want to add filler documents
+		else if (documentsListModel.size() - rankedDocuments.size() > 0)
+		{
+			
+
+			// If the amount of ranked documents is less than size topK and
+			// there are documents that were not ranked we want to fill in the
+			// rest of the documents
+			List<Document> searchFiller = new ArrayList<>();
+
+			// Copy the documents (not matching tag) from the list model over to
+			// a list so it can be ranked. (We want to rank non-matching tags
+			// last - after matching tags)
+			for (int i = 0; i < documentsListModel.getSize(); i++)
+			{
+				if (!documentsListModel.getElementAt(i).getTag().equals(tag))
+				{
+					searchFiller.add((documentsListModel.getElementAt(i)));
+				}
+			}
+
+			// We want to add the ranked (non tag-matching) documents to the end
+			// (after ranked tag-matching documents)
+
+			// Determine where to cut off the list (so that we can match topK
+			// documents)
+			int endIndex = Math.min(searchFiller.size(), topK - rankedDocuments.size());
+			rankedDocuments.addAll(user.getSearchStrategyEnum().getStrategy().rankDocuments(searchFiller, user).subList(0, endIndex));
+
 		}
 		
 		
