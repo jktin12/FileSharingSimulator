@@ -10,7 +10,7 @@ import nullSquad.filesharingsystem.document.Document;
 import nullSquad.filesharingsystem.users.User;
 
 /**
- * Class that implements a follow similarity strategy
+ * Class that implements a like similarity strategy
  * 
  * @author Raymond Wu
  */
@@ -31,6 +31,13 @@ public class LikesSimilarityRankingStrategy implements DocumentRankingStrategy, 
 		return rankedDocuments;
 	}
 	
+	/**
+	 * @author Raymond Wu
+	 * @param doc1 Document that will be compared
+	 * @param doc2 Document that will be compared
+	 * 
+	 * Returns 1 for doc1>doc2, 0 for doc1=doc2 and -1 for doc1<doc2
+	 */
 	@Override
 	public int compare(Document doc1, Document doc2)
 	{
@@ -51,6 +58,13 @@ public class LikesSimilarityRankingStrategy implements DocumentRankingStrategy, 
 	
 	}
 	
+	/**
+	 * @author Raymond Wu
+	 * @param doc Document that will be analyzed
+	 * 
+	 * Returns the highest score for a document
+	 * based on like similarities
+	 */
 	private int docLikeScore(Document doc){
 		int score;
 		int highestScore=0;
