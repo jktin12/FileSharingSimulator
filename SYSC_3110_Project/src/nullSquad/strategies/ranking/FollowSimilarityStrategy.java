@@ -9,9 +9,9 @@ import nullSquad.filesharingsystem.document.Document;
 import nullSquad.filesharingsystem.users.User;
 /**
 * @author Marc Tebo
-* Rank the documents by the “like” similarity 
-* (i.e., if we tend to “like” the same documents, I will 
-* trust you when you “like” documents I haven’t seen yet)
+* Rank the documents by the “follow” similarity 
+* (i.e., if I follow you, I will trust you when I “like” 
+* documents I haven’t seen yet)
 */
 
 public class FollowSimilarityStrategy implements DocumentRankingStrategy, Comparator<Document>
@@ -20,7 +20,7 @@ public class FollowSimilarityStrategy implements DocumentRankingStrategy, Compar
 	
 	/**
 	 * @author Marc Tebo
-	 * return list of documents ranked off of "like" similarity
+	 * return list of documents ranked off of "follow" similarity
 	 */
 	@Override
 	public List<Document> rankDocuments(List<Document> allDocuments, User user)
@@ -37,7 +37,7 @@ public class FollowSimilarityStrategy implements DocumentRankingStrategy, Compar
 	
 	/**
 	 * @author Marc Tebo
-	 * Comparing documents based on "like" similarity
+	 * Comparing documents based on "follow" similarity
 	 * return 1 if doc1 is better, 0 if it is a tie, -1 if doc2 is better
 	 */
 	@Override
