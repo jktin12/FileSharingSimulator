@@ -8,6 +8,11 @@ import java.util.List;
 import nullSquad.filesharingsystem.document.Document;
 import nullSquad.filesharingsystem.users.User;
 
+/**
+ * User Popularity Ranking Strategy
+ * 
+ * @author MVezina
+ */
 public class UserPopularityRankingStrategy implements DocumentRankingStrategy, Comparator<Document>
 {
 

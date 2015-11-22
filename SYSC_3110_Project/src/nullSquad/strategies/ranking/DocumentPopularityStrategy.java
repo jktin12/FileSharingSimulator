@@ -23,8 +23,8 @@ public class DocumentPopularityStrategy implements DocumentRankingStrategy, Comp
 		List<Document> rankedDocuments = new ArrayList<>();
 
 		// Return an empty list if any of the fields are null or if the
-		// documents list is empty
-		if (allDocuments == null || user == null || allDocuments.isEmpty())
+		// documents list is empty. Note: user can be null because it is not used in this strategy
+		if (allDocuments == null || allDocuments.isEmpty())
 			return rankedDocuments;
 
 		// Copy the items over from the passed in list so that we can sort and
