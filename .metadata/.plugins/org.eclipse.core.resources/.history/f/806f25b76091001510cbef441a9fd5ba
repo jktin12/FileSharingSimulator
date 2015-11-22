@@ -108,7 +108,7 @@ public class FileSharingSystem
 		// Remove all followers
 		for (int i = 0; i < user.getFollowers().size(); i++)
 		{
-			user.getFollowers().get(i).unfollowUser(user);
+			user.unfollowUser(user.getFollowing().get(i));
 		}
 
 		usersListModel.removeElement(user);

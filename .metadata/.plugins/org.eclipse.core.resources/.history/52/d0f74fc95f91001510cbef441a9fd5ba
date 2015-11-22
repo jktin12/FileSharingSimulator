@@ -68,27 +68,9 @@ public class FileSharingSystemTest {
 	@Test
 	public void testDeactivateUser() {
 		consumer1.registerUser(network);
-		producer1.registerUser(network);
 		assertTrue(network.getUsers().contains(consumer1));
-		assertTrue(network.getUsers().contains(producer1));
-		
-		producer1.act(network, 1);
-		assertTrue(!network.getAllDocuments().isEmpty());
-		
-		consumer1.followUser(producer1);
-		producer1.followUser(consumer1);
-		assertTrue(consumer1.getFollowers().contains(producer1));
-		assertTrue(consumer1.getFollowing().contains(producer1));
-		
-		network.deactivateUser(producer1);
-		assertTrue(!network.getUsers().contains(producer1));
-		
-		assertTrue(!consumer1.getFollowers().contains(producer1));
-		assertTrue(!consumer1.getFollowing().contains(producer1));
-		
 		assertTrue(network.deactivateUser(consumer1));
 		assertTrue(!network.getUsers().contains(consumer1));
-		
 	}
 
 	@Test

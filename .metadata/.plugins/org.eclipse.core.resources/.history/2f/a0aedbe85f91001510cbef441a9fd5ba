@@ -85,9 +85,9 @@ public class FileSharingSystem
 			Producer producer = (Producer) user;
 
 			// Remove all produced documents
-			for(int i = 0; i < producer.getDocumentsProduced().size(); i++)
+			for (Document d : producer.getDocumentsProduced())
 			{
-				this.removeDocument(producer.getDocumentsProduced().get(i));
+				this.removeDocument(d);
 			}
 		}
 
@@ -265,9 +265,9 @@ public class FileSharingSystem
 			}
 
 			// Remove the document from all users 'likes'
-			for(int i = 0; i< doc.getUserLikes().size(); i++)
+			for (User u : doc.getUserLikes())
 			{
-				doc.getUserLikes().get(i).unlikeDocument(doc);
+				u.unlikeDocument(doc);
 			}
 
 			documentsListModel.removeElement(doc);
