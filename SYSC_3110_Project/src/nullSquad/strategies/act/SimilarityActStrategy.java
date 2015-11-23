@@ -8,7 +8,7 @@ import nullSquad.simulator.gui.SimulatorGUI;
 import nullSquad.filesharingsystem.document.*;
 import nullSquad.filesharingsystem.*;
 
-public class SimularityActStrategy implements ProducerActStrategy {
+public class SimilarityActStrategy implements ProducerActStrategy {
 
 	
 	@Override
