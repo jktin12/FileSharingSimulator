@@ -27,17 +27,16 @@ public class ProducerTest {
 	private Producer producer1;
 	private Producer producer2;
 	private ProducerPayoffStrategy strategy;
+	private ProducerActStrategy.Strategy actStrategy;
 	private FileSharingSystem network;
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 	
 	@Before
 	public void setUp() throws Exception {
 		strategy = null;
-		
-		
-		
+		actStrategy = ProducerActStrategy.Strategy.Similarity;
 		producer1 = new Producer("TestName","TEST");
-		producer2 = new Producer(strategy, ProducerActStrategy.Strategy.Similarity, Strategy.FollowSimiliarity,"TestName","TEST");
+		producer2 = new Producer(strategy, actStrategy, Strategy.FollowSimiliarity,"TestName","TEST");
 		network = new FileSharingSystem(null);
 		System.setOut(new PrintStream(outContent));
 	}
@@ -173,6 +172,29 @@ public class ProducerTest {
 	public void testDocumentLiked() {
 		System.out.print("Producer: " + producer1.getUserName() + " Document has been liked! Current Payoff: " + producer1.calculatePayoff());
 		assertEquals("Producer: " + producer1.getUserName() + " Document has been liked! Current Payoff: " + producer1.calculatePayoff(), outContent.toString());
+	}
+	
+	@Test
+	public void testAddIterationPayoff()
+	{
+		Producer producer3 = new Producer("Bob", "TEST");
+		producer3.addIterationPayoff(0);
+		assertEquals(1, producer3.getPayoffHistory().size());
+		producer3.addIterationPayoff(1);
+		assertEquals(2, producer3.getPayoffHistory().size());
+	}
+	
+	@Test
+	public void testGetActStrategyEnum()
+	{
+		assertTrue(producer2.getActStrategyEnum().equals(ProducerActStrategy.Strategy.Similarity));
+	}
+	
+	@Test
+	public void testSetActStrategyEnum()
+	{
+		producer2.setActStrategyEnum(ProducerActStrategy.Strategy.Default);
+		assertTrue(producer2.getActStrategyEnum().equals(ProducerActStrategy.Strategy.Default));
 	}
 
 }
