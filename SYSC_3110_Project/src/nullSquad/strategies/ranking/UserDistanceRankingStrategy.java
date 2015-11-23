@@ -83,35 +83,6 @@ public class UserDistanceRankingStrategy implements DocumentRankingStrategy, Com
 			return 0;
 		}
 	}
-
-	/**
-	 * Iterative solution
-	 * 
-	 * Only checks friends and friends of friends.
-	 * pre: given user and document to check
-	 * post: returns 1 if one of the user's friends liked the document
-	 * 		 returns 2 if one of the friends of one of the user's friends liked the document
-	 * 		 returns 3 otherwise (i.e. distance is greater than 2)
-	 */
-	private int getFriendDistance(User user, Document doc){
-		int depth = 3;
-		if (docLikedByFriend(user, doc))
-		{
-			depth = 1;
-		}
-		else
-		{
-			for (User u : getFriendsList(user))
-			{
-				if (docLikedByFriend(u, doc))
-				{
-					depth = 2;
-					break;
-				}
-			}
-		}
-		return depth;
-	}
 	
 	/**
 	 * Recursive solution
@@ -147,6 +118,10 @@ public class UserDistanceRankingStrategy implements DocumentRankingStrategy, Com
 										// +1 to factor in the current level of depth.
 			}
 			else{
+				//if the depth is at the max searchable, add 1 for this depth and one for the 
+				//next depth which will not be searched.  
+				//Final return value should end up being MAX_DEPTH_TO_SEARCH + 1
+				
 				return 2;
 			}
 		}

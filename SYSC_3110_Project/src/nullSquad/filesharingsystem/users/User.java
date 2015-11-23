@@ -19,7 +19,6 @@ import nullSquad.strategies.ranking.DocumentRankingStrategy;
 public abstract class User
 {
 	private DocumentRankingStrategy.Strategy searchStrategy;
-
 	protected int userID;
 	protected String userName;
 	protected List<User> followers;
