@@ -10,7 +10,7 @@ public interface ProducerActStrategy {
 	 * 
 	 * @author MVezina
 	 */
-	public enum Strategy
+	public static enum Strategy
 	{
 		Simularity("Simularity", new SimularityActStrategy()),
 		Default("Default", new DefaultProducerActStrategy());

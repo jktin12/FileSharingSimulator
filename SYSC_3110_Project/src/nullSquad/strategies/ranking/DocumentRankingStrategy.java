@@ -17,7 +17,7 @@ public interface DocumentRankingStrategy
 	 * 
 	 * @author MVezina
 	 */
-	public enum Strategy
+	public static enum Strategy
 	{
 		DocumentPopularity("Document Popularity", new DocumentPopularityStrategy()),
 		UserPopularity("User Popularity", new UserPopularityRankingStrategy()),

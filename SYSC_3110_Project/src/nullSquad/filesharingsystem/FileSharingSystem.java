@@ -11,7 +11,6 @@ import nullSquad.simulator.gui.SimulatorGUI;
 import nullSquad.filesharingsystem.document.*;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
