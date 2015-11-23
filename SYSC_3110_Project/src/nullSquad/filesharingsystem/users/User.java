@@ -167,6 +167,18 @@ public abstract class User
 	}
 
 	/**
+	 * Call the User's selected ranking strategy
+	 * 
+	 * @param allDocuments The documents to be ranked
+	 * @return The Documents ranked according to the User's selected strategy
+	 * @author MVezina
+	 */
+	public List<Document> rankDocuments(List<Document> allDocuments)
+	{
+		return this.getSearchStrategyEnum().getStrategy().rankDocuments(allDocuments, this);
+	}
+
+	/**
 	 * Adds a user to the list of followers
 	 * 
 	 * @param user The user to add the list of followers

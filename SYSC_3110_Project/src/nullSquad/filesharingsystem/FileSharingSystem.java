@@ -1,5 +1,5 @@
 /**
-  * Title: SYSC 3110 Project
+ * Title: SYSC 3110 Project
  * 
  * @author Justin Krol Student Number: 100941980 Team: nullSquad
  */
@@ -84,7 +84,7 @@ public class FileSharingSystem
 			Producer producer = (Producer) user;
 
 			// Remove all produced documents
-			for(int i = 0; i < producer.getDocumentsProduced().size(); i++)
+			for (int i = 0; i < producer.getDocumentsProduced().size(); i++)
 			{
 				this.removeDocument(producer.getDocumentsProduced().get(i));
 			}
@@ -152,19 +152,18 @@ public class FileSharingSystem
 		}
 
 		// Get a list of ranked documents
-		List<Document> rankedDocuments = user.getSearchStrategyEnum().getStrategy().rankDocuments(documentList, user);
+		List<Document> rankedDocuments = user.rankDocuments(documentList);
 
 		// Only maintain the top k documents
 		if (rankedDocuments.size() >= topK)
 		{
 			rankedDocuments = rankedDocuments.subList(0, topK);
-		
+
 		}
 		// If there are spots that need to be filled in to match topK
 		// and there are un-ranked documents, we want to add filler documents
 		else if (documentsListModel.size() - rankedDocuments.size() > 0)
 		{
-			
 
 			// If the amount of ranked documents is less than size topK and
 			// there are documents that were not ranked we want to fill in the
@@ -188,11 +187,10 @@ public class FileSharingSystem
 			// Determine where to cut off the list (so that we can match topK
 			// documents)
 			int endIndex = Math.min(searchFiller.size(), topK - rankedDocuments.size());
-			rankedDocuments.addAll(user.getSearchStrategyEnum().getStrategy().rankDocuments(searchFiller, user).subList(0, endIndex));
+			rankedDocuments.addAll(user.rankDocuments(searchFiller).subList(0, endIndex));
 
 		}
-		
-		
+
 		// We want to update the payoff for all of the producers every time
 		// their documents are returned
 		for (Document d : rankedDocuments)
@@ -264,7 +262,7 @@ public class FileSharingSystem
 			}
 
 			// Remove the document from all users 'likes'
-			for(int i = 0; i< doc.getUserLikes().size(); i++)
+			for (int i = 0; i < doc.getUserLikes().size(); i++)
 			{
 				doc.getUserLikes().get(i).unlikeDocument(doc);
 			}
