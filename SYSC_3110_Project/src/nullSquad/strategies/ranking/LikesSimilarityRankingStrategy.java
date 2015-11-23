@@ -23,7 +23,13 @@ public class LikesSimilarityRankingStrategy implements DocumentRankingStrategy, 
 	{
 		this.user = user;
 		List<Document> rankedDocuments = new ArrayList<Document>();
-
+		
+		// We want to copy the documents into a new array list for modification
+		for(Document d : allDocuments)
+		{
+			rankedDocuments.add(d);
+		}
+		
 		Collections.sort(rankedDocuments, this);
 
 		Collections.reverse(rankedDocuments);
