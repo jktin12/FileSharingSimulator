@@ -12,7 +12,6 @@ import org.junit.Test;
 
 import nullSquad.filesharingsystem.users.*;
 import nullSquad.strategies.payoff.ConsumerPayoffStrategy;
-import nullSquad.strategies.ranking.DocumentPopularityStrategy;
 import nullSquad.strategies.ranking.DocumentRankingStrategy;
 import nullSquad.filesharingsystem.document.*;
 
@@ -30,6 +29,7 @@ public class ConsumerTest
 	private Document docA, docB, docC, docD, docE, docF;
 	String programmingTag, booksTag, musicTag, sportsTag;
 	List<String> tags;
+	ConsumerPayoffStrategy ps;
 
 	@Before
 	public void setUp() throws Exception
@@ -46,10 +46,15 @@ public class ConsumerTest
 		tags.add(sportsTag);
 
 		consumer1 = new Consumer("Bob", programmingTag);
-		consumer2 = new Consumer("Bob", programmingTag);
+
+		ps = ((Consumer c, List<Document> d) -> {
+			return 0;
+		});
+		consumer2 = new Consumer(ps, DocumentRankingStrategy.Strategy.FollowSimiliarity, "Bob", programmingTag);
 		network1 = new FileSharingSystem(tags);
 		network2 = new FileSharingSystem(tags);
 		producer1 = new Producer("Jim", programmingTag);
+
 		docA = new Document("docA", programmingTag, (Producer) producer1);
 		docB = new Document("docB", booksTag, (Producer) producer1);
 		docC = new Document("docC", musicTag, (Producer) producer1);
@@ -110,29 +115,14 @@ public class ConsumerTest
 	}
 
 	@Test
-	public void testConstructor2Args()
+	public void testConstructorArgs()
 	{
-		// Create a test payoff strategy
-		ConsumerPayoffStrategy ps = ((Consumer c, List<Document> d)-> {return 0;});
-		
-
-		Consumer consumer2 = new Consumer(ps, "John", booksTag);
+		assertEquals("Bob", consumer2.getUserName());
 		assertEquals(consumer2.getConsumerPayoffStrategy(), ps);
-		assertEquals("John", consumer2.getUserName());
-		assertEquals(booksTag, consumer2.getTaste());
-	}
-
-	@Test
-	public void testConstructor3Args()
-	{
-		ConsumerPayoffStrategy ps = ((Consumer c, List<Document> d)-> {return 0;});
-		
-		Consumer consumer2 = new Consumer(ps, DocumentRankingStrategy.Strategy.FollowSimiliarity,"John", booksTag);
-		assertEquals("John", consumer2.getUserName());
-		assertEquals(booksTag, consumer2.getTaste());
+		assertEquals(programmingTag, consumer2.getTaste());
 		assertEquals(consumer2.getDocumentRankingStrategy(), DocumentRankingStrategy.Strategy.FollowSimiliarity);
 		assertEquals(consumer2.getConsumerPayoffStrategy(), ps);
-		
+
 	}
 
 	@Test

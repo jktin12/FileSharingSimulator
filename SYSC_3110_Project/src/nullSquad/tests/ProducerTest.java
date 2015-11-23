@@ -15,7 +15,10 @@ import java.util.List;
 
 import org.junit.*;
 import nullSquad.filesharingsystem.users.*;
+import nullSquad.strategies.act.ProducerActStrategy;
 import nullSquad.strategies.payoff.ProducerPayoffStrategy;
+import nullSquad.strategies.ranking.DocumentRankingStrategy;
+import nullSquad.strategies.ranking.DocumentRankingStrategy.Strategy;
 import nullSquad.filesharingsystem.document.*;
 import nullSquad.filesharingsystem.*;
 
@@ -34,7 +37,7 @@ public class ProducerTest {
 		
 		
 		producer1 = new Producer("TestName","TEST");
-		producer2 = new Producer(strategy,"TestName","TEST");
+		producer2 = new Producer(strategy, ProducerActStrategy.Strategy.Similarity, Strategy.FollowSimiliarity,"TestName","TEST");
 		network = new FileSharingSystem(null);
 		System.setOut(new PrintStream(outContent));
 	}
@@ -151,6 +154,14 @@ public class ProducerTest {
 		testProducer.getDocumentsProduced().add(doc);
 		testProducer.getDocumentsProduced().add(doc2);
 		assertEquals(testProducer.getDocumentsProduced(),docsProduced);
+	}
+	
+	@Test
+	public void testConstructor()
+	{
+		assertEquals(producer2.getProducerPayoffStrategy(), producer2);
+		assertEquals(producer2.getActStrategyEnum(), ProducerActStrategy.Strategy.Similarity);
+		assertEquals(producer2.getDocumentRankingStrategy(), DocumentRankingStrategy.Strategy.FollowSimiliarity);
 	}
 	
 	/**

@@ -43,6 +43,8 @@ public abstract class User
 		if (taste == null)
 			taste = "";
 
+		
+		// Initialize default values
 		this.userID = 0;
 		this.userName = userName;
 		this.taste = taste;
@@ -52,6 +54,7 @@ public abstract class User
 		payoffHistory = new ArrayList<>();
 		payoffListeners = new ArrayList<>();
 
+		// Sets the default ranking strategy
 		this.setDocumentRankingStrategy(DocumentRankingStrategy.Strategy.DocumentPopularity);
 
 	}

@@ -155,9 +155,8 @@ public class DocumentTest {
 	 */
 	@Test
 	public void testGetDateUploaded() {
-		Date testDateUploaded = Calendar.getInstance().getTime();
 		Document testDoc = new Document("TestDocument","TEST",prod);
-		assertTrue(testDoc.getDateUploaded().compareTo(testDateUploaded) <= 0);
+		assertTrue(testDoc.getDateUploaded().getTime() > 0);
 	}
 
 	/**

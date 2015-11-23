@@ -29,24 +29,7 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 	private int currentPayoff;
 
 	/**
-	 * Calls the default constructor and sets the Consumer Payoff Strategy
-	 * 
-	 * @param payoffStrat The payoff Strategy to be used
-	 * @param userName The name of the user
-	 * @param taste The taste of the user
-	 */
-	public Consumer(ConsumerPayoffStrategy payoffStrat, String userName, String taste)
-	{
-		// Call the default Constructor
-		this(userName, taste);
-
-		// Set the payoff Strategy if it is not null
-		if (payoffStrat != null)
-			this.payoffStrategy = payoffStrat;
-	}
-	
-	/**
-	 * Calls the default constructor and sets the Consumer Payoff Strategy and Ranking Strategy
+	 * Calls the 3 argument constructor and sets the Ranking Strategy
 	 * 
 	 * @param payoffStrat The payoff Strategy to be used
 	 * @param rankingStrat The Document Ranking Strategy to Set
@@ -57,7 +40,23 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 	{
 		// Call the default Constructor
 		this(payoffStrat, userName, taste);
-		super.setDocumentRankingStrategy(rankingStrat);
+
+		if (rankingStrat != null)
+			super.setDocumentRankingStrategy(rankingStrat);
+
+	}
+
+	/**
+	 * Calls the default constructor and sets the Consumer Payoff Strategy
+	 * 
+	 * @param payoffStrat The payoff Strategy to be used
+	 * @param userName The name of the user
+	 * @param taste The taste of the user
+	 */
+	public Consumer(ConsumerPayoffStrategy payoffStrat, String userName, String taste)
+	{
+		// Call the default Constructor
+		this(userName, taste);
 
 		// Set the payoff Strategy if it is not null
 		if (payoffStrat != null)
@@ -74,6 +73,7 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 	public Consumer(String userName, String taste)
 	{
 		super(userName, taste);
+
 		this.currentPayoff = 0;
 		this.payoffStrategy = this;
 	}
@@ -124,7 +124,7 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 	{
 		return payoffStrategy.consumerPayoffStrategy(this, documents);
 	}
-	
+
 	/**
 	 * @return The Consumer Payoff Strategy
 	 * @author MVezina

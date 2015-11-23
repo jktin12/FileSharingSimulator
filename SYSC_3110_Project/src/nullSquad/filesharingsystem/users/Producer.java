@@ -44,13 +44,12 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 	 */
 	public Producer(ProducerPayoffStrategy payoffStrat, ProducerActStrategy.Strategy actStrat, DocumentRankingStrategy.Strategy docRankStrategy, String userName, String taste)
 	{
-		this(userName, taste);
-		
-		this.payoffStrategy = payoffStrat;		
-		this.actStrategy = actStrat;
-		super.setDocumentRankingStrategy(docRankStrategy);
+		this(payoffStrat, actStrat, userName, taste);
+
+		if (docRankStrategy != null)
+			super.setDocumentRankingStrategy(docRankStrategy);
 	}
-	
+
 	/**
 	 * Constructor that sets the Producer Payoff Strategy and Producer Act
 	 * Strategy
@@ -62,7 +61,10 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 	 */
 	public Producer(ProducerPayoffStrategy payoffStrat, ProducerActStrategy.Strategy actStrat, String userName, String taste)
 	{
-		this(payoffStrat,actStrat, DocumentRankingStrategy.Strategy.DocumentPopularity, userName, taste);
+		this(payoffStrat, userName, taste);
+
+		if (actStrat != null)
+			this.setActStrategyEnum(actStrat);
 	}
 
 	/**
@@ -75,7 +77,8 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 	public Producer(ProducerPayoffStrategy payoffStrat, String userName, String taste)
 	{
 		this(userName, taste);
-		this.payoffStrategy = payoffStrat;
+		if (payoffStrat != null)
+			this.payoffStrategy = payoffStrat;
 	}
 
 	/**
@@ -88,7 +91,8 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 	public Producer(ProducerActStrategy.Strategy actStrat, String userName, String taste)
 	{
 		this(userName, taste);
-		this.actStrategy = actStrat;
+		if (actStrat != null)
+			this.setActStrategyEnum(actStrat);
 	}
 
 	/**
@@ -103,10 +107,9 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 		super(userName, taste);
 		this.docsProduced = new ArrayList<Document>();
 
-		// Sets the default payoff strategy to the interface implementation in
-		// this class
+		// Sets the default strategies
 		this.payoffStrategy = this;
-		this.actStrategy = ProducerActStrategy.Strategy.Default;
+		this.setActStrategyEnum(ProducerActStrategy.Strategy.Default);
 	}
 
 	/**
@@ -182,7 +185,7 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 	{
 		return payoffStrategy.producerPayoffStrategy(this);
 	}
-	
+
 	/**
 	 * @return The Producer Payoff Strategy
 	 * @author MVezina
