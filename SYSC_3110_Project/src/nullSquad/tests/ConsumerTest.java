@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import nullSquad.filesharingsystem.users.*;
+import nullSquad.strategies.payoff.ConsumerPayoffStrategy;
 import nullSquad.filesharingsystem.document.*;
 
 
@@ -22,7 +23,7 @@ import nullSquad.filesharingsystem.document.*;
 public class ConsumerTest {
 
 	FileSharingSystem network1, network2;
-	User consumer1, consumer2;
+	Consumer consumer1, consumer2;
 	User producer1;
 	private Document docA, docB, docC, docD, docE, docF;
 	String programmingTag, booksTag, musicTag, sportsTag;
@@ -108,13 +109,37 @@ public class ConsumerTest {
 		);
 		
 	}
+	@Test
+	public void testGetConsumerPayoffStrategy()
+	{
+		assertEquals(consumer1.getConsumerPayoffStrategy(), consumer1);
+	}
 
 	@Test
 	public void testConstructor2Args() {
-		Consumer consumer2 = new Consumer("John", booksTag);
+		// Create a test payoff strategy
+		ConsumerPayoffStrategy ps = new ConsumerPayoffStrategy()
+		{			
+			@Override
+			public int consumerPayoffStrategy(Consumer consumer, List<Document> documentSearchResults)
+			{
+				return 0;
+			}
+		};
+		
+		Consumer consumer2 = new Consumer(ps, "John", booksTag);
+		assertEquals(consumer2.getConsumerPayoffStrategy(), ps);
 		assertEquals("John", consumer2.getUserName());
 		assertEquals(booksTag, consumer2.getTaste());
 	}
+	
+	@Test
+	public void testConstructor3Args() {
+		Consumer consumer2 = new Consumer();
+		assertEquals("John", consumer2.getUserName());
+		assertEquals(booksTag, consumer2.getTaste());
+	}
+
 
 
 	@Test

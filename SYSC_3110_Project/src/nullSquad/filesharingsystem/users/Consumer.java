@@ -124,6 +124,15 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 	{
 		return payoffStrategy.consumerPayoffStrategy(this, documents);
 	}
+	
+	/**
+	 * @return The Consumer Payoff Strategy
+	 * @author MVezina
+	 */
+	public ConsumerPayoffStrategy getConsumerPayoffStrategy()
+	{
+		return this.payoffStrategy;
+	}
 
 	// Default Method Implementation of Consumer Payoff Strategy
 	@Override

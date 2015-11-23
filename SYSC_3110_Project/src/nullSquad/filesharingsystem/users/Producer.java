@@ -182,6 +182,15 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 	{
 		return payoffStrategy.producerPayoffStrategy(this);
 	}
+	
+	/**
+	 * @return The Producer Payoff Strategy
+	 * @author MVezina
+	 */
+	public ProducerPayoffStrategy getProducerPayoffStrategy()
+	{
+		return this.payoffStrategy;
+	}
 
 	/**
 	 * The Default Producer payoff method uses followers/likes to calculate
