@@ -9,9 +9,9 @@ import nullSquad.filesharingsystem.document.Document;
 import nullSquad.filesharingsystem.users.User;
 
 /**
- * @author Marc Tebo Rank the documents by the �like� similarity (i.e., if we
- *         tend to �like� the same documents, I will trust you when you �like�
- *         documents I haven�t seen yet)
+ * @author Marc Tebo Rank the documents by the "like" similarity (i.e. if we
+ *         tend to "like" the same documents, I will trust you when you "like"
+ *         documents I haven't seen yet)
  */
 
 public class FollowSimilarityStrategy implements DocumentRankingStrategy, Comparator<Document>
