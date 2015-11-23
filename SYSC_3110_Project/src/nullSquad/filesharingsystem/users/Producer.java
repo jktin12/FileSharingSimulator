@@ -14,6 +14,7 @@ import java.util.*;
 
 import nullSquad.strategies.act.ProducerActStrategy;
 import nullSquad.strategies.payoff.ProducerPayoffStrategy;
+import nullSquad.strategies.ranking.DocumentRankingStrategy;
 
 /**
  * Producer class that extends User and implements the default
@@ -37,15 +38,31 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 	 * 
 	 * @param payoffStrat The Payoff strategy to use
 	 * @param actStrat The Producer Act Strategy to use
+	 * @param docRankStrategy The Document Ranking Strategy to use
+	 * @param userName The User name of the producer
+	 * @param taste The taste of the producer
+	 */
+	public Producer(ProducerPayoffStrategy payoffStrat, ProducerActStrategy.Strategy actStrat, DocumentRankingStrategy.Strategy docRankStrategy, String userName, String taste)
+	{
+		this(userName, taste);
+		
+		this.payoffStrategy = payoffStrat;		
+		this.actStrategy = actStrat;
+		super.setDocumentRankingStrategy(docRankStrategy);
+	}
+	
+	/**
+	 * Constructor that sets the Producer Payoff Strategy and Producer Act
+	 * Strategy
+	 * 
+	 * @param payoffStrat The Payoff strategy to use
+	 * @param actStrat The Producer Act Strategy to use
 	 * @param userName The User name of the producer
 	 * @param taste The taste of the producer
 	 */
 	public Producer(ProducerPayoffStrategy payoffStrat, ProducerActStrategy.Strategy actStrat, String userName, String taste)
 	{
-		this(userName, taste);
-
-		this.payoffStrategy = payoffStrat;
-		this.actStrategy = actStrat;
+		this(payoffStrat,actStrat, DocumentRankingStrategy.Strategy.DocumentPopularity, userName, taste);
 	}
 
 	/**
@@ -58,7 +75,6 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 	public Producer(ProducerPayoffStrategy payoffStrat, String userName, String taste)
 	{
 		this(userName, taste);
-
 		this.payoffStrategy = payoffStrat;
 	}
 

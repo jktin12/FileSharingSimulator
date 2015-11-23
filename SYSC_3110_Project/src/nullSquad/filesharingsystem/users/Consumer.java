@@ -10,6 +10,7 @@ import nullSquad.filesharingsystem.*;
 import nullSquad.filesharingsystem.document.*;
 import nullSquad.simulator.gui.SimulatorGUI;
 import nullSquad.strategies.payoff.ConsumerPayoffStrategy;
+import nullSquad.strategies.ranking.DocumentRankingStrategy;
 
 import java.util.*;
 
@@ -38,6 +39,25 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 	{
 		// Call the default Constructor
 		this(userName, taste);
+
+		// Set the payoff Strategy if it is not null
+		if (payoffStrat != null)
+			this.payoffStrategy = payoffStrat;
+	}
+	
+	/**
+	 * Calls the default constructor and sets the Consumer Payoff Strategy and Ranking Strategy
+	 * 
+	 * @param payoffStrat The payoff Strategy to be used
+	 * @param rankingStrat The Document Ranking Strategy to Set
+	 * @param userName The name of the user
+	 * @param taste The taste of the user
+	 */
+	public Consumer(ConsumerPayoffStrategy payoffStrat, DocumentRankingStrategy.Strategy rankingStrat, String userName, String taste)
+	{
+		// Call the default Constructor
+		this(payoffStrat, userName, taste);
+		super.setDocumentRankingStrategy(rankingStrat);
 
 		// Set the payoff Strategy if it is not null
 		if (payoffStrat != null)

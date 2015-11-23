@@ -52,14 +52,8 @@ public abstract class User
 		payoffHistory = new ArrayList<>();
 		payoffListeners = new ArrayList<>();
 
-		this.setSearchStrategy(DocumentRankingStrategy.Strategy.DocumentPopularity);
+		this.setDocumentRankingStrategy(DocumentRankingStrategy.Strategy.DocumentPopularity);
 
-	}
-
-	public User(DocumentRankingStrategy.Strategy rankingStrategy, String userName, String taste)
-	{
-		this(userName, taste);
-		this.setSearchStrategy(rankingStrategy);
 	}
 
 	/**
@@ -246,7 +240,7 @@ public abstract class User
 	 * 
 	 * @param searchStrategy The Search Ranking Strategy to use
 	 */
-	public void setSearchStrategy(DocumentRankingStrategy.Strategy searchStrategy)
+	public void setDocumentRankingStrategy(DocumentRankingStrategy.Strategy searchStrategy)
 	{
 		if (searchStrategy != null)
 			this.searchStrategy = searchStrategy;

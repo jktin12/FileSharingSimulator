@@ -248,7 +248,7 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 			return;
 
 		// Sets the search ranking strategy
-		selectedUser.setSearchStrategy(rankingStrategy);
+		selectedUser.setDocumentRankingStrategy(rankingStrategy);
 	}
 
 	/**
