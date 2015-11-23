@@ -12,7 +12,7 @@ public interface ProducerActStrategy {
 	 */
 	public static enum Strategy
 	{
-		Simularity("Simularity", new SimularityActStrategy()),
+		Similarity("Similarity", new SimilarityActStrategy()),
 		Default("Default", new DefaultProducerActStrategy());
 
 		private ProducerActStrategy actStrategy;
