@@ -2,7 +2,6 @@ package nullSquad.strategies.ranking;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import nullSquad.filesharingsystem.document.Document;
@@ -13,7 +12,7 @@ import nullSquad.filesharingsystem.users.User;
  * 
  * @author MVezina
  */
-public class UserPopularityRankingStrategy implements DocumentRankingStrategy, Comparator<Document>
+public class UserPopularityRankingStrategy implements DocumentRankingStrategy
 {
 
 	@Override

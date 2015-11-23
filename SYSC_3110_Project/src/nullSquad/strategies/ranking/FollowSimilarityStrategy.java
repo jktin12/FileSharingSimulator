@@ -2,7 +2,6 @@ package nullSquad.strategies.ranking;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import nullSquad.filesharingsystem.document.Document;
@@ -14,7 +13,7 @@ import nullSquad.filesharingsystem.users.User;
  *         documents I haven't seen yet)
  */
 
-public class FollowSimilarityStrategy implements DocumentRankingStrategy, Comparator<Document>
+public class FollowSimilarityStrategy implements DocumentRankingStrategy
 {
 	private User user;
 

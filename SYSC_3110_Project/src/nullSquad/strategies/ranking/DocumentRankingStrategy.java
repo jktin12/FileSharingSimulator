@@ -10,7 +10,7 @@ import java.util.*;
  * 
  * @author MVezina
  */
-public interface DocumentRankingStrategy
+public interface DocumentRankingStrategy extends Comparator<Document>
 {
 	/**
 	 * Enumeration for all possible strategies

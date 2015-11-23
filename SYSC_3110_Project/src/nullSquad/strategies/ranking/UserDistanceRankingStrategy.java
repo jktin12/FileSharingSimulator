@@ -2,7 +2,6 @@ package nullSquad.strategies.ranking;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import nullSquad.filesharingsystem.document.Document;
@@ -15,7 +14,7 @@ import nullSquad.filesharingsystem.users.User;
  * @author Justin Krol
  *
  */
-public class UserDistanceRankingStrategy implements DocumentRankingStrategy, Comparator<Document>
+public class UserDistanceRankingStrategy implements DocumentRankingStrategy
 {
 	private User user;
 	private final int MAX_DEPTH_TO_SEARCH = 4;

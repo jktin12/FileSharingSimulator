@@ -3,7 +3,6 @@ package nullSquad.strategies.ranking;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import nullSquad.filesharingsystem.document.Document;
@@ -14,7 +13,7 @@ import nullSquad.filesharingsystem.users.User;
  * 
  * @author Raymond Wu
  */
-public class LikesSimilarityRankingStrategy implements DocumentRankingStrategy, Comparator<Document>
+public class LikesSimilarityRankingStrategy implements DocumentRankingStrategy
 {
 	private User user;
 
