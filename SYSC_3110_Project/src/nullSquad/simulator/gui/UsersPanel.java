@@ -199,8 +199,8 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 		producerActStrategyARadioButton = new JRadioButton(ProducerActStrategy.Strategy.Default.toString());
 		producerActStrategyARadioButton.addActionListener(al -> actStrategyRadioButton_Clicked(ProducerActStrategy.Strategy.Default));
 
-		producerActStrategyBRadioButton = new JRadioButton(ProducerActStrategy.Strategy.Simularity.toString());
-		producerActStrategyBRadioButton.addActionListener(al -> actStrategyRadioButton_Clicked(ProducerActStrategy.Strategy.Simularity));
+		producerActStrategyBRadioButton = new JRadioButton(ProducerActStrategy.Strategy.Similarity.toString());
+		producerActStrategyBRadioButton.addActionListener(al -> actStrategyRadioButton_Clicked(ProducerActStrategy.Strategy.Similarity));
 
 		// Add the radio buttons to the panel and a button group
 		actStrategySelectionButtonGroup = new ButtonGroup();
@@ -395,7 +395,7 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 				case Default:
 					producerActStrategyARadioButton.setSelected(true);
 					break;
-				case Simularity:
+				case Similarity:
 					producerActStrategyBRadioButton.setSelected(true);
 					break;
 			}
