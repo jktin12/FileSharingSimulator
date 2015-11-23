@@ -169,7 +169,7 @@ public abstract class User
 	 */
 	public List<Document> rankDocuments(List<Document> allDocuments)
 	{
-		return this.getSearchStrategyEnum().getStrategy().rankDocuments(allDocuments, this);
+		return this.getDocumentRankingStrategy().getStrategy().rankDocuments(allDocuments, this);
 	}
 
 	/**
@@ -230,7 +230,7 @@ public abstract class User
 		return this.following.add(user);
 	}
 
-	public DocumentRankingStrategy.Strategy getSearchStrategyEnum()
+	public DocumentRankingStrategy.Strategy getDocumentRankingStrategy()
 	{
 		return searchStrategy;
 	}
