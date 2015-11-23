@@ -12,81 +12,83 @@ import org.junit.Test;
 
 import nullSquad.filesharingsystem.users.*;
 import nullSquad.strategies.payoff.ConsumerPayoffStrategy;
+import nullSquad.strategies.ranking.DocumentPopularityStrategy;
+import nullSquad.strategies.ranking.DocumentRankingStrategy;
 import nullSquad.filesharingsystem.document.*;
-
 
 /**
  * JUnit test class for Consumer
  * 
  * @author Justin Krol
  */
-public class ConsumerTest {
+public class ConsumerTest
+{
 
 	FileSharingSystem network1, network2;
 	Consumer consumer1, consumer2;
 	User producer1;
 	private Document docA, docB, docC, docD, docE, docF;
 	String programmingTag, booksTag, musicTag, sportsTag;
-	List<String> tags ;
-	
-	
+	List<String> tags;
+
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() throws Exception
+	{
 		programmingTag = "Programming";
 		booksTag = "Books";
 		musicTag = "Music";
 		sportsTag = "Sports";
-		
+
 		tags = new ArrayList<>();
 		tags.add(programmingTag);
 		tags.add(booksTag);
 		tags.add(musicTag);
 		tags.add(sportsTag);
-		
+
 		consumer1 = new Consumer("Bob", programmingTag);
 		consumer2 = new Consumer("Bob", programmingTag);
 		network1 = new FileSharingSystem(tags);
 		network2 = new FileSharingSystem(tags);
 		producer1 = new Producer("Jim", programmingTag);
-		docA = new Document("docA", programmingTag, (Producer)producer1);
-		docB = new Document("docB", booksTag, (Producer)producer1);
-		docC = new Document("docC", musicTag, (Producer)producer1);
-		docD = new Document("docD", sportsTag, (Producer)producer1);
-		docE = new Document("docE", programmingTag, (Producer)producer1);
-		docF = new Document("docF", programmingTag, (Producer)producer1);
-				
+		docA = new Document("docA", programmingTag, (Producer) producer1);
+		docB = new Document("docB", booksTag, (Producer) producer1);
+		docC = new Document("docC", musicTag, (Producer) producer1);
+		docD = new Document("docD", sportsTag, (Producer) producer1);
+		docE = new Document("docE", programmingTag, (Producer) producer1);
+		docF = new Document("docF", programmingTag, (Producer) producer1);
+
 	}
 
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() throws Exception
+	{
 	}
 
 	@Test
-	public void testAct() {
+	public void testAct()
+	{
 		network1.addDocument(docA);
 		network1.addDocument(docE);
 		network1.addDocument(docF);
 		consumer1.registerUser(network1);
 		producer1.registerUser(network1);
 		consumer1.act(network1, 3);
-		boolean assertion = (consumer1.getLikedDocuments().contains(docA) || 
-							consumer1.getLikedDocuments().contains(docE) ||
-							consumer1.getLikedDocuments().contains(docF));
-		
+		boolean assertion = (consumer1.getLikedDocuments().contains(docA) || consumer1.getLikedDocuments().contains(docE) || consumer1.getLikedDocuments().contains(docF));
+
 		assertTrue(assertion);
-		
+
 		network2.addDocument(docA);
 		network2.addDocument(docB);
 		network2.addDocument(docC);
 		consumer2.registerUser(network2);
 		consumer2.act(network2, 1);
-		assertion = (!consumer2.getLikedDocuments().contains(docB) &&
-					!consumer2.getLikedDocuments().contains(docC));
+		assertion = (!consumer2.getLikedDocuments().contains(docB) && !consumer2.getLikedDocuments().contains(docC));
 		assertTrue(assertion);
 	}
 
 	@Test
-	public void testEquals() {
+	public void testEquals()
+	{
 		Consumer consumer3 = new Consumer("Justin", booksTag);
 		assertTrue(consumer1.equals(consumer2));
 		assertTrue(consumer2.equals(consumer1));
@@ -95,20 +97,12 @@ public class ConsumerTest {
 	}
 
 	@Test
-	public void testToString() {
-		assertEquals( 
-				("User Type: Consumer\n"+
-				"User ID: "+consumer1.getUserID()+
-				"\nUser Name: "+consumer1.getUserName()+
-				"\nTaste: "+consumer1.getTaste().toString()+
-				"\nFollowers: "+consumer1.getFollowers().size()+
-				"\nFollowing: "+consumer1.getFollowing().size()+
-				"\nNumber of Documents Liked: "+consumer1.getLikedDocuments().size()+
-				"\n"),
-				consumer1.toString()
-		);
-		
+	public void testToString()
+	{
+		assertEquals(("User Type: Consumer\n" + "User ID: " + consumer1.getUserID() + "\nUser Name: " + consumer1.getUserName() + "\nTaste: " + consumer1.getTaste().toString() + "\nFollowers: " + consumer1.getFollowers().size() + "\nFollowing: " + consumer1.getFollowing().size() + "\nNumber of Documents Liked: " + consumer1.getLikedDocuments().size() + "\n"), consumer1.toString());
+
 	}
+
 	@Test
 	public void testGetConsumerPayoffStrategy()
 	{
@@ -116,44 +110,43 @@ public class ConsumerTest {
 	}
 
 	@Test
-	public void testConstructor2Args() {
+	public void testConstructor2Args()
+	{
 		// Create a test payoff strategy
-		ConsumerPayoffStrategy ps = new ConsumerPayoffStrategy()
-		{			
-			@Override
-			public int consumerPayoffStrategy(Consumer consumer, List<Document> documentSearchResults)
-			{
-				return 0;
-			}
-		};
+		ConsumerPayoffStrategy ps = ((Consumer c, List<Document> d)-> {return 0;});
 		
+
 		Consumer consumer2 = new Consumer(ps, "John", booksTag);
 		assertEquals(consumer2.getConsumerPayoffStrategy(), ps);
 		assertEquals("John", consumer2.getUserName());
 		assertEquals(booksTag, consumer2.getTaste());
 	}
-	
+
 	@Test
-	public void testConstructor3Args() {
-		Consumer consumer2 = new Consumer();
+	public void testConstructor3Args()
+	{
+		ConsumerPayoffStrategy ps = ((Consumer c, List<Document> d)-> {return 0;});
+		
+		Consumer consumer2 = new Consumer(ps, DocumentRankingStrategy.Strategy.FollowSimiliarity,"John", booksTag);
 		assertEquals("John", consumer2.getUserName());
 		assertEquals(booksTag, consumer2.getTaste());
+		assertEquals(consumer2.getDocumentRankingStrategy(), DocumentRankingStrategy.Strategy.FollowSimiliarity);
+		assertEquals(consumer2.getConsumerPayoffStrategy(), ps);
+		
 	}
 
-
-
 	@Test
-	public void testCalculatePayoff() {
+	public void testCalculatePayoff()
+	{
 		Consumer consumer3 = new Consumer("Bob", programmingTag);
 		Consumer consumer4 = new Consumer("Joe", booksTag);
 
-		
 		network1.addDocument(docA);
 		network1.addDocument(docB);
 		network1.addDocument(docC);
 		network1.addDocument(docD);
 		network1.addDocument(docE);
-		
+
 		consumer3.registerUser(network1);
 		consumer4.registerUser(network1);
 		assertEquals(2, consumer3.calculatePayoff(network1.search(consumer3, 3)));
@@ -161,19 +154,17 @@ public class ConsumerTest {
 		assertEquals(2, consumer3.calculatePayoff(network1.search(consumer3, 5)));
 		assertEquals(1, consumer4.calculatePayoff(network1.search(consumer4, 5)));
 
-		
-/*		Removed effect of follows and likes on payoff calculations for now
- 		consumer3.followUser(producer1);
-		producer1.likeDocument(docA);
-		producer1.likeDocument(docB);
-		producer1.likeDocument(docE);
-		
-		assertEquals(5, consumer3.calculatePayoff(network1.search(consumer3, 5)));
-*/
+		/* Removed effect of follows and likes on payoff calculations for now
+		 * consumer3.followUser(producer1); producer1.likeDocument(docA);
+		 * producer1.likeDocument(docB); producer1.likeDocument(docE);
+		 * 
+		 * assertEquals(5, consumer3.calculatePayoff(network1.search(consumer3,
+		 * 5))); */
 	}
-	
+
 	@Test
-	public void testAddIterationPayoff(){
+	public void testAddIterationPayoff()
+	{
 		Consumer consumer3 = new Consumer("Bob", programmingTag);
 		consumer3.addIterationPayoff(0);
 		assertEquals(1, consumer3.getPayoffHistory().size());
