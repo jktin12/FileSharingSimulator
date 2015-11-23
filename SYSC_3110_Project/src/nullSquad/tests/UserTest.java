@@ -192,7 +192,7 @@ public class UserTest
 
 		// Make sure that user.rankDocuments() return the same results as
 		// user.getSearchStrategyEnum().getStrategy().rankDocuments()
-		assertEquals(rankedResults, user1.getSearchStrategyEnum().getStrategy().rankDocuments(documents, user1));
+		assertEquals(rankedResults, user1.getDocumentRankingStrategy().getStrategy().rankDocuments(documents, user1));
 
 		// Ensure they return the same size as the original document list
 		assertEquals(rankedResults.size(), documents.size());
@@ -242,21 +242,21 @@ public class UserTest
 	 * @author Marc Tebo Test Case for the getSearchStrategyEnum method
 	 */
 	@Test
-	public void testGetSearchStrategyEnum()
+	public void testGetDocumentRankingStrategy()
 	{
-		user1.setSearchStrategy(DocumentRankingStrategy.Strategy.FollowSimiliarity);
-		assertTrue(user1.getSearchStrategyEnum().equals(DocumentRankingStrategy.Strategy.FollowSimiliarity));
+		user1.setDocumentRankingStrategy(DocumentRankingStrategy.Strategy.FollowSimiliarity);
+		assertTrue(user1.getDocumentRankingStrategy().equals(DocumentRankingStrategy.Strategy.FollowSimiliarity));
 	}
 	
 	/**
 	 * @author Marc Tebo Test Case for the setSearchStrategy method
 	 */
 	@Test
-	public void testSetSearchStrategy(){
-		user1.setSearchStrategy(DocumentRankingStrategy.Strategy.FollowSimiliarity);
-		assertTrue(user1.getSearchStrategyEnum().equals(DocumentRankingStrategy.Strategy.FollowSimiliarity));
+	public void testDocumentRankingStrategy(){
+		user1.setDocumentRankingStrategy(DocumentRankingStrategy.Strategy.FollowSimiliarity);
+		assertTrue(user1.getDocumentRankingStrategy().equals(DocumentRankingStrategy.Strategy.FollowSimiliarity));
 	
-		user1.setSearchStrategy(DocumentRankingStrategy.Strategy.LikeSimilarity);
-		assertTrue(user1.getSearchStrategyEnum().equals(DocumentRankingStrategy.Strategy.LikeSimilarity));
+		user1.setDocumentRankingStrategy(DocumentRankingStrategy.Strategy.LikeSimilarity);
+		assertTrue(user1.getDocumentRankingStrategy().equals(DocumentRankingStrategy.Strategy.LikeSimilarity));
 	}
 }
