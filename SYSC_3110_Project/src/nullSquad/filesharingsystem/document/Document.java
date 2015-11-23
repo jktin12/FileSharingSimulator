@@ -14,7 +14,7 @@ import nullSquad.filesharingsystem.users.*;
  * @author Marc Tebo
  *
  */
-public class Document implements Comparable<Document>
+public class Document
 {
 	private String name;
 	private String tag;
@@ -217,15 +217,4 @@ public class Document implements Comparable<Document>
 		this.docID = docID;
 	}
 	
-	/**
-	 * @author Justin Krol
-	 */
-	public int compareTo(Document doc){
-		if(this.getUserLikes().size() > doc.getUserLikes().size())
-			return 1;
-		else if(this.getUserLikes().size() == doc.getUserLikes().size())
-			return 0;
-		else
-			return -1;
-	}
 }

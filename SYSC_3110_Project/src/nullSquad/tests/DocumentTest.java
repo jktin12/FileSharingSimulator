@@ -185,23 +185,4 @@ public class DocumentTest {
 		assertEquals(doc.getDocumentID(),12345);
 	}
 
-	/**
-	 * @author Marc Tebo
-	 * Test case for the compareTo method
-	 */
-	@Test
-	public void testCompareTo() {
-		Document testDoc = new Document("TestDocument2","TEST",prod);
-		doc.likeDocument(prod);
-		testDoc.likeDocument(prod);
-		testDoc.likeDocument(cons);
-		
-		assertEquals(testDoc.compareTo(doc), 1);
-		
-		testDoc.unlikeDocument(cons);
-		assertEquals(testDoc.compareTo(doc),0);
-		
-		testDoc.unlikeDocument(prod);
-		assertEquals(testDoc.compareTo(doc), -1);
-	}
 }
