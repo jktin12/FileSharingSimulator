@@ -15,6 +15,7 @@ import nullSquad.filesharingsystem.document.Document;
 import nullSquad.filesharingsystem.users.Consumer;
 import nullSquad.filesharingsystem.users.Producer;
 import nullSquad.filesharingsystem.users.User;
+import nullSquad.strategies.ranking.DocumentRankingStrategy;
 
 import org.junit.After;
 import org.junit.Before;
@@ -25,6 +26,8 @@ public class UserTest
 	public Producer user1;
 	public User user2;
 	public User user3;
+	public User user4;
+	
 	FileSharingSystem network;
 	List<String> tags;
 
@@ -34,7 +37,7 @@ public class UserTest
 		user1 = new Producer("TestUser1", "TEST");
 		user2 = new Consumer("TestUser2", "TEST");
 		user3 = new Consumer("TestUser3", "TEST");
-
+		
 		network = new FileSharingSystem(null);
 	}
 
@@ -233,5 +236,27 @@ public class UserTest
 
 		user2.unlikeDocument(testDoc);
 		assertTrue(!(testDoc.getUserLikes().contains(user2) || user2.getLikedDocuments().contains(testDoc)));
+	}
+	
+	/**
+	 * @author Marc Tebo Test Case for the getSearchStrategyEnum method
+	 */
+	@Test
+	public void testGetSearchStrategyEnum()
+	{
+		user1.setSearchStrategy(DocumentRankingStrategy.Strategy.FollowSimiliarity);
+		assertTrue(user1.getSearchStrategyEnum().equals(DocumentRankingStrategy.Strategy.FollowSimiliarity));
+	}
+	
+	/**
+	 * @author Marc Tebo Test Case for the setSearchStrategy method
+	 */
+	@Test
+	public void testSetSearchStrategy(){
+		user1.setSearchStrategy(DocumentRankingStrategy.Strategy.FollowSimiliarity);
+		assertTrue(user1.getSearchStrategyEnum().equals(DocumentRankingStrategy.Strategy.FollowSimiliarity));
+	
+		user1.setSearchStrategy(DocumentRankingStrategy.Strategy.LikeSimilarity);
+		assertTrue(user1.getSearchStrategyEnum().equals(DocumentRankingStrategy.Strategy.LikeSimilarity));
 	}
 }
