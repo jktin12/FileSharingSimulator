@@ -6,17 +6,20 @@
  */
 package nullSquad.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
+
+import nullSquad.filesharingsystem.FileSharingSystem;
+import nullSquad.filesharingsystem.document.Document;
+import nullSquad.filesharingsystem.users.Consumer;
+import nullSquad.filesharingsystem.users.Producer;
+import nullSquad.filesharingsystem.users.User;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import nullSquad.filesharingsystem.users.*;
-import nullSquad.filesharingsystem.document.*;
-import nullSquad.filesharingsystem.*;
 
 public class UserTest {
 	public User user1;
@@ -29,8 +32,7 @@ public class UserTest {
 	public void setUp() throws Exception {
 		user1 = new Producer("TestUser1","TEST");
 		user2 = new Consumer("TestUser2","TEST");
-		user3 = new Consumer("TestUser3","TEST");
-		
+		user3 = new Consumer("TestUser3","TEST");	
 		
 		network = new FileSharingSystem(null);
 	}
@@ -50,6 +52,7 @@ public class UserTest {
 		User testUser2 = new Consumer("TestUser2", "TEST");
 		
 		assertTrue(user1.equals(testUser1) && user2.equals(testUser2));
+		
 	}
 
 	/**
@@ -190,5 +193,31 @@ public class UserTest {
 				"\nTaste: " + user2.getTaste() + "\nFollowers: " + 	user2.getFollowers().size()
 				+ "\nFollowing: " + user2.getFollowing().size() + 	"\nNumber of Documents Liked: "
 				+ user2.getLikedDocuments().size() + "\n");
+	}
+	
+	/**
+	 * @author Marc Tebo
+	 * Test case for the likeDocument method
+	 */
+	@Test
+	public void testLikeDocument(){
+		Document testDoc = new Document("TestDocument","TEST", (Producer) user1);
+		user2.likeDocument(testDoc);
+		
+		assertTrue(testDoc.getUserLikes().contains(user2) && user2.getLikedDocuments().contains(testDoc));
+	}
+	
+	/**
+	 * @author Marc Tebo
+	 * Test case for the unlikeDocument method
+	 */
+	@Test
+	public void testUnlikeDocument(){
+		Document testDoc = new Document("TestDocument","TEST", (Producer) user1);
+		user2.likeDocument(testDoc);
+		assertTrue(testDoc.getUserLikes().contains(user2) && user2.getLikedDocuments().contains(testDoc));
+	
+		user2.unlikeDocument(testDoc);
+		assertTrue(!(testDoc.getUserLikes().contains(user2) || user2.getLikedDocuments().contains(testDoc)));
 	}
 }
