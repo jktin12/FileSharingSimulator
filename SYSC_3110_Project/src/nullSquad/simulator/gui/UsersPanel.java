@@ -364,7 +364,7 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 		userStatsLabel.setText(userStats + "</html>");
 
 		// Determine which strategy is currently being used by the user
-		switch (user.getSearchStrategyEnum())
+		switch (user.getDocumentRankingStrategy())
 		{
 			case DocumentPopularity:
 				documentPopularityStrategyRadioButton.setSelected(true);
