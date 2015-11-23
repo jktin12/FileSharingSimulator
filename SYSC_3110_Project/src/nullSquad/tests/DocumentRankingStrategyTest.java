@@ -16,6 +16,9 @@ import nullSquad.filesharingsystem.users.Producer;
 import nullSquad.strategies.ranking.DocumentRankingStrategy;
 
 /**
+ * A Class to test the integrity of all implemented tests included in the
+ * DocumentRankingStrategy.Strategy Enum
+ * 
  * @author MVezina
  */
 public class DocumentRankingStrategyTest
