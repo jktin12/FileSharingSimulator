@@ -41,12 +41,18 @@ public class DocumentRankingStrategyTest
 		documents.add(new Document("Doc3", tag, user1));
 	}
 
+	/**
+	 * Ensure the ranking strategies are initialized and that they do not modify
+	 * the size of the list. (They only change the order of items)
+	 * 
+	 * @author MVezina
+	 */
 	@Test
 	public void testAllRankingStrategies()
 	{
 		for (int i = 0; i < DocumentRankingStrategy.Strategy.values().length; i++)
 		{
-			System.out.println(DocumentRankingStrategy.Strategy.values()[i].toString());
+			assertNotNull(DocumentRankingStrategy.Strategy.values()[i].getStrategy());
 			assertEquals(documents.size(), DocumentRankingStrategy.Strategy.values()[i].getStrategy().rankDocuments(documents, user1).size());
 		}
 
