@@ -11,12 +11,17 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import nullSquad.filesharingsystem.*;
 
@@ -242,7 +247,7 @@ public class SimulatorGUI extends JFrame
 			new SimulatorGUI("Simulator");
 		}
 
-		//restoreSimulatorState();
+		// restoreSimulatorState();
 
 	}
 
@@ -260,7 +265,7 @@ public class SimulatorGUI extends JFrame
 			stepSimulator_Click();
 		}
 
-		//saveSimulatorState();
+		// saveSimulatorState();
 	}
 
 	/**
@@ -307,8 +312,8 @@ public class SimulatorGUI extends JFrame
 		// clicked
 		if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
 		{
-			
-			//simulator.restoreSimulatorState(fileChooser.getSelectedFile());
+
+			// simulator.restoreSimulatorState(fileChooser.getSelectedFile());
 			// this.simulatorPanel.setLogText(Simulator.logText);
 			// this.updateFrameTitle();
 		}
@@ -326,7 +331,7 @@ public class SimulatorGUI extends JFrame
 		// clicked
 		if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
 		{
-			//simulator.saveSimulatorState(fileChooser.getSelectedFile());
+			// simulator.saveSimulatorState(fileChooser.getSelectedFile());
 		}
 
 	}
@@ -367,9 +372,42 @@ public class SimulatorGUI extends JFrame
 		};
 	}
 
-	public static void main(String[] args)
+	public static void main(String[] args) throws Exception
 	{
-		new SimulatorGUI("Simulator");
+		// new SimulatorGUI("Simulator");
+		
+		testXMLSerialization();
+		
+		System.exit(0);
+
+	}
+
+	public static void testXMLSerialization() throws Exception
+	{
+		File f = new File("file.xml");
+		
+		java.util.List<String> tags = new ArrayList<>();
+		
+		tags.add("Tag1");
+		tags.add("Tag2");
+		
+		FileSharingSystem fss = new FileSharingSystem(tags);
+		
+		Simulator s = new Simulator(fss, 100);
+		FileWriter fW = new FileWriter(f);
+		fW.write(s.toXML());
+		fW.close();
+		
+		DocumentBuilder dB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+		org.w3c.dom.Document doc = dB.parse(new FileInputStream(f));
+		
+		Simulator s2 = Simulator.createSimulatorFromXML(doc.getDocumentElement());
+		
+		
+		System.out.println(s2.getFileSharingSystem().getTags().size());
+		
+		System.out.println(s2.getTotalSimulatorSequences());
+		
 	}
 
 }

@@ -19,9 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
-import javax.swing.event.ListDataListener;
 
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * Represents the FileSharingSystem
@@ -31,7 +31,19 @@ import org.w3c.dom.Node;
 public class FileSharingSystem implements XMLSerializable
 {
 	public static final String NODE_NAME = "filesharingsystem";
-	
+
+	private static final String NODE_NAME_NEXTAVAILABLEUSERID = "nextavailableuserid";
+
+	private static final String NODE_NAME_NEXTAVAILABLEDOCID = "nextavailabledocid";
+
+	private static final String NODE_NAME_USERSLISTMODEL = "userslistmodel";
+
+	private static final String NODE_NAME_DOCSLISTMODEL = "docslistmodel";
+
+	private static final String NODE_NAME_TAG = "tag";
+
+	private static final String NODE_NAME_TAGS = "tags";
+
 	private int nextAvailableUserID = 1;
 	private int nextAvailableDocID = 1;
 	private DefaultListModel<User> usersListModel;
@@ -48,7 +60,11 @@ public class FileSharingSystem implements XMLSerializable
 	{
 		usersListModel = new DefaultListModel<>();
 		documentsListModel = new DefaultListModel<>();
+
 		this.tags = tags;
+
+		if (tags == null)
+			this.tags = new ArrayList<>();
 	}
 
 	/**
@@ -372,25 +388,112 @@ public class FileSharingSystem implements XMLSerializable
 		return tags;
 	}
 
-
 	/* (non-Javadoc)
-	 * @see nullSquad.simulator.XMLSerializable#toXML()
-	 */
+	 * 
+	 * @see nullSquad.simulator.XMLSerializable#toXML() */
 	@Override
 	public String toXML()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		String xmlStr = "<" + NODE_NAME + ">\n";
+
+		xmlStr += "<" + NODE_NAME_NEXTAVAILABLEUSERID + ">";
+		xmlStr += nextAvailableUserID;
+		xmlStr += "</" + NODE_NAME_NEXTAVAILABLEUSERID + ">\n";
+
+		xmlStr += "<" + NODE_NAME_NEXTAVAILABLEDOCID + ">";
+		xmlStr += nextAvailableDocID;
+		xmlStr += "</" + NODE_NAME_NEXTAVAILABLEDOCID + ">\n";
+
+		xmlStr += "<" + NODE_NAME_USERSLISTMODEL + ">";
+
+		for (int i = 0; i < usersListModel.size(); i++)
+		{
+			xmlStr += usersListModel.getElementAt(i).toXML();
+		}
+
+		xmlStr += "</" + NODE_NAME_USERSLISTMODEL + ">\n";
+
+		xmlStr += "<" + NODE_NAME_DOCSLISTMODEL + ">";
+
+		for (int i = 0; i < documentsListModel.size(); i++)
+		{
+			xmlStr += documentsListModel.getElementAt(i).toXML();
+		}
+
+		xmlStr += "</" + NODE_NAME_DOCSLISTMODEL + ">\n";
+
+		xmlStr += "<" + NODE_NAME_TAGS + ">\n";
+
+		for (String s : tags)
+		{
+			xmlStr += "<" + NODE_NAME_TAG + ">" + s + "</" + NODE_NAME_TAG + ">\n";
+		}
+
+		xmlStr += "</" + NODE_NAME_TAGS + ">\n";
+
+		return xmlStr + "</" + NODE_NAME + ">\n";
 	}
 
-	/* (non-Javadoc)
-	 * @see nullSquad.simulator.XMLSerializable#readXML(java.lang.String)
-	 */
-	@Override
-	public void importFromXML(Node root)
+	public static FileSharingSystem createFileSharingSystemFromXML(Node root)
 	{
-		System.out.println(root.getNodeName());
-		
+		if (!root.getNodeName().equals(NODE_NAME))
+			return null;
+
+		FileSharingSystem fss = new FileSharingSystem(null);
+
+		NodeList allNodes = root.getChildNodes();
+
+		for (int i = 0; i < allNodes.getLength(); i++)
+		{
+			Node currNode = allNodes.item(i);
+
+			if (currNode.getNodeName().equals(NODE_NAME))
+				break;
+
+			if (currNode.getNodeName().equals(NODE_NAME_NEXTAVAILABLEUSERID))
+			{
+				fss.nextAvailableUserID = Integer.parseInt(currNode.getTextContent().trim());
+			}
+
+			if (currNode.getNodeName().equals(NODE_NAME_NEXTAVAILABLEDOCID))
+			{
+				fss.nextAvailableDocID = Integer.parseInt(currNode.getTextContent().trim());
+			}
+
+			if (currNode.getNodeName().equals(NODE_NAME_TAGS))
+			{
+				if (fss.tags == null)
+					fss.tags = new ArrayList<>();
+
+				// Clear tags
+				fss.tags.clear();
+
+				NodeList tagNodes = currNode.getChildNodes();
+
+				for (int t = 0; t < tagNodes.getLength(); t++)
+				{
+					Node tagNode = tagNodes.item(t);
+					if (tagNode.getNodeName().equals(NODE_NAME_TAG))
+					{
+						fss.tags.add(tagNode.getTextContent());
+					}
+
+				}
+			}
+
+			if (currNode.getNodeName().equals(NODE_NAME_USERSLISTMODEL))
+			{
+
+			}
+
+			if (currNode.getNodeName().equals(NODE_NAME_DOCSLISTMODEL))
+			{
+			}
+
+		}
+
+		return fss;
+
 	}
 
 }

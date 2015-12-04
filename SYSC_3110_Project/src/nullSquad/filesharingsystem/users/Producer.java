@@ -321,14 +321,10 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see nullSquad.simulator.XMLSerializable#importFromXML(java.lang.String)
-	 */
-	@Override
-	public void importFromXML(Node root)
+	public static Producer createProducerFromNode(Node root)
 	{
 		// TODO Auto-generated method stub
+		return null;
 		
 	}
-
 }

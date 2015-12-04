@@ -236,15 +236,11 @@ public class Document implements XMLSerializable
 	}
 
 
-	/**
-	 * @author Marc Tebo
-	 * @see nullSquad.simulator.XMLSerializable#readXML(java.lang.String)
-	 */
-	@Override
-	public void importFromXML(Node root)
+
+	public static Document createDocumentFromXML(Node root)
 	{
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
 	
 }

@@ -2,7 +2,6 @@ package nullSquad.simulator;
 
 import java.util.Random;
 
-import javax.xml.parsers.*;
 import org.w3c.dom.*;
 
 import nullSquad.filesharingsystem.*;
@@ -10,7 +9,13 @@ import nullSquad.filesharingsystem.users.*;
 
 public class Simulator implements XMLSerializable
 {
+	/* XML Node Names */
 	public static final String NODE_NAME = "simulator";
+	private static final String NODE_NAME_TOTALSIMULATORSEQUENCES = "totalsimulatorsequences";
+	private static final String NODE_NAME_CURRENTSIMULATORSEQUENCE = "currentsimulatorsequence";
+	private static final String NODE_NAME_LOGTEXT = "logtext";
+	/* End XML Node Names */
+
 	private FileSharingSystem fileSharingSystem;
 	private int currentSimulatorSequence;
 	private int totalSimulatorSequences;
@@ -138,56 +143,67 @@ public class Simulator implements XMLSerializable
 	@Override
 	public String toXML()
 	{
-		String xmlStr = "<simulator>\n";
+		String xmlStr = "<" + NODE_NAME + ">\n";
+
+		xmlStr += "<" + NODE_NAME_LOGTEXT + ">";
+		xmlStr += logText;
+		xmlStr += "</" + NODE_NAME_LOGTEXT + ">\n";
 
 		xmlStr += fileSharingSystem.toXML();
 
-		xmlStr += "<currentsimulatorsequence>";
+		xmlStr += "<" + NODE_NAME_CURRENTSIMULATORSEQUENCE + ">";
 		xmlStr += currentSimulatorSequence;
-		xmlStr += "</currentsimulatorsequence>\n";
+		xmlStr += "</" + NODE_NAME_CURRENTSIMULATORSEQUENCE + ">\n";
 
-		xmlStr += "<totalsimulatorsequences>";
+		xmlStr += "<" + NODE_NAME_TOTALSIMULATORSEQUENCES + ">";
 		xmlStr += totalSimulatorSequences;
-		xmlStr += "</totalsimulatorsequences>\n";
+		xmlStr += "</" + NODE_NAME_TOTALSIMULATORSEQUENCES + ">\n";
 
-		return xmlStr + "</simulator>\n";
+		return xmlStr + "</" + NODE_NAME + ">\n";
 	}
 
-	/* (non-Javadoc)
-	 * 
-	 * @see nullSquad.simulator.XMLSerializable#readXML(java.lang.String) */
-	@Override
-	public void importFromXML(Node rootNode)
+	public static Simulator createSimulatorFromXML(Node rootNode)
 	{
-		if (rootNode.getNodeName().equals("simulator"))
+		
+		if (!rootNode.getNodeName().equals(Simulator.NODE_NAME))
 		{
-			NodeList allNodes = rootNode.getChildNodes();
+			return null;
+		}
+		
+		Simulator newSim = new Simulator(null, 0);
+		
+		NodeList allNodes = rootNode.getChildNodes();
 
-			for (int i = 0; i < allNodes.getLength(); i++)
+		for (int i = 0; i < allNodes.getLength(); i++)
+		{
+			Node currNode = allNodes.item(i);
+			// Break from importing if another simulator is found
+			if (currNode.getNodeName().equals(Simulator.NODE_NAME))
+				break;
+
+			if (currNode.getNodeName().equals(NODE_NAME_LOGTEXT))
 			{
-				Node currNode = allNodes.item(i);
-				// Break from importing if another simulator is found
-				if (currNode.getNodeName().equals("simulator"))
-					break;
+				logText = currNode.getTextContent();
+			}
 
-				if (currNode.getNodeName().equals("currentsimulatorsequence"))
-				{
-					currentSimulatorSequence = Integer.parseInt(currNode.getTextContent());
-				}
+			if (currNode.getNodeName().equals(NODE_NAME_CURRENTSIMULATORSEQUENCE))
+			{
+				newSim.currentSimulatorSequence = Integer.parseInt(currNode.getTextContent().trim());
+			}
 
-				if (currNode.getNodeName().equals("totalsimulatorsequences"))
-				{
-					currentSimulatorSequence = Integer.parseInt(currNode.getTextContent());
-				}
+			if (currNode.getNodeName().equals(NODE_NAME_TOTALSIMULATORSEQUENCES))
+			{
+				newSim.totalSimulatorSequences = Integer.parseInt(currNode.getTextContent().trim());
+			}
 
-				if (currNode.getNodeName().equals(FileSharingSystem.NODE_NAME))
-				{
-					fileSharingSystem.importFromXML(currNode);
-				}
-
+			if (currNode.getNodeName().equals(FileSharingSystem.NODE_NAME))
+			{
+				newSim.fileSharingSystem = FileSharingSystem.createFileSharingSystemFromXML(currNode);
 			}
 
 		}
+
+		return newSim;
 
 	}
 

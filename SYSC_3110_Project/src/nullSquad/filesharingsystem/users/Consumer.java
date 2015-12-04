@@ -210,13 +210,10 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see nullSquad.simulator.XMLSerializable#importFromXML(java.lang.String)
-	 */
-	@Override
-	public void importFromXML(Node root)
+	public static Consumer createConsumerFromNode(Node root)
 	{
 		// TODO Auto-generated method stub
+		return null;
 		
 	}
 
