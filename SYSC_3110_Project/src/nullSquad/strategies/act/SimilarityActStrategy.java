@@ -11,8 +11,6 @@ import nullSquad.filesharingsystem.*;
 public class SimilarityActStrategy implements ProducerActStrategy {
 
 	
-	/* Serializable ID */
-	private static final long serialVersionUID = 1L;
 	
 	@Override
 	public void act(Producer producer, FileSharingSystem fileSharingSystem, int kResults) {
@@ -48,6 +46,7 @@ public class SimilarityActStrategy implements ProducerActStrategy {
 				producer.followUser(u);
 			}
 		}
-	}	
+	}
+
 
 }

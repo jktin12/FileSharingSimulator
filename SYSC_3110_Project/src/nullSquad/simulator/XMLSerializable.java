@@ -3,6 +3,8 @@
  */
 package nullSquad.simulator;
 
+import org.w3c.dom.Element;
+
 /**
  * @author MVezina
  *
@@ -10,5 +12,5 @@ package nullSquad.simulator;
 public interface XMLSerializable
 {
 	public String toXML();
-	public void importFromXML(String xmlObject);	
+	public void importFromXML(Element rootNode);	
 }

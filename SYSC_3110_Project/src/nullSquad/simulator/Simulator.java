@@ -1,6 +1,18 @@
 package nullSquad.simulator;
 
 import java.util.Random;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.w3c.dom.Element;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
 import nullSquad.filesharingsystem.*;
 import nullSquad.filesharingsystem.users.*;
 
@@ -134,17 +146,36 @@ public class Simulator implements XMLSerializable
 	@Override
 	public String toXML()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		String xmlStr = "<simulator>\n";
+		
+		xmlStr += fileSharingSystem.toXML();
+		
+		xmlStr += "<currentsimulatorsequence>";
+		xmlStr += currentSimulatorSequence;
+		xmlStr += "</currentsimulatorsequence>\n";
+		
+		xmlStr += "<totalsimulatorsequences>";
+		xmlStr += totalSimulatorSequences;
+		xmlStr += "</currentsimulatorsequence>\n";
+		
+		
+		return xmlStr + "</simulator>\n";
 	}
 
 	/* (non-Javadoc)
 	 * @see nullSquad.simulator.XMLSerializable#readXML(java.lang.String)
 	 */
 	@Override
-	public void importFromXML(String xmlObject)
+	public void importFromXML(Element rootNode)
 	{
-		// TODO Auto-generated method stub
+			if(rootNode.getNodeName().equals("simulator"))
+			{
+				
+				
+				
+			}
+		
+		
 		
 	}
 

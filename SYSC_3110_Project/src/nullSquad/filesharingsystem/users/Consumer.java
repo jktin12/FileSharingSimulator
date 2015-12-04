@@ -14,6 +14,8 @@ import nullSquad.strategies.ranking.DocumentRankingStrategy;
 
 import java.util.*;
 
+import org.w3c.dom.Element;
+
 /**
  * Producer class that extends User and implements the default
  * ProducerPayoffStrategy This class represents a Producer that belongs to a
@@ -212,7 +214,7 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 	 * @see nullSquad.simulator.XMLSerializable#importFromXML(java.lang.String)
 	 */
 	@Override
-	public void importFromXML(String xmlObject)
+	public void importFromXML(Element root)
 	{
 		// TODO Auto-generated method stub
 		

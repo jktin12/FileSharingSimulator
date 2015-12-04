@@ -12,6 +12,8 @@ import nullSquad.simulator.Simulator;
 
 import java.util.*;
 
+import org.w3c.dom.Element;
+
 import nullSquad.strategies.act.ProducerActStrategy;
 import nullSquad.strategies.payoff.ProducerPayoffStrategy;
 import nullSquad.strategies.ranking.DocumentRankingStrategy;
@@ -310,15 +312,20 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 	@Override
 	public String toXML()
 	{
-		// TODO Auto-generated method stub
+		String xmlStr = "<producer>\n";
+		
+		for(Document d : docsProduced)
+			xmlStr += d.toXML();
+		
 		return null;
+		
 	}
 
 	/* (non-Javadoc)
 	 * @see nullSquad.simulator.XMLSerializable#importFromXML(java.lang.String)
 	 */
 	@Override
-	public void importFromXML(String xmlObject)
+	public void importFromXML(Element root)
 	{
 		// TODO Auto-generated method stub
 		

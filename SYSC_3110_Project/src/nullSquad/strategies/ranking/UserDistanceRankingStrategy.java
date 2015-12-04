@@ -188,4 +188,6 @@ public class UserDistanceRankingStrategy implements DocumentRankingStrategy
 		return false;
 	}
 
+
+
 }

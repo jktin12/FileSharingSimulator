@@ -8,6 +8,7 @@ package nullSquad.filesharingsystem.document;
 import java.util.EventObject;
 
 import nullSquad.filesharingsystem.users.*;
+import nullSquad.simulator.XMLSerializable;
 
 /**
  * Represents the event of a user liking a document
@@ -16,9 +17,6 @@ import nullSquad.filesharingsystem.users.*;
  */
 public class DocumentLikeEvent extends EventObject
 {
-	
-	/* Serializable ID */
-	private static final long serialVersionUID = 1L;
 	
 	private Document documentSource;
 	private User user;
@@ -45,4 +43,6 @@ public class DocumentLikeEvent extends EventObject
 	{
 		return user;
 	}
+	
+	
 }

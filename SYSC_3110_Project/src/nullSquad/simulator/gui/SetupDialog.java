@@ -126,7 +126,7 @@ public class SetupDialog implements Serializable
 	private void showDialog(JFrame parentFrame)
 	{
 		// Components to be shown on the input dialog
-		JComponent[] components = new JComponent[] { new JLabel("Number of Producers: "), numProducersTextField, new JLabel("Number of Consumers: "), numConsumersTextField, new JLabel("Tags (Seperated by Commas): "), tagsTextField, new JLabel("Maximum Steps to Run: "), numSimulationIterationsTextField, };
+		JComponent[] components = new JComponent[] { new JLabel("Number of Producers: "), numProducersTextField, new JLabel("Number of Consumers: "), numConsumersTextField, new JLabel("Tags (Separated by Commas): "), tagsTextField, new JLabel("Maximum Steps to Run: "), numSimulationIterationsTextField, };
 
 		// Continue showing the dialog until valid entries are prevalent
 		while (true)
