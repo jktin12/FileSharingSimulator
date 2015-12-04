@@ -4,7 +4,20 @@
 package nullSquad.simulator.gui;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+
 import nullSquad.filesharingsystem.*;
 
 import nullSquad.filesharingsystem.users.*;
@@ -14,12 +27,13 @@ import nullSquad.filesharingsystem.document.*;
 /**
  * @author MVezina
  */
-@SuppressWarnings("serial")
 public class SimulatorGUI extends JFrame
 {
 
-	// The log text
-	private static String logText = "Welcome to the Simulator!\n\n";
+	/* Serializable ID */
+	private static final long serialVersionUID = 1L;
+
+	private static final String SSF_FILE_EXT = ".ssf";
 
 	// Main Frame Tab Pane
 	private JTabbedPane tabbedMenuPane;
@@ -40,26 +54,10 @@ public class SimulatorGUI extends JFrame
 	private JButton restartSimulationButton;
 	private JPanel simulatorControlsPanel;
 
+	private JFileChooser fileChooser;
+
 	/* Simulator */
 	private Simulator simulator;
-
-	/**
-	 * Appends text t to log text
-	 * 
-	 * @param t The text to be appended
-	 */
-	public static void appendLog(String t)
-	{
-		logText += t + '\n';
-	}
-
-	/**
-	 * Clears log text
-	 */
-	public static void clearLog()
-	{
-		logText = "";
-	}
 
 	/**
 	 * Constructor for creating a simulator GUI. Initializes all values and
@@ -73,7 +71,7 @@ public class SimulatorGUI extends JFrame
 		super(frameTitle);
 
 		// Ensure the Log is cleared
-		SimulatorGUI.clearLog();
+		Simulator.clearLog();
 
 		// Run the setup dialog
 		SetupDialog sD = new SetupDialog(this);
@@ -85,8 +83,51 @@ public class SimulatorGUI extends JFrame
 		// Initialize the Simulator
 		simulator = new Simulator(new FileSharingSystem(sD.getTags()), sD.getTotalSimulationIterations());
 
-		/* Set & Initialize Frame Properties / Components */
+		/* Initialize the file chooser */
+		fileChooser = new JFileChooser();
 
+		fileChooser.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+
+				// These actions only apply to the save dialog
+				if (!fileChooser.getName().equals("SaveFileDialog"))
+					return;
+
+				if (fileChooser.getSelectedFile() == null || fileChooser.getSelectedFile().getName() == null)
+					return;
+
+				// Ensure the file is created with the appropriate file
+				// extension
+				String selectedFileName = fileChooser.getSelectedFile().getAbsolutePath();
+
+				if (!selectedFileName.toLowerCase().endsWith(SSF_FILE_EXT))
+				{
+					selectedFileName += SSF_FILE_EXT;
+					fileChooser.setSelectedFile(new File(selectedFileName));
+				}
+
+				if (fileChooser.getSelectedFile().exists())
+				{
+					System.out.println("Exists");
+					fileChooser.getSelectedFile().delete();
+				}
+
+			}
+		});
+
+		// Set the file filter to only enable simulation save files
+		fileChooser.setFileFilter(createSimulationStateFileFilter());
+
+		// Set current directory to user's home directory
+		fileChooser.setCurrentDirectory(null);
+
+		// Disable multiple file selections
+		fileChooser.setMultiSelectionEnabled(false);
+
+		/* Set & Initialize Frame Properties / Components */
 		this.setTitle("Simulator (" + simulator.getCurrentSimulatorSequence() + "/" + simulator.getTotalSimulatorSequences() + ")");
 
 		// Set the frame layout
@@ -189,6 +230,7 @@ public class SimulatorGUI extends JFrame
 	{
 		if (JOptionPane.showConfirmDialog(this, "Are you sure you want to restart the Simulation?", "Restart?", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
 		{
+
 			// Ensure the application does not exit on closing
 			this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
@@ -199,6 +241,8 @@ public class SimulatorGUI extends JFrame
 			// Create and run a new simulation
 			new SimulatorGUI("Simulator");
 		}
+
+		//restoreSimulatorState();
 
 	}
 
@@ -215,6 +259,8 @@ public class SimulatorGUI extends JFrame
 		{
 			stepSimulator_Click();
 		}
+
+		//saveSimulatorState();
 	}
 
 	/**
@@ -230,7 +276,7 @@ public class SimulatorGUI extends JFrame
 		this.setTitle("Simulator (" + simulator.getCurrentSimulatorSequence() + "/" + simulator.getTotalSimulatorSequences() + ")");
 
 		// Set the log text box
-		simulatorPanel.setLogText(logText);
+		simulatorPanel.setLogText(Simulator.logText);
 
 		// Repaint the frame
 		this.repaint();
@@ -243,6 +289,82 @@ public class SimulatorGUI extends JFrame
 			JOptionPane.showMessageDialog(null, "The simulator has finished!", "Simulation Complete!", JOptionPane.INFORMATION_MESSAGE);
 		}
 
+	}
+
+	private void updateFrameTitle()
+	{
+		/* Set & Initialize Frame Properties / Components */
+		this.setTitle("Simulator (" + simulator.getCurrentSimulatorSequence() + "/" + simulator.getTotalSimulatorSequences() + ")");
+	}
+
+	private void restoreSimulatorState()
+	{
+		// Set title
+		fileChooser.setDialogTitle("Restore Simulation State");
+		fileChooser.setName("RestoreFileDialog");
+
+		// Show the save dialog and ensure the 'Open' (approve) button was
+		// clicked
+		if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+		{
+			
+			//simulator.restoreSimulatorState(fileChooser.getSelectedFile());
+			// this.simulatorPanel.setLogText(Simulator.logText);
+			// this.updateFrameTitle();
+		}
+
+	}
+
+	private void saveSimulatorState()
+	{
+
+		// Set title and disable multiple file selections
+		fileChooser.setDialogTitle("Save Simulation State");
+		fileChooser.setName("SaveFileDialog");
+
+		// Show the save dialog and ensure the 'Save' (approve) button was
+		// clicked
+		if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
+		{
+			//simulator.saveSimulatorState(fileChooser.getSelectedFile());
+		}
+
+	}
+
+	/**
+	 * @return
+	 * @author MVezina
+	 */
+	private FileFilter createSimulationStateFileFilter()
+	{
+
+		return new FileFilter()
+		{
+
+			@Override
+			public String getDescription()
+			{
+				return "Simulation State File (.ssf)";
+			}
+
+			@Override
+			public boolean accept(File f)
+			{
+				// If the file is a directory OR we dont have permission to
+				// write, return false
+				if (f.isDirectory() || !f.canWrite())
+					return false;
+
+				// Check to make sure the file is a file (not a directory) and
+				// ends with .ssf (Simulation State File)
+				if (f.isFile() && f.getName().toLowerCase().endsWith(SSF_FILE_EXT))
+				{
+					return true;
+				}
+
+				return false;
+			}
+		};
 	}
 
 	public static void main(String[] args)

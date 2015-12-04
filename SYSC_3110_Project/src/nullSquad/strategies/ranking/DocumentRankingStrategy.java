@@ -3,6 +3,7 @@ package nullSquad.strategies.ranking;
 import nullSquad.filesharingsystem.document.*;
 import nullSquad.filesharingsystem.users.*;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -10,7 +11,7 @@ import java.util.*;
  * 
  * @author MVezina
  */
-public interface DocumentRankingStrategy extends Comparator<Document>
+public interface DocumentRankingStrategy extends Comparator<Document>, Serializable
 {
 	/**
 	 * Enumeration for all possible strategies

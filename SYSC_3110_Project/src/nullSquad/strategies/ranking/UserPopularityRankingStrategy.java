@@ -14,6 +14,8 @@ import nullSquad.filesharingsystem.users.User;
  */
 public class UserPopularityRankingStrategy implements DocumentRankingStrategy
 {
+	/* Serializable ID */
+	private static final long serialVersionUID = 1L;
 
 	@Override
 	public List<Document> rankDocuments(List<Document> allDocuments, User user)
@@ -56,7 +58,6 @@ public class UserPopularityRankingStrategy implements DocumentRankingStrategy
 		if (document1 != null && document2 == null)
 			return 1;
 
-	
 		// Return the difference of the two user popularity averages
 		return (int) (getAverageUserPopularity(document1) - getAverageUserPopularity(document2));
 	}
@@ -64,7 +65,7 @@ public class UserPopularityRankingStrategy implements DocumentRankingStrategy
 	private float getAverageUserPopularity(Document d)
 	{
 		float avgUserPopularity = 0;
-		
+
 		// Determine the overall popularity of all likers of document 1
 		for (User u : d.getUserLikes())
 		{
@@ -74,7 +75,7 @@ public class UserPopularityRankingStrategy implements DocumentRankingStrategy
 		// Prevent division by 0
 		if (d.getUserLikes().size() != 0)
 			avgUserPopularity /= d.getUserLikes().size();
-		
+
 		return avgUserPopularity;
 	}
 

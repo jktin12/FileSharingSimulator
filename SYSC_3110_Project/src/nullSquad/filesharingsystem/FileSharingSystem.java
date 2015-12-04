@@ -7,20 +7,26 @@
 package nullSquad.filesharingsystem;
 
 import nullSquad.filesharingsystem.users.*;
-import nullSquad.simulator.gui.SimulatorGUI;
+import nullSquad.simulator.Simulator;
+import nullSquad.simulator.XMLSerializable;
 import nullSquad.filesharingsystem.document.*;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
+import javax.swing.event.ListDataListener;
 
 /**
  * Represents the FileSharingSystem
  * 
  * @author Justin Krol
  */
-public class FileSharingSystem
+public class FileSharingSystem implements XMLSerializable
 {
 	private int nextAvailableUserID = 1;
 	private int nextAvailableDocID = 1;
@@ -112,7 +118,7 @@ public class FileSharingSystem
 
 		usersListModel.removeElement(user);
 
-		SimulatorGUI.appendLog("File Sharing System: User " + user.getUserName() + " has been removed from the File Sharing System");
+		Simulator.appendLineLog("File Sharing System: User " + user.getUserName() + " has been removed from the File Sharing System");
 		return true;
 
 	}
@@ -136,7 +142,7 @@ public class FileSharingSystem
 		if (topK < 0)
 			topK = Math.abs(topK);
 
-		SimulatorGUI.appendLog("User: " + user.getUserName() + " has Searched for " + topK + " documents with Tag: " + tag);
+		Simulator.appendLineLog("User: " + user.getUserName() + " has Searched for " + topK + " documents with Tag: " + tag);
 
 		List<Document> documentList = new ArrayList<>();
 
@@ -234,7 +240,7 @@ public class FileSharingSystem
 
 			doc.setDocumentID(nextAvailableDocID++);
 			documentsListModel.addElement(doc);
-			SimulatorGUI.appendLog("File Sharing System: Document '" + doc.getDocumentName() + "' has been uploaded");
+			Simulator.appendLineLog("File Sharing System: Document '" + doc.getDocumentName() + "' has been uploaded");
 
 			return true;
 		}
@@ -360,6 +366,27 @@ public class FileSharingSystem
 	public List<String> getTags()
 	{
 		return tags;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see nullSquad.simulator.XMLSerializable#toXML()
+	 */
+	@Override
+	public String toXML()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see nullSquad.simulator.XMLSerializable#readXML(java.lang.String)
+	 */
+	@Override
+	public void importFromXML(String xmlObject)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 }

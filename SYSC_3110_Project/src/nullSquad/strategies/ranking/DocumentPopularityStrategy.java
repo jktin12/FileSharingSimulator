@@ -16,6 +16,10 @@ import nullSquad.filesharingsystem.users.User;
 public class DocumentPopularityStrategy implements DocumentRankingStrategy, Comparator<Document>
 {
 
+	/* Serializable ID */
+	private static final long serialVersionUID = 1L;
+	
+	
 	@Override
 	public List<Document> rankDocuments(List<Document> allDocuments, User user)
 	{

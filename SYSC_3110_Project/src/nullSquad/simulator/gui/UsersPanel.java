@@ -21,6 +21,9 @@ import nullSquad.strategies.ranking.DocumentRankingStrategy;
 public class UsersPanel extends JPanel implements ListDataListener, ListCellRenderer<User>, UserPayoffListener
 {
 
+	/* Serializable ID */
+	private static final long serialVersionUID = 1L;
+	
 	// All SubPanels
 	private JScrollPane consumersListScrollPane;
 	private JScrollPane producersListScrollPane;

@@ -16,6 +16,10 @@ import nullSquad.filesharingsystem.users.*;
  */
 public class DocumentLikeEvent extends EventObject
 {
+	
+	/* Serializable ID */
+	private static final long serialVersionUID = 1L;
+	
 	private Document documentSource;
 	private User user;
 

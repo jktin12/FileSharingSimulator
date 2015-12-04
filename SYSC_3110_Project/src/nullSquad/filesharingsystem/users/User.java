@@ -9,6 +9,7 @@ package nullSquad.filesharingsystem.users;
 import java.util.*;
 import nullSquad.filesharingsystem.*;
 import nullSquad.filesharingsystem.document.*;
+import nullSquad.simulator.XMLSerializable;
 import nullSquad.strategies.ranking.DocumentRankingStrategy;
 
 /**
@@ -16,8 +17,9 @@ import nullSquad.strategies.ranking.DocumentRankingStrategy;
  * 
  * @author MVezina
  */
-public abstract class User
+public abstract class User implements XMLSerializable
 {
+	
 	private DocumentRankingStrategy.Strategy searchStrategy;
 	protected int userID;
 	protected String userName;

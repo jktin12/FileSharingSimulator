@@ -1,7 +1,7 @@
 package nullSquad.strategies.act;
 
 import nullSquad.filesharingsystem.users.*;
-import nullSquad.simulator.gui.SimulatorGUI;
+import nullSquad.simulator.Simulator;
 import nullSquad.filesharingsystem.document.*;
 
 import java.util.*;
@@ -12,6 +12,8 @@ import nullSquad.filesharingsystem.*;
 
 public class DefaultProducerActStrategy implements ProducerActStrategy{
 	
+	/* Serializable ID */
+	private static final long serialVersionUID = 1L;
 	
 	public void act(Producer producer, FileSharingSystem fileSharingSystem, int kResults)
 	{
@@ -23,7 +25,7 @@ public class DefaultProducerActStrategy implements ProducerActStrategy{
 		
 		
 		// Append Results to log
-		SimulatorGUI.appendLog("Search: Returned " + documentResults.size() + " documents");
+		Simulator.appendLineLog("Search: Returned " + documentResults.size() + " documents");
 		
 		// Search the file sharing system for top K documents
 		for (Document d : documentResults)

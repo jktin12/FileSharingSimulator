@@ -4,12 +4,15 @@ import java.util.List;
 import java.util.Random;
 
 import nullSquad.filesharingsystem.users.*;
-import nullSquad.simulator.gui.SimulatorGUI;
+import nullSquad.simulator.Simulator;
 import nullSquad.filesharingsystem.document.*;
 import nullSquad.filesharingsystem.*;
 
 public class SimilarityActStrategy implements ProducerActStrategy {
 
+	
+	/* Serializable ID */
+	private static final long serialVersionUID = 1L;
 	
 	@Override
 	public void act(Producer producer, FileSharingSystem fileSharingSystem, int kResults) {
@@ -32,7 +35,7 @@ public class SimilarityActStrategy implements ProducerActStrategy {
 		
 		// Search the file sharing system for the new tag
 		List<Document> documentResults = fileSharingSystem.search(producer, newTaste, kResults);
-		SimulatorGUI.appendLog("Search: Returned " + documentResults.size() + " documents");
+		Simulator.appendLineLog("Search: Returned " + documentResults.size() + " documents");
 		
 		for(Document d : documentResults)
 		{

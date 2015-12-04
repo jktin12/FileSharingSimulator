@@ -9,7 +9,9 @@ import javax.swing.*;
  */
 public class SimulatorPanel extends JPanel
 {
-
+	/* Serializable ID */
+	private static final long serialVersionUID = 1L;
+	
 	private JTextArea mainSimulatorTextArea;
 
 	/**

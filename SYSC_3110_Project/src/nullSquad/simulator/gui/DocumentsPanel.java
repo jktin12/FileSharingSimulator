@@ -19,6 +19,9 @@ import nullSquad.filesharingsystem.document.DocumentLikeListener;
 public class DocumentsPanel extends JPanel implements ListCellRenderer<Document>, DocumentLikeListener, ListDataListener
 {
 
+	/* Serializable ID */
+	private static final long serialVersionUID = 1L;
+	
 	/* 'Documents' tab content */
 	private JList<Document> documentsJList;
 	private DefaultListModel<Document> allDocumentsListModel;

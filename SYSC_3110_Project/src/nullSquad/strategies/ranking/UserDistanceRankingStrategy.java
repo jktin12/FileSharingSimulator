@@ -7,15 +7,17 @@ import java.util.List;
 import nullSquad.filesharingsystem.document.Document;
 import nullSquad.filesharingsystem.users.User;
 
-
 /**
  * User Distance Ranking Strategy
  * 
  * @author Justin Krol
- *
  */
 public class UserDistanceRankingStrategy implements DocumentRankingStrategy
 {
+
+	/* Serializable ID */
+	private static final long serialVersionUID = 1L;
+	
 	private User user;
 	private final int MAX_DEPTH_TO_SEARCH = 4;
 
@@ -60,15 +62,15 @@ public class UserDistanceRankingStrategy implements DocumentRankingStrategy
 		// Compare documents in terms of immediacy of friends
 		// Need to call getFriendDistance() on both documents.
 		// If using the recursive solution, use arguments:
-		//		user
-		//		document
-		//		depth (should be 1)
-		
+		// user
+		// document
+		// depth (should be 1)
+
 		int doc1_val = MAX_DEPTH_TO_SEARCH, doc2_val = MAX_DEPTH_TO_SEARCH;
 
 		doc1_val = getFriendDistance(user, doc1, 1);
 		doc2_val = getFriendDistance(user, doc2, 1);
-		
+
 		if (doc1_val < doc2_val)
 		{
 			return 1;
@@ -82,45 +84,76 @@ public class UserDistanceRankingStrategy implements DocumentRankingStrategy
 			return 0;
 		}
 	}
-	
+
 	/**
-	 * Recursive solution
-	 * 
-	 * Checks up to the MAX_DEPTH_TO_SEARCH
-	 * pre: given user and document, as well as current ranking (this is important 
-	 * as the recursions gets deeper so that it knows when it should stop looking)
-	 * post: returns the number of layers of friends before one is found that likes the document
-	 * 		 If none is found, then the final return value will be MAX_DEPTH_TO_SEARCH + 1.
+	 * Recursive solution Checks up to the MAX_DEPTH_TO_SEARCH pre: given user
+	 * and document, as well as current ranking (this is important as the
+	 * recursions gets deeper so that it knows when it should stop looking)
+	 * post: returns the number of layers of friends before one is found that
+	 * likes the document If none is found, then the final return value will be
+	 * MAX_DEPTH_TO_SEARCH + 1.
 	 */
-	private int getFriendDistance(User user, Document doc, int depth){
-		int minDepth = MAX_DEPTH_TO_SEARCH;		//i.e. starts off greater than all other possible depths
-		int tempDepth = 0;						//reset with every recursive call at a specific depth
-		
-		//Base Case: One of this user's friends likes the document
+	private int getFriendDistance(User user, Document doc, int depth)
+	{
+		int minDepth = MAX_DEPTH_TO_SEARCH; // i.e. starts off greater than all
+											// other possible depths
+		int tempDepth = 0; // reset with every recursive call at a specific
+							// depth
+
+		// Base Case: One of this user's friends likes the document
 		if (docLikedByFriend(user, doc))
 		{
-			return 1;		//return 1 to represent a distance of one friend
+			return 1; // return 1 to represent a distance of one friend
 		}
-		
-		//If none of this user's friends like the document.
-		else{
-			if(depth < MAX_DEPTH_TO_SEARCH){		//if we are at less than the maximum allowable depth
-				for(User u: getFriendsList(user)){	//for every user in this user's friend list		
-					tempDepth = getFriendDistance(u, doc, depth+1); //get the distance to a liker of the document
-																	//pass depth+1 to indicate another layer of depth,
-																	//so that the recursion does not continue forever.
-					if(tempDepth < minDepth){		//if the depth for this user is less than the previous minimum,	
-						minDepth = tempDepth;		//set it as the new minimum.
+
+		// If none of this user's friends like the document.
+		else
+		{
+			if (depth < MAX_DEPTH_TO_SEARCH)
+			{ // if we are at less than the maximum allowable depth
+				for (User u : getFriendsList(user))
+				{ // for every user in this user's friend list
+					tempDepth = getFriendDistance(u, doc, depth + 1); // get the
+																		// distance
+																		// to a
+																		// liker
+																		// of
+																		// the
+																		// document
+																		// pass
+																		// depth+1
+																		// to
+																		// indicate
+																		// another
+																		// layer
+																		// of
+																		// depth,
+																		// so
+																		// that
+																		// the
+																		// recursion
+																		// does
+																		// not
+																		// continue
+																		// forever.
+					if (tempDepth < minDepth)
+					{ // if the depth for this user is less than the previous
+						// minimum,
+						minDepth = tempDepth; // set it as the new minimum.
 					}
 				}
-				return minDepth + 1;	// return the minimum depth obtained
-										// +1 to factor in the current level of depth.
+				return minDepth + 1; // return the minimum depth obtained
+										// +1 to factor in the current level of
+										// depth.
 			}
-			else{
-				//if the depth is at the max searchable, add 1 for this depth and one for the 
-				//next depth which will not be searched.  
-				//Final return value should end up being MAX_DEPTH_TO_SEARCH + 1
-				
+			else
+			{
+				// if the depth is at the max searchable, add 1 for this depth
+				// and one for the
+				// next depth which will not be searched.
+				// Final return value should end up being MAX_DEPTH_TO_SEARCH +
+				// 1
+
 				return 2;
 			}
 		}

@@ -15,6 +15,9 @@ import nullSquad.filesharingsystem.users.User;
  */
 public class LikesSimilarityRankingStrategy implements DocumentRankingStrategy
 {
+	/* Serializable ID */
+	private static final long serialVersionUID = 1L;
+	
 	private User user;
 
 	@Override

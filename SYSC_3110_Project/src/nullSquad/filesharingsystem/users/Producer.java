@@ -8,7 +8,7 @@ package nullSquad.filesharingsystem.users;
 
 import nullSquad.filesharingsystem.*;
 import nullSquad.filesharingsystem.document.*;
-import nullSquad.simulator.gui.SimulatorGUI;
+import nullSquad.simulator.Simulator;
 
 import java.util.*;
 
@@ -25,6 +25,7 @@ import nullSquad.strategies.ranking.DocumentRankingStrategy;
  */
 public class Producer extends User implements ProducerPayoffStrategy, DocumentLikeListener
 {
+
 	// The list of documents that the producer has produced
 	private List<Document> docsProduced;
 
@@ -123,7 +124,7 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 		// status
 		if (super.addFollower(user))
 		{
-			SimulatorGUI.appendLog(this.getUserName() + " has been followed by " + user.getUserName() + ". Updated Producer Payoff: " + calculatePayoff());
+			Simulator.appendLineLog(this.getUserName() + " has been followed by " + user.getUserName() + ". Updated Producer Payoff: " + calculatePayoff());
 			return true;
 		}
 		return false;
@@ -279,7 +280,7 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 		if (docLikeEvent.getDocument().getProducer().equals(this))
 		{
 			// Calculate and print the payoff
-			SimulatorGUI.appendLog(docLikeEvent.getLikingUser().getUserName() + " has liked '" + docLikeEvent.getDocument().getDocumentName() + "'. " + docLikeEvent.getDocument().getProducer().getUserName() + " Payoff: " + calculatePayoff());
+			Simulator.appendLineLog(docLikeEvent.getLikingUser().getUserName() + " has liked '" + docLikeEvent.getDocument().getDocumentName() + "'. " + docLikeEvent.getDocument().getProducer().getUserName() + " Payoff: " + calculatePayoff());
 		}
 
 	}
@@ -301,6 +302,26 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 				upl.payoffUpdated(new UserPayoffEvent(this));
 			}
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see nullSquad.simulator.XMLSerializable#toXML()
+	 */
+	@Override
+	public String toXML()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see nullSquad.simulator.XMLSerializable#importFromXML(java.lang.String)
+	 */
+	@Override
+	public void importFromXML(String xmlObject)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 }

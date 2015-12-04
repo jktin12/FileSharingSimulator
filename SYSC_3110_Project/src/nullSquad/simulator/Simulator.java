@@ -1,18 +1,19 @@
 package nullSquad.simulator;
 
 import java.util.Random;
-
 import nullSquad.filesharingsystem.*;
 import nullSquad.filesharingsystem.users.*;
-import nullSquad.simulator.gui.SimulatorGUI;
 
-public class Simulator
+public class Simulator implements XMLSerializable
 {
 
 	private FileSharingSystem fileSharingSystem;
 	private int currentSimulatorSequence;
 	private int totalSimulatorSequences;
 	private Random randomNumber;
+
+	// The log text
+	public static String logText = "Welcome to the Simulator!\n\n";
 
 	public Simulator(FileSharingSystem fileSharingSystem, int totalSequences)
 	{
@@ -43,11 +44,11 @@ public class Simulator
 		User randomUser = fileSharingSystem.getUsers().get(randomNumber.nextInt(fileSharingSystem.getUsers().size()));
 
 		String startText = " === " + randomUser.getUserName() + " has been called to act: === ";
-		SimulatorGUI.appendLog(startText);
+		Simulator.appendLineLog(startText);
 
 		randomUser.act(fileSharingSystem, 10);
 
-		SimulatorGUI.appendLog("\n");
+		Simulator.appendLineLog("\n");
 
 		// Add the payoff iteration for each user
 		for (User u : fileSharingSystem.getUsers())
@@ -102,6 +103,49 @@ public class Simulator
 	public int getTotalSimulatorSequences()
 	{
 		return totalSimulatorSequences;
+	}
+
+	/**
+	 * Appends text t to log text
+	 * 
+	 * @param t The text to be appended
+	 */
+	public static void appendLineLog(String t)
+	{
+		appendLog(t + "\n");
+	}
+
+	public static void appendLog(String t)
+	{
+		logText += t;
+	}
+
+	/**
+	 * Clears log text
+	 */
+	public static void clearLog()
+	{
+		logText = "";
+	}
+
+	/* (non-Javadoc)
+	 * @see nullSquad.simulator.XMLSerializable#toXML()
+	 */
+	@Override
+	public String toXML()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see nullSquad.simulator.XMLSerializable#readXML(java.lang.String)
+	 */
+	@Override
+	public void importFromXML(String xmlObject)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 }

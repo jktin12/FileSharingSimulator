@@ -8,7 +8,7 @@ package nullSquad.filesharingsystem.users;
 
 import nullSquad.filesharingsystem.*;
 import nullSquad.filesharingsystem.document.*;
-import nullSquad.simulator.gui.SimulatorGUI;
+import nullSquad.simulator.Simulator;
 import nullSquad.strategies.payoff.ConsumerPayoffStrategy;
 import nullSquad.strategies.ranking.DocumentRankingStrategy;
 
@@ -24,6 +24,7 @@ import java.util.*;
 public class Consumer extends User implements ConsumerPayoffStrategy
 {
 
+	
 	// The Consumer Payoff Strategy to be used
 	private ConsumerPayoffStrategy payoffStrategy;
 	private int currentPayoff;
@@ -94,7 +95,7 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 		// Calculates the payoff of the search results
 		int payoff = calculatePayoff(documentResults);
 
-		SimulatorGUI.appendLog("Search: Returned " + documentResults.size() + " documents (Result Payoff: " + payoff + ")");
+		Simulator.appendLineLog("Search: Returned " + documentResults.size() + " documents (Result Payoff: " + payoff + ")");
 
 		// Like all documents that match the users taste
 		for (Document d : documentResults)
@@ -195,6 +196,26 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 			}
 
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see nullSquad.simulator.XMLSerializable#toXML()
+	 */
+	@Override
+	public String toXML()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see nullSquad.simulator.XMLSerializable#importFromXML(java.lang.String)
+	 */
+	@Override
+	public void importFromXML(String xmlObject)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 }

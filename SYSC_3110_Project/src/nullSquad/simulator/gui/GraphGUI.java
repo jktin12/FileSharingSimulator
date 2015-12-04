@@ -17,6 +17,9 @@ import org.jfree.data.xy.XYSeriesCollection;
 public class GraphGUI extends JFrame implements UserPayoffListener
 {
 
+	/* Serializable ID */
+	private static final long serialVersionUID = 1L;
+	
 	private JFreeChart chart;
 	private User userInfo;
 	private XYSeriesCollection xySeriesCollection;
@@ -141,6 +144,11 @@ public class GraphGUI extends JFrame implements UserPayoffListener
  */
 class GraphPanel extends JPanel
 {
+	
+	/* Serializable ID */
+	private static final long serialVersionUID = 1L;
+	
+	
 	private GraphGUI mainFrame;
 
 	public GraphPanel(GraphGUI mainFrame)

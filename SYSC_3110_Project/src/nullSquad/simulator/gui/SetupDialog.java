@@ -1,6 +1,7 @@
 package nullSquad.simulator.gui;
 
 import java.awt.Color;
+import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,9 +9,11 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
 
-public class SetupDialog
+public class SetupDialog implements Serializable
 {
-
+	/* Serializable ID */
+	private static final long serialVersionUID = 1L;
+	
 	private JFormattedTextField numProducersTextField;
 	private JFormattedTextField numConsumersTextField;
 	private JTextField tagsTextField;

@@ -6,16 +6,19 @@
  */
 package nullSquad.filesharingsystem.document;
 
+import java.io.Serializable;
 import java.util.*;
 import nullSquad.filesharingsystem.users.*;
+import nullSquad.simulator.XMLSerializable;
 
 /**
  * Document class represents a document that is produced by a producer
  * @author Marc Tebo
  *
  */
-public class Document
+public class Document implements XMLSerializable
 {
+	
 	private String name;
 	private String tag;
 	private int docID;
@@ -215,6 +218,28 @@ public class Document
 	public void setDocumentID(int docID)
 	{
 		this.docID = docID;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see nullSquad.simulator.XMLSerializable#toXML()
+	 */
+	@Override
+	public String toXML()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see nullSquad.simulator.XMLSerializable#readXML(java.lang.String)
+	 */
+	@Override
+	public void importFromXML(String xmlObject)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

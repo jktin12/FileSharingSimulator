@@ -1,9 +1,11 @@
 package nullSquad.strategies.act;
 
+import java.io.Serializable;
+
 import nullSquad.filesharingsystem.*;
 import nullSquad.filesharingsystem.users.*;
 
-public interface ProducerActStrategy {
+public interface ProducerActStrategy extends Serializable{
 	
 	/**
 	 * Enumeration used to hold all Producer Act Strategies
