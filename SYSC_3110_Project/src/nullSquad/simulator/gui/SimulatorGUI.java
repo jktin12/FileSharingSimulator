@@ -374,11 +374,11 @@ public class SimulatorGUI extends JFrame
 
 	public static void main(String[] args) throws Exception
 	{
-		// new SimulatorGUI("Simulator");
+		new SimulatorGUI("Simulator");
 		
-		testXMLSerialization();
+		//testXMLSerialization();
 		
-		System.exit(0);
+		//System.exit(0);
 
 	}
 
