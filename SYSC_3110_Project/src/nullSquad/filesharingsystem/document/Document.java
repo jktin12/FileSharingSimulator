@@ -221,7 +221,8 @@ public class Document implements XMLSerializable
 	}
 
 
-	/* (non-Javadoc)
+	/** 
+	 * @author Marc Tebo
 	 * @see nullSquad.simulator.XMLSerializable#toXML()
 	 */
 	@Override
@@ -232,7 +233,8 @@ public class Document implements XMLSerializable
 	}
 
 
-	/* (non-Javadoc)
+	/**
+	 * @author Marc Tebo
 	 * @see nullSquad.simulator.XMLSerializable#readXML(java.lang.String)
 	 */
 	@Override
