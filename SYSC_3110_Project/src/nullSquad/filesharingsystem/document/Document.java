@@ -9,7 +9,7 @@ package nullSquad.filesharingsystem.document;
 import java.io.Serializable;
 import java.util.*;
 
-import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import nullSquad.filesharingsystem.users.*;
 import nullSquad.simulator.XMLSerializable;
@@ -241,7 +241,7 @@ public class Document implements XMLSerializable
 	 * @see nullSquad.simulator.XMLSerializable#readXML(java.lang.String)
 	 */
 	@Override
-	public void importFromXML(Element root)
+	public void importFromXML(Node root)
 	{
 		// TODO Auto-generated method stub
 		

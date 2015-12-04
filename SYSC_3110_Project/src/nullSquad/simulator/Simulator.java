@@ -2,23 +2,15 @@ package nullSquad.simulator;
 
 import java.util.Random;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.w3c.dom.Element;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
+import javax.xml.parsers.*;
+import org.w3c.dom.*;
 
 import nullSquad.filesharingsystem.*;
 import nullSquad.filesharingsystem.users.*;
 
 public class Simulator implements XMLSerializable
 {
-
+	public static final String NODE_NAME = "simulator";
 	private FileSharingSystem fileSharingSystem;
 	private int currentSimulatorSequence;
 	private int totalSimulatorSequences;
@@ -141,42 +133,62 @@ public class Simulator implements XMLSerializable
 	}
 
 	/* (non-Javadoc)
-	 * @see nullSquad.simulator.XMLSerializable#toXML()
-	 */
+	 * 
+	 * @see nullSquad.simulator.XMLSerializable#toXML() */
 	@Override
 	public String toXML()
 	{
 		String xmlStr = "<simulator>\n";
-		
+
 		xmlStr += fileSharingSystem.toXML();
-		
+
 		xmlStr += "<currentsimulatorsequence>";
 		xmlStr += currentSimulatorSequence;
 		xmlStr += "</currentsimulatorsequence>\n";
-		
+
 		xmlStr += "<totalsimulatorsequences>";
 		xmlStr += totalSimulatorSequences;
-		xmlStr += "</currentsimulatorsequence>\n";
-		
-		
+		xmlStr += "</totalsimulatorsequences>\n";
+
 		return xmlStr + "</simulator>\n";
 	}
 
 	/* (non-Javadoc)
-	 * @see nullSquad.simulator.XMLSerializable#readXML(java.lang.String)
-	 */
+	 * 
+	 * @see nullSquad.simulator.XMLSerializable#readXML(java.lang.String) */
 	@Override
-	public void importFromXML(Element rootNode)
+	public void importFromXML(Node rootNode)
 	{
-			if(rootNode.getNodeName().equals("simulator"))
+		if (rootNode.getNodeName().equals("simulator"))
+		{
+			NodeList allNodes = rootNode.getChildNodes();
+
+			for (int i = 0; i < allNodes.getLength(); i++)
 			{
-				
-				
-				
+				Node currNode = allNodes.item(i);
+				// Break from importing if another simulator is found
+				if (currNode.getNodeName().equals("simulator"))
+					break;
+
+				if (currNode.getNodeName().equals("currentsimulatorsequence"))
+				{
+					currentSimulatorSequence = Integer.parseInt(currNode.getTextContent());
+				}
+
+				if (currNode.getNodeName().equals("totalsimulatorsequences"))
+				{
+					currentSimulatorSequence = Integer.parseInt(currNode.getTextContent());
+				}
+
+				if (currNode.getNodeName().equals(FileSharingSystem.NODE_NAME))
+				{
+					fileSharingSystem.importFromXML(currNode);
+				}
+
 			}
-		
-		
-		
+
+		}
+
 	}
 
 }

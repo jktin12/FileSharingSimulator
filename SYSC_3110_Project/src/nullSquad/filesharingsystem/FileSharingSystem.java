@@ -21,7 +21,7 @@ import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.event.ListDataListener;
 
-import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 /**
  * Represents the FileSharingSystem
@@ -30,6 +30,8 @@ import org.w3c.dom.Element;
  */
 public class FileSharingSystem implements XMLSerializable
 {
+	public static final String NODE_NAME = "filesharingsystem";
+	
 	private int nextAvailableUserID = 1;
 	private int nextAvailableDocID = 1;
 	private DefaultListModel<User> usersListModel;
@@ -385,9 +387,9 @@ public class FileSharingSystem implements XMLSerializable
 	 * @see nullSquad.simulator.XMLSerializable#readXML(java.lang.String)
 	 */
 	@Override
-	public void importFromXML(Element root)
+	public void importFromXML(Node root)
 	{
-		// TODO Auto-generated method stub
+		System.out.println(root.getNodeName());
 		
 	}
 

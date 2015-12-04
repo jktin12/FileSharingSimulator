@@ -12,7 +12,7 @@ import nullSquad.simulator.Simulator;
 
 import java.util.*;
 
-import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import nullSquad.strategies.act.ProducerActStrategy;
 import nullSquad.strategies.payoff.ProducerPayoffStrategy;
@@ -325,7 +325,7 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 	 * @see nullSquad.simulator.XMLSerializable#importFromXML(java.lang.String)
 	 */
 	@Override
-	public void importFromXML(Element root)
+	public void importFromXML(Node root)
 	{
 		// TODO Auto-generated method stub
 		
