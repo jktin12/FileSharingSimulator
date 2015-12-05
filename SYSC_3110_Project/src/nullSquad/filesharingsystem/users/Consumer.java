@@ -26,8 +26,6 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 
 	private static final long serialVersionUID = -3413511102536759411L;
 
-	public static String NODE_NAME = "consumer";
-
 	// The Consumer Payoff Strategy to be used
 	private ConsumerPayoffStrategy payoffStrategy;
 	private int currentPayoff;

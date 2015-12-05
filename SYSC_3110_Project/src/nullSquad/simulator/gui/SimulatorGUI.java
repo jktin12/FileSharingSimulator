@@ -74,14 +74,6 @@ public class SimulatorGUI extends JFrame
 		// Run the setup dialog
 		SetupDialog sD = new SetupDialog(this);
 
-		int numProducers = 0, numConsumers = 0;
-
-		if (!sD.loadPreviousState())
-		{
-			// Set the values from the setup dialog
-			numProducers = sD.getNumProducers();
-			numConsumers = sD.getNumConsumers();
-		}
 		// Initialize the Simulator
 		simulator = new Simulator(new FileSharingSystem(sD.getTags()), sD.getTotalSimulationIterations());
 
@@ -147,11 +139,17 @@ public class SimulatorGUI extends JFrame
 		// Now we want to add any components to the GUI
 		InitializeFrameComponents();
 
-		// Generate the producers and consumers
-		simulator.createConsumers(numConsumers);
-		simulator.createProducers(numProducers);
+		if (!sD.loadPreviousState())
+		{
+			// Set the values from the setup dialog
+			int numProducers = sD.getNumProducers();
+			int numConsumers = sD.getNumConsumers();
 
-		if (sD.loadPreviousState())
+			// Generate the producers and consumers
+			simulator.createConsumers(numConsumers);
+			simulator.createProducers(numProducers);
+		}
+		else
 		{
 			restoreSimulatorState();
 		}
@@ -214,6 +212,7 @@ public class SimulatorGUI extends JFrame
 		restartSimulationButton = new JButton("Restart");
 		restartSimulationButton.addActionListener(click -> restartSimulation_Click());
 
+		// Create state save / restore / undo buttons
 		saveSimulatorButton = new JButton("Save State");
 		saveSimulatorButton.addActionListener(click -> saveSimulatorState());
 
@@ -241,18 +240,16 @@ public class SimulatorGUI extends JFrame
 	}
 
 	/**
+	 * Steps the simulator back
+	 * 
 	 * @author MVezina
 	 */
 	private void undoSimulator()
 	{
+		// Steps back and updates simulator panel information
 		simulator.stepBack();
-
 		updateSimulatorInfo();
 
-		if (simulator.canStepBack())
-		{
-			undoSimulatorButton.setEnabled(false);
-		}
 	}
 
 	/**
@@ -302,9 +299,9 @@ public class SimulatorGUI extends JFrame
 	private void stepSimulator_Click()
 	{
 		simulator.savePreviousState();
-		
+
 		simulator.simulationStep();
-	
+
 		this.updateSimulatorInfo();
 
 		// Repaint the frame
@@ -315,18 +312,23 @@ public class SimulatorGUI extends JFrame
 			JOptionPane.showMessageDialog(null, "The simulator has finished!", "Simulation Complete!", JOptionPane.INFORMATION_MESSAGE);
 		}
 
-		
 		documentsPanel.updateDocumentStats();
 		usersPanel.updateUserStats();
-		
 
 	}
 
+	/**
+	 * Updates the Simulator Panel Information (Including Control Buttons)
+	 * 
+	 * @author MVezina
+	 */
 	private void updateSimulatorInfo()
 	{
 		/* Set & Initialize Frame Properties / Components */
 		this.setTitle("Simulator (" + simulator.getCurrentSimulatorSequence() + "/" + simulator.getTotalSimulatorSequences() + ")");
 
+		// Enable/Disable undo button based on whether or not there is a
+		// previous step-back state
 		if (simulator.canStepBack())
 		{
 			undoSimulatorButton.setEnabled(true);
@@ -336,7 +338,8 @@ public class SimulatorGUI extends JFrame
 			undoSimulatorButton.setEnabled(false);
 		}
 
-		
+		// Enable / disable step/run buttons based on the number of sequences
+		// left
 		if (simulator.getCurrentSimulatorSequence() == simulator.getTotalSimulatorSequences())
 		{
 			stepSimulatorButton.setEnabled(false);
@@ -347,12 +350,17 @@ public class SimulatorGUI extends JFrame
 			stepSimulatorButton.setEnabled(true);
 			runSimulatorButton.setEnabled(true);
 		}
-		
+
 		// Set the log text box
 		simulatorPanel.setLogText(Simulator.logText);
 
 	}
 
+	/**
+	 * Restore a simulator state using a fileChooser dialog
+	 * 
+	 * @author MVezina
+	 */
 	private void restoreSimulatorState()
 	{
 		// Set title
@@ -366,6 +374,7 @@ public class SimulatorGUI extends JFrame
 
 			try
 			{
+				// Restore the simulator state
 				simulator.restoreState(new FileInputStream(fileChooser.getSelectedFile()));
 			} catch (Exception ex)
 			{
@@ -374,12 +383,17 @@ public class SimulatorGUI extends JFrame
 				System.exit(1);
 			}
 
-			this.simulatorPanel.setLogText(Simulator.logText);
+			// Update the simulator information panel
 			this.updateSimulatorInfo();
 		}
 
 	}
 
+	/**
+	 * Save the simulator state using a file chooser dialog
+	 * 
+	 * @author MVezina
+	 */
 	private void saveSimulatorState()
 	{
 
@@ -393,6 +407,7 @@ public class SimulatorGUI extends JFrame
 		{
 			try
 			{
+				// Save the simulator state
 				simulator.saveState(new FileOutputStream(fileChooser.getSelectedFile()));
 			} catch (Exception ex)
 			{
@@ -404,15 +419,16 @@ public class SimulatorGUI extends JFrame
 	}
 
 	/**
-	 * @return
+	 * Creates and return a new file filter used to filter out non-simulator
+	 * state files
+	 * 
+	 * @return The file filter
 	 * @author MVezina
 	 */
 	private FileFilter createSimulationStateFileFilter()
 	{
-
 		return new FileFilter()
 		{
-
 			@Override
 			public String getDescription()
 			{

@@ -28,8 +28,6 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 
 	private static final long serialVersionUID = -1183152556744639318L;
 
-	public static String NODE_NAME = "producer";
-
 	// The list of documents that the producer has produced
 	private List<Document> docsProduced;
 

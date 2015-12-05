@@ -3,21 +3,22 @@
  */
 package nullSquad.simulator.gui;
 
-import javax.swing.DefaultListModel;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
+import javax.swing.*;
+import javax.swing.event.*;
 
-import nullSquad.filesharingsystem.users.Consumer;
-import nullSquad.filesharingsystem.users.Producer;
-import nullSquad.filesharingsystem.users.User;
+import nullSquad.filesharingsystem.users.*;
 
 /**
+ * Used for the allUsersListModel to split Users into a producerList and a
+ * consumerList. This class needed to be separate from the class containing the
+ * JList due to problems with Serialization encountering a stack overflow
+ * 
  * @author MVezina
  */
 public class UserListHandler implements ListDataListener
 {
-	DefaultListModel<Producer> producerListModel;
-	DefaultListModel<Consumer> consumersListModel;
+	private DefaultListModel<Producer> producerListModel;
+	private DefaultListModel<Consumer> consumersListModel;
 
 	public UserListHandler(DefaultListModel<Producer> producerList, DefaultListModel<Consumer> consumerList)
 	{
@@ -25,19 +26,12 @@ public class UserListHandler implements ListDataListener
 		this.consumersListModel = consumerList;
 	}
 
-	@Override
-	public void intervalAdded(ListDataEvent e)
-	{
-		if (!(e.getSource() instanceof DefaultListModel<?>))
-			return;
-
-		resyncLists((DefaultListModel<?>) e.getSource());
-
-		// We want to add the newly added user object into the appropriate
-		// sub-list model and subscribe to payoff updates
-
-	}
-
+	/**
+	 * Clears Both Producer and Consumer Lists and synchronizes users
+	 * 
+	 * @param allUsers The list of all users
+	 * @author MVezina
+	 */
 	public void resyncLists(DefaultListModel<?> allUsers)
 	{
 		producerListModel.clear();
@@ -59,6 +53,16 @@ public class UserListHandler implements ListDataListener
 				consumersListModel.addElement((Consumer) newUser);
 			}
 		}
+
+	}
+
+	@Override
+	public void intervalAdded(ListDataEvent e)
+	{
+		if (!(e.getSource() instanceof DefaultListModel<?>))
+			return;
+
+		resyncLists((DefaultListModel<?>) e.getSource());
 
 	}
 

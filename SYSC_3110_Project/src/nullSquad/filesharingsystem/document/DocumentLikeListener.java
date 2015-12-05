@@ -13,6 +13,5 @@ import java.io.Serializable;
  */
 public interface DocumentLikeListener extends Serializable
 {
-	
 	public void DocumentLiked(DocumentLikeEvent docLikeEvent);
 }

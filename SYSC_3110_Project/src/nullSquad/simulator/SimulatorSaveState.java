@@ -6,6 +6,8 @@ package nullSquad.simulator;
 import java.io.Serializable;
 
 /**
+ * Represents a saved simulator state
+ * 
  * @author MVezina
  */
 public class SimulatorSaveState implements Serializable
@@ -20,11 +22,19 @@ public class SimulatorSaveState implements Serializable
 		this.logTextState = Simulator.logText;
 	}
 
+	/**
+	 * @return Get the log text
+	 * @author MVezina
+	 */
 	public String getLogText()
 	{
 		return this.logTextState;
 	}
 
+	/**
+	 * @return Get the simulator
+	 * @author MVezina
+	 */
 	public Simulator getSimulator()
 	{
 		return this.simulatorState;

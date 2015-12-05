@@ -16,7 +16,6 @@ import java.util.List;
 
 import javax.swing.DefaultListModel;
 
-
 /**
  * Represents the FileSharingSystem
  * 
@@ -24,11 +23,7 @@ import javax.swing.DefaultListModel;
  */
 public class FileSharingSystem implements Serializable
 {
-	
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 7503055761943137003L;
 	private int nextAvailableUserID = 1;
 	private int nextAvailableDocID = 1;
@@ -375,33 +370,31 @@ public class FileSharingSystem implements Serializable
 	}
 
 	/**
-	 * @param fileSharingSystem
+	 * Restores a previous state given the specified FileSharingSystem
+	 * 
+	 * @param fileSharingSystem The previous state to set this state to
 	 * @author MVezina
 	 */
 	public void restoreState(FileSharingSystem fileSharingSystem)
 	{
 		this.nextAvailableUserID = fileSharingSystem.nextAvailableUserID;
 		this.nextAvailableDocID = fileSharingSystem.nextAvailableDocID;
-		
+
 		this.usersListModel.clear();
 		this.documentsListModel.clear();
-		
+
 		DefaultListModel<Document> docsList = fileSharingSystem.documentsListModel;
 		DefaultListModel<User> userList = fileSharingSystem.usersListModel;
-		for(int i = 0; i < userList.size(); i++)
+		for (int i = 0; i < userList.size(); i++)
 		{
 			this.usersListModel.addElement(userList.getElementAt(i));
 		}
-		
-		for(int i = 0; i < docsList.size(); i++)
+
+		for (int i = 0; i < docsList.size(); i++)
 		{
 			this.documentsListModel.addElement(docsList.getElementAt(i));
 		}
-		
-		
-		
-		
-		
+
 	}
 
 }
