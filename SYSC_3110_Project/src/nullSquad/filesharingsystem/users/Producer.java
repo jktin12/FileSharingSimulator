@@ -12,8 +12,6 @@ import nullSquad.simulator.Simulator;
 
 import java.util.*;
 
-import org.w3c.dom.Node;
-
 import nullSquad.strategies.act.ProducerActStrategy;
 import nullSquad.strategies.payoff.ProducerPayoffStrategy;
 import nullSquad.strategies.ranking.DocumentRankingStrategy;
@@ -27,6 +25,8 @@ import nullSquad.strategies.ranking.DocumentRankingStrategy;
  */
 public class Producer extends User implements ProducerPayoffStrategy, DocumentLikeListener
 {
+
+	private static final long serialVersionUID = -1183152556744639318L;
 
 	public static String NODE_NAME = "producer";
 

@@ -9,8 +9,8 @@ import java.util.EventObject;
  */
 public class UserPayoffEvent extends EventObject
 {
-	
-	
+
+	private static final long serialVersionUID = -9096563796777825385L;
 	private User user;
 
 	public UserPayoffEvent(User sender)

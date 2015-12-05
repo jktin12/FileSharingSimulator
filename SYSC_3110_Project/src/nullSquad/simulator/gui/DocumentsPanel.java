@@ -3,13 +3,9 @@ package nullSquad.simulator.gui;
 import java.awt.Component;
 
 import javax.swing.*;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 
 import nullSquad.filesharingsystem.document.Document;
-import nullSquad.filesharingsystem.document.DocumentLikeEvent;
-import nullSquad.filesharingsystem.document.DocumentLikeListener;
 
 /**
  * Representation of the Documents Tab Panel
@@ -21,7 +17,7 @@ public class DocumentsPanel extends JPanel implements ListCellRenderer<Document>
 
 	/* Serializable ID */
 	private static final long serialVersionUID = 1L;
-	
+
 	/* 'Documents' tab content */
 	private JList<Document> documentsJList;
 	private DefaultListModel<Document> allDocumentsListModel;
@@ -65,7 +61,6 @@ public class DocumentsPanel extends JPanel implements ListCellRenderer<Document>
 		// Add the info panel to the document tab panel
 		this.add(documentListScrollPane);
 		this.add(documentStatsListPanel);
-		
 
 	}
 
@@ -95,14 +90,11 @@ public class DocumentsPanel extends JPanel implements ListCellRenderer<Document>
 
 	/**
 	 * Updates the document stats shown in the documents tab
-	 * 
-	 * @param selectedDoc The document currently selected. (null = No document
-	 *        is selected)
 	 */
 	public void updateDocumentStats()
 	{
 		Document selectedDoc = documentsJList.getSelectedValue();
-		
+
 		if (selectedDoc == null)
 		{
 			documentStatsLabel.setText("No Document Selected!");
@@ -146,7 +138,5 @@ public class DocumentsPanel extends JPanel implements ListCellRenderer<Document>
 
 		return label;
 	}
-
-
 
 }

@@ -9,8 +9,6 @@ package nullSquad.filesharingsystem.document;
 import java.io.Serializable;
 import java.util.*;
 
-import org.w3c.dom.Node;
-
 import nullSquad.filesharingsystem.users.*;
 
 /**

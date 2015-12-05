@@ -17,7 +17,6 @@ public class SimulatorSaveState implements Serializable
 	public SimulatorSaveState(Simulator simulator)
 	{
 		this.simulatorState = simulator;
-		
 		this.logTextState = Simulator.logText;
 	}
 

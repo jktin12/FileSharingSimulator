@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.Stack;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
@@ -18,7 +17,6 @@ import nullSquad.filesharingsystem.*;
 
 import nullSquad.filesharingsystem.users.*;
 import nullSquad.simulator.Simulator;
-import nullSquad.simulator.SimulatorSaveState;
 import nullSquad.filesharingsystem.document.*;
 
 /**
@@ -373,6 +371,7 @@ public class SimulatorGUI extends JFrame
 			{
 				JOptionPane.showMessageDialog(this, "Failed to Restore state From file!");
 				ex.printStackTrace();
+				System.exit(1);
 			}
 
 			this.simulatorPanel.setLogText(Simulator.logText);
