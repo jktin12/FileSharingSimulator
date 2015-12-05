@@ -19,7 +19,6 @@ public class SimulatorSaveState implements Serializable
 		this.simulatorState = simulator;
 		
 		this.logTextState = Simulator.logText;
-		System.out.println(logTextState);
 	}
 
 	public String getLogText()
