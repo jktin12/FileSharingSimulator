@@ -6,31 +6,19 @@ package nullSquad.simulator.gui;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
+import java.util.Stack;
 
 import javax.swing.*;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
 import javax.swing.filechooser.FileFilter;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import nullSquad.filesharingsystem.*;
 
 import nullSquad.filesharingsystem.users.*;
 import nullSquad.simulator.Simulator;
+import nullSquad.simulator.SimulatorSaveState;
 import nullSquad.filesharingsystem.document.*;
 
 /**
@@ -61,6 +49,9 @@ public class SimulatorGUI extends JFrame
 	private JButton stepSimulatorButton;
 	private JButton runSimulatorButton;
 	private JButton restartSimulationButton;
+	private JButton saveSimulatorButton;
+	private JButton restoreSimulatorButton;
+	private JButton undoSimulatorButton;
 	private JPanel simulatorControlsPanel;
 
 	private JFileChooser fileChooser;
@@ -85,10 +76,14 @@ public class SimulatorGUI extends JFrame
 		// Run the setup dialog
 		SetupDialog sD = new SetupDialog(this);
 
-		// Set the values from the setup dialog
-		int numProducers = sD.getNumProducers();
-		int numConsumers = sD.getNumConsumers();
+		int numProducers = 0, numConsumers = 0;
 
+		if (!sD.loadPreviousState())
+		{
+			// Set the values from the setup dialog
+			numProducers = sD.getNumProducers();
+			numConsumers = sD.getNumConsumers();
+		}
 		// Initialize the Simulator
 		simulator = new Simulator(new FileSharingSystem(sD.getTags()), sD.getTotalSimulationIterations());
 
@@ -158,6 +153,11 @@ public class SimulatorGUI extends JFrame
 		simulator.createConsumers(numConsumers);
 		simulator.createProducers(numProducers);
 
+		if (sD.loadPreviousState())
+		{
+			restoreSimulatorState();
+		}
+
 		// Pack the initialized components (Adjust sizes)
 		this.pack();
 
@@ -203,18 +203,28 @@ public class SimulatorGUI extends JFrame
 		mainTabPanel.add(tabbedMenuPane);
 
 		// stepSimulator JButton
-		stepSimulatorButton = new JButton("Step Simulator");
+		stepSimulatorButton = new JButton("Step");
 		stepSimulatorButton.addActionListener(click -> stepSimulator_Click());
-		stepSimulatorButton.setSize(new Dimension(90, 20));
+		// stepSimulatorButton.setSize(new Dimension(90, 20));
 
 		// runSimulator JButton
-		runSimulatorButton = new JButton("Run Simulator");
+		runSimulatorButton = new JButton("Run");
 		runSimulatorButton.addActionListener(click -> runSimulator_Click());
-		runSimulatorButton.setSize(new Dimension(90, 20));
+		// runSimulatorButton.setSize(new Dimension(90, 20));
 
 		// restartButton JButton
-		restartSimulationButton = new JButton("Restart Simulation");
+		restartSimulationButton = new JButton("Restart");
 		restartSimulationButton.addActionListener(click -> restartSimulation_Click());
+
+		saveSimulatorButton = new JButton("Save State");
+		saveSimulatorButton.addActionListener(click -> saveSimulatorState());
+
+		restoreSimulatorButton = new JButton("Restore State");
+		restoreSimulatorButton.addActionListener(click -> restoreSimulatorState());
+
+		undoSimulatorButton = new JButton("Undo");
+		undoSimulatorButton.setEnabled(false);
+		undoSimulatorButton.addActionListener(click -> undoSimulator());
 
 		// Create a panel solely for simulator controls
 		simulatorControlsPanel = new JPanel();
@@ -223,10 +233,28 @@ public class SimulatorGUI extends JFrame
 		simulatorControlsPanel.add(stepSimulatorButton);
 		simulatorControlsPanel.add(runSimulatorButton);
 		simulatorControlsPanel.add(restartSimulationButton);
+		simulatorControlsPanel.add(saveSimulatorButton);
+		simulatorControlsPanel.add(restoreSimulatorButton);
+		simulatorControlsPanel.add(undoSimulatorButton);
 		simulatorControlsPanel.setBorder(BorderFactory.createTitledBorder("Simulator Controls"));
 
 		this.add(mainTabPanel);
 		this.add(simulatorControlsPanel);
+	}
+
+	/**
+	 * @author MVezina
+	 */
+	private void undoSimulator()
+	{
+		simulator.stepBack();
+
+		updateSimulatorInfo();
+
+		if (simulator.canStepBack())
+		{
+			undoSimulatorButton.setEnabled(false);
+		}
 	}
 
 	/**
@@ -250,39 +278,6 @@ public class SimulatorGUI extends JFrame
 			new SimulatorGUI("Simulator");
 		}
 
-		 restoreSimulatorState();
-
-	}
-	
-	
-	public void saveState(OutputStream oS) throws IOException
-	{
-		if (oS == null)
-			return;
-
-		ObjectOutputStream oos = new ObjectOutputStream(oS);
-
-		oos.writeObject(this);
-		oos.close();
-	}
-
-	public void restoreState(InputStream iS) throws IOException, ClassNotFoundException
-	{
-		if (iS == null)
-			return;
-
-		ObjectInputStream oIS = new ObjectInputStream(iS);
-
-		Object inputObject = oIS.readObject();
-
-		oIS.close();
-
-		if (!(inputObject instanceof Simulator))
-		{
-			return;
-		}
-
-
 	}
 
 	/**
@@ -298,9 +293,7 @@ public class SimulatorGUI extends JFrame
 		{
 			stepSimulator_Click();
 		}
-		saveSimulatorState();
 
-		// saveSimulatorState();
 	}
 
 	/**
@@ -310,31 +303,56 @@ public class SimulatorGUI extends JFrame
 	 */
 	private void stepSimulator_Click()
 	{
+		simulator.savePreviousState();
+		
 		simulator.simulationStep();
-
-		// Set the title
-		this.setTitle("Simulator (" + simulator.getCurrentSimulatorSequence() + "/" + simulator.getTotalSimulatorSequences() + ")");
-
-		// Set the log text box
-		simulatorPanel.setLogText(Simulator.logText);
+	
+		this.updateSimulatorInfo();
 
 		// Repaint the frame
 		this.repaint();
 
 		if (simulator.getCurrentSimulatorSequence() == simulator.getTotalSimulatorSequences())
 		{
-			stepSimulatorButton.setEnabled(false);
-			runSimulatorButton.setEnabled(false);
-
 			JOptionPane.showMessageDialog(null, "The simulator has finished!", "Simulation Complete!", JOptionPane.INFORMATION_MESSAGE);
 		}
 
+		
+		documentsPanel.updateDocumentStats();
+		usersPanel.updateUserStats();
+		
+
 	}
 
-	private void updateFrameTitle()
+	private void updateSimulatorInfo()
 	{
 		/* Set & Initialize Frame Properties / Components */
 		this.setTitle("Simulator (" + simulator.getCurrentSimulatorSequence() + "/" + simulator.getTotalSimulatorSequences() + ")");
+
+		if (simulator.canStepBack())
+		{
+			undoSimulatorButton.setEnabled(true);
+		}
+		else
+		{
+			undoSimulatorButton.setEnabled(false);
+		}
+
+		
+		if (simulator.getCurrentSimulatorSequence() == simulator.getTotalSimulatorSequences())
+		{
+			stepSimulatorButton.setEnabled(false);
+			runSimulatorButton.setEnabled(false);
+		}
+		else
+		{
+			stepSimulatorButton.setEnabled(true);
+			runSimulatorButton.setEnabled(true);
+		}
+		
+		// Set the log text box
+		simulatorPanel.setLogText(Simulator.logText);
+
 	}
 
 	private void restoreSimulatorState()
@@ -356,10 +374,9 @@ public class SimulatorGUI extends JFrame
 				JOptionPane.showMessageDialog(this, "Failed to Restore state From file!");
 				ex.printStackTrace();
 			}
-			
-			
+
 			this.simulatorPanel.setLogText(Simulator.logText);
-			this.updateFrameTitle();
+			this.updateSimulatorInfo();
 		}
 
 	}

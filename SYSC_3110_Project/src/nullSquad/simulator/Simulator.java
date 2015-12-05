@@ -1,15 +1,17 @@
 package nullSquad.simulator;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOError;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Random;
+import java.util.Stack;
 
 import nullSquad.filesharingsystem.*;
 import nullSquad.filesharingsystem.users.*;
@@ -25,6 +27,7 @@ public class Simulator implements Serializable
 	private int currentSimulatorSequence;
 	private int totalSimulatorSequences;
 	private Random randomNumber;
+	byte[] previousState;
 
 	// The log text
 	public static String logText = "Welcome to the Simulator!\n\n";
@@ -35,6 +38,9 @@ public class Simulator implements Serializable
 		randomNumber = new Random();
 		this.currentSimulatorSequence = 0;
 		this.totalSimulatorSequences = totalSequences;
+
+		previousState = null;
+
 	}
 
 	/**
@@ -71,6 +77,22 @@ public class Simulator implements Serializable
 		}
 
 		currentSimulatorSequence++;
+
+	}
+
+	public void savePreviousState()
+	{
+		try
+		{
+			ByteArrayOutputStream bAOS = new ByteArrayOutputStream();
+			// Write the state to the output stream
+			saveState(bAOS);
+			previousState = (bAOS.toByteArray());
+		} catch (IOException e)
+		{
+			System.out.println("Failed to write save state to byte array");
+			e.printStackTrace();
+		}
 
 	}
 
@@ -126,9 +148,9 @@ public class Simulator implements Serializable
 
 		ObjectOutputStream oos = new ObjectOutputStream(oS);
 
-		oos.writeObject(this);
-		oos.writeObject(logText);
-		
+		SimulatorSaveState saveState = new SimulatorSaveState(this);
+
+		oos.writeObject(saveState);
 		oos.close();
 	}
 
@@ -141,26 +163,60 @@ public class Simulator implements Serializable
 
 		// Read the first (Simulator) object
 		Object inputObject = oIS.readObject();
-		
-		// Read the static object
-		logText = (String)oIS.readObject();
-		
-
 		oIS.close();
 
-		if (!(inputObject instanceof Simulator))
+		if (!(inputObject instanceof SimulatorSaveState))
 		{
 			return;
 		}
 
-		Simulator s = (Simulator) inputObject;
+		setCurrentState((SimulatorSaveState) inputObject);
 
-		this.currentSimulatorSequence = s.currentSimulatorSequence;
-		this.totalSimulatorSequences = s.totalSimulatorSequences;
+	}
 
-		this.randomNumber = s.randomNumber;
-		fileSharingSystem.restoreState(s.fileSharingSystem);
+	private void setCurrentState(SimulatorSaveState saveState)
+	{
 
+		Simulator simulator = saveState.getSimulator();
+		logText = saveState.getLogText();
+
+		this.currentSimulatorSequence = simulator.currentSimulatorSequence;
+		this.totalSimulatorSequences = simulator.totalSimulatorSequences;
+
+		this.randomNumber = simulator.randomNumber;
+		fileSharingSystem.restoreState(simulator.fileSharingSystem);
+
+		this.previousState = simulator.previousState;
+
+	}
+
+	public boolean canStepBack()
+	{
+		return previousState != null;
+	}
+
+	/**
+	 * @return
+	 * @author MVezina
+	 */
+	public void stepBack()
+	{
+		if (canStepBack())
+		{
+
+			try
+			{
+				ByteArrayInputStream bAIS = new ByteArrayInputStream(previousState);
+				restoreState(bAIS);
+				
+				previousState = null;
+				
+			} catch (ClassNotFoundException | IOException e)
+			{
+				System.out.println("Failed to restore state from stack!");
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**

@@ -23,7 +23,7 @@ public class UsersPanel extends JPanel implements ListCellRenderer<User>
 
 	/* Serializable ID */
 	private static final long serialVersionUID = 1L;
-	
+
 	// All SubPanels
 	private JScrollPane consumersListScrollPane;
 	private JScrollPane producersListScrollPane;
@@ -60,6 +60,8 @@ public class UsersPanel extends JPanel implements ListCellRenderer<User>
 	private JRadioButton userDistanceStrategyRadioButton;
 	private JRadioButton userPopularityStrategyRadioButton;
 
+	private User currentlySelectedUser;
+
 	/**
 	 * Creates the Users panel and all associated components
 	 * 
@@ -67,10 +69,10 @@ public class UsersPanel extends JPanel implements ListCellRenderer<User>
 	 */
 	public UsersPanel(DefaultListModel<User> allUsersListModel)
 	{
+		currentlySelectedUser = null;
 
 		// Set the users list model
 		this.allUsersListModel = allUsersListModel;
-		
 
 		// Create the users tab panel
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -78,8 +80,7 @@ public class UsersPanel extends JPanel implements ListCellRenderer<User>
 		// Initialize the list models
 		consumersListModel = new DefaultListModel<Consumer>();
 		producerListModel = new DefaultListModel<Producer>();
-		
-		
+
 		this.allUsersListModel.addListDataListener(new UserListHandler(producerListModel, consumersListModel));
 
 		// Create the Strategy Selection Panel
@@ -287,7 +288,8 @@ public class UsersPanel extends JPanel implements ListCellRenderer<User>
 				producersJList.getSelectionModel().clearSelection();
 
 				// Update the user stats label
-				updateUserStats(consumersJList.getSelectedValue());
+				currentlySelectedUser = (consumersJList.getSelectedValue());
+				updateUserStats();
 			}
 		}
 	}
@@ -328,7 +330,8 @@ public class UsersPanel extends JPanel implements ListCellRenderer<User>
 			if (producersJList.getSelectedIndex() >= 0)
 			{
 				consumersJList.getSelectionModel().clearSelection();
-				updateUserStats(producersJList.getSelectedValue());
+				currentlySelectedUser = (producersJList.getSelectedValue());
+				updateUserStats();
 			}
 		}
 	}
@@ -336,12 +339,12 @@ public class UsersPanel extends JPanel implements ListCellRenderer<User>
 	/**
 	 * Update the currently Selected user stats
 	 * 
-	 * @param user The Currently Selected user
 	 * @author MVezina
 	 */
-	private void updateUserStats(User user)
+	public void updateUserStats()
 	{
-		if (user == null)
+
+		if (currentlySelectedUser == null)
 		{
 			userStatsLabel.setText("No User is Selected!");
 			rankStrategySelectionPanel.setVisible(false);
@@ -353,24 +356,24 @@ public class UsersPanel extends JPanel implements ListCellRenderer<User>
 		String userStats = "<html>";
 		String newLine = "<br>";
 
-		userStats += ("<b>ID</b>: " + user.getUserID() + newLine);
-		userStats += ("<b>Name</b>: " + user.getUserName() + newLine);
-		userStats += ("<b>User Type</b>: " + (user instanceof Producer ? "Producer" : "Consumer") + " (Payoff: " + (user.getPayoffHistory().size() > 0 ? user.getPayoffHistory().get(user.getPayoffHistory().size() - 1) : 0) + ")" + newLine);
-		userStats += ("<b>Taste</b>: " + user.getTaste() + newLine);
-		userStats += ("<b>Followers</b>: " + user.getFollowers().size() + newLine);
-		userStats += ("<b>Following</b>: " + user.getFollowing().size() + newLine);
-		userStats += ("<b>Number of Documents Liked</b>: " + user.getLikedDocuments().size() + newLine);
+		userStats += ("<b>ID</b>: " + currentlySelectedUser.getUserID() + newLine);
+		userStats += ("<b>Name</b>: " + currentlySelectedUser.getUserName() + newLine);
+		userStats += ("<b>User Type</b>: " + (currentlySelectedUser instanceof Producer ? "Producer" : "Consumer") + " (Payoff: " + (currentlySelectedUser.getPayoffHistory().size() > 0 ? currentlySelectedUser.getPayoffHistory().get(currentlySelectedUser.getPayoffHistory().size() - 1) : 0) + ")" + newLine);
+		userStats += ("<b>Taste</b>: " + currentlySelectedUser.getTaste() + newLine);
+		userStats += ("<b>Followers</b>: " + currentlySelectedUser.getFollowers().size() + newLine);
+		userStats += ("<b>Following</b>: " + currentlySelectedUser.getFollowing().size() + newLine);
+		userStats += ("<b>Number of Documents Liked</b>: " + currentlySelectedUser.getLikedDocuments().size() + newLine);
 
-		if (user instanceof Producer)
+		if (currentlySelectedUser instanceof Producer)
 		{
-			userStats += ("<b>Number of Documents Produced</b>: " + ((Producer) user).getDocumentsProduced().size() + newLine);
+			userStats += ("<b>Number of Documents Produced</b>: " + ((Producer) currentlySelectedUser).getDocumentsProduced().size() + newLine);
 		}
 
 		// Set the label text (ending it with a closing HTML tag)
 		userStatsLabel.setText(userStats + "</html>");
 
 		// Determine which strategy is currently being used by the user
-		switch (user.getDocumentRankingStrategy())
+		switch (currentlySelectedUser.getDocumentRankingStrategy())
 		{
 			case DocumentPopularity:
 				documentPopularityStrategyRadioButton.setSelected(true);
@@ -391,10 +394,10 @@ public class UsersPanel extends JPanel implements ListCellRenderer<User>
 		}
 
 		// Determine which radio button is chosen when a producer is selected
-		if (user instanceof Producer)
+		if (currentlySelectedUser instanceof Producer)
 		{
 			// Create a temporary producer
-			Producer p = (Producer) user;
+			Producer p = (Producer) currentlySelectedUser;
 
 			switch (p.getActStrategyEnum())
 			{
@@ -447,8 +450,5 @@ public class UsersPanel extends JPanel implements ListCellRenderer<User>
 
 		return label;
 	}
-
-	
-
 
 }

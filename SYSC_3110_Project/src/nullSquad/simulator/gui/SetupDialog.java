@@ -19,6 +19,8 @@ public class SetupDialog implements Serializable
 	private JTextField tagsTextField;
 	private JFormattedTextField numSimulationIterationsTextField;
 
+	private boolean loadPreviousState;
+	
 	// The maximum number of characters a string can have
 	private final static int TAG_MAX_LENGTH = 20;
 
@@ -30,6 +32,8 @@ public class SetupDialog implements Serializable
 	 */
 	public SetupDialog(JFrame parent)
 	{
+		loadPreviousState = false;
+		
 		// Set up a basic integer number formatter (JTextField input can only
 		// take in digits)
 		NumberFormatter numFormatter = new NumberFormatter(NumberFormat.getInstance());
@@ -58,6 +62,9 @@ public class SetupDialog implements Serializable
 	 */
 	public int getTotalSimulationIterations()
 	{
+		if(numSimulationIterationsTextField.getText().trim().isEmpty())
+			return 0;
+		
 		return Integer.parseInt(numSimulationIterationsTextField.getText().replaceAll(",", "").trim());
 	}
 
@@ -67,6 +74,8 @@ public class SetupDialog implements Serializable
 	 */
 	public int getNumProducers()
 	{
+		if(numProducersTextField.getText().trim().isEmpty())
+			return 0;
 		return Integer.parseInt(numProducersTextField.getText().replaceAll(",", "").trim());
 	}
 
@@ -76,6 +85,9 @@ public class SetupDialog implements Serializable
 	 */
 	public int getNumConsumers()
 	{
+		if(numConsumersTextField.getText().trim().isEmpty())
+			return 0;
+		
 		return Integer.parseInt(numConsumersTextField.getText().replaceAll(",", "").trim());
 	}
 
@@ -117,6 +129,12 @@ public class SetupDialog implements Serializable
 			return true;
 		}
 	}
+	
+	
+	public boolean loadPreviousState()
+	{
+		return this.loadPreviousState;
+	}
 
 	/**
 	 * Show the SetupDialog
@@ -128,10 +146,18 @@ public class SetupDialog implements Serializable
 		// Components to be shown on the input dialog
 		JComponent[] components = new JComponent[] { new JLabel("Number of Producers: "), numProducersTextField, new JLabel("Number of Consumers: "), numConsumersTextField, new JLabel("Tags (Separated by Commas): "), tagsTextField, new JLabel("Maximum Steps to Run: "), numSimulationIterationsTextField, };
 
+		
+		if(JOptionPane.showConfirmDialog(parentFrame, "Would You Like to Load A Previously Saved Simulation State?","Load Simulation?", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+		{
+			loadPreviousState = true;
+			return;
+		}
+		
 		// Continue showing the dialog until valid entries are prevalent
 		while (true)
 		{
-
+			
+			
 			// Show the dialog
 			if (JOptionPane.showConfirmDialog(parentFrame, components, "Simulator Setup", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE) == JOptionPane.OK_OPTION)
 			{
