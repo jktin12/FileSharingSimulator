@@ -13,14 +13,14 @@ public class SetupDialog implements Serializable
 {
 	/* Serializable ID */
 	private static final long serialVersionUID = 1L;
-	
+
 	private JFormattedTextField numProducersTextField;
 	private JFormattedTextField numConsumersTextField;
 	private JTextField tagsTextField;
 	private JFormattedTextField numSimulationIterationsTextField;
 
 	private boolean loadPreviousState;
-	
+
 	// The maximum number of characters a string can have
 	private final static int TAG_MAX_LENGTH = 20;
 
@@ -33,7 +33,7 @@ public class SetupDialog implements Serializable
 	public SetupDialog(JFrame parent)
 	{
 		loadPreviousState = false;
-		
+
 		// Set up a basic integer number formatter (JTextField input can only
 		// take in digits)
 		NumberFormatter numFormatter = new NumberFormatter(NumberFormat.getInstance());
@@ -62,9 +62,9 @@ public class SetupDialog implements Serializable
 	 */
 	public int getTotalSimulationIterations()
 	{
-		if(numSimulationIterationsTextField.getText().trim().isEmpty())
+		if (numSimulationIterationsTextField.getText().trim().isEmpty())
 			return 0;
-		
+
 		return Integer.parseInt(numSimulationIterationsTextField.getText().replaceAll(",", "").trim());
 	}
 
@@ -74,7 +74,7 @@ public class SetupDialog implements Serializable
 	 */
 	public int getNumProducers()
 	{
-		if(numProducersTextField.getText().trim().isEmpty())
+		if (numProducersTextField.getText().trim().isEmpty())
 			return 0;
 		return Integer.parseInt(numProducersTextField.getText().replaceAll(",", "").trim());
 	}
@@ -85,9 +85,9 @@ public class SetupDialog implements Serializable
 	 */
 	public int getNumConsumers()
 	{
-		if(numConsumersTextField.getText().trim().isEmpty())
+		if (numConsumersTextField.getText().trim().isEmpty())
 			return 0;
-		
+
 		return Integer.parseInt(numConsumersTextField.getText().replaceAll(",", "").trim());
 	}
 
@@ -100,7 +100,7 @@ public class SetupDialog implements Serializable
 		List<String> list = new ArrayList<>();
 		for (String s : tagsTextField.getText().split(","))
 		{
-			// Truncanate the string based on the maximum length of a tag
+			// Truncate the string based on the maximum length of a tag
 			list.add(s.trim().substring(0, Math.min(TAG_MAX_LENGTH, s.trim().length())));
 		}
 
@@ -129,8 +129,12 @@ public class SetupDialog implements Serializable
 			return true;
 		}
 	}
-	
-	
+
+	/**
+	 * @return Boolean stating whether or not the user wants to load a previous
+	 *         state
+	 * @author MVezina
+	 */
 	public boolean loadPreviousState()
 	{
 		return this.loadPreviousState;
@@ -146,18 +150,16 @@ public class SetupDialog implements Serializable
 		// Components to be shown on the input dialog
 		JComponent[] components = new JComponent[] { new JLabel("Number of Producers: "), numProducersTextField, new JLabel("Number of Consumers: "), numConsumersTextField, new JLabel("Tags (Separated by Commas): "), tagsTextField, new JLabel("Maximum Steps to Run: "), numSimulationIterationsTextField, };
 
-		
-		if(JOptionPane.showConfirmDialog(parentFrame, "Would You Like to Load A Previously Saved Simulation State?","Load Simulation?", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+		if (JOptionPane.showConfirmDialog(parentFrame, "Would You Like to Load A Previously Saved Simulation State?", "Load Simulation?", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
 		{
 			loadPreviousState = true;
 			return;
 		}
-		
+
 		// Continue showing the dialog until valid entries are prevalent
 		while (true)
 		{
-			
-			
+
 			// Show the dialog
 			if (JOptionPane.showConfirmDialog(parentFrame, components, "Simulator Setup", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE) == JOptionPane.OK_OPTION)
 			{
