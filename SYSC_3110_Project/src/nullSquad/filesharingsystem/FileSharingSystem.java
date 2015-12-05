@@ -8,42 +8,28 @@ package nullSquad.filesharingsystem;
 
 import nullSquad.filesharingsystem.users.*;
 import nullSquad.simulator.Simulator;
-import nullSquad.simulator.XMLSerializable;
 import nullSquad.filesharingsystem.document.*;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
 
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * Represents the FileSharingSystem
  * 
  * @author Justin Krol
  */
-public class FileSharingSystem implements XMLSerializable
+public class FileSharingSystem implements Serializable
 {
-	public static final String NODE_NAME = "filesharingsystem";
+	
 
-	private static final String NODE_NAME_NEXTAVAILABLEUSERID = "nextavailableuserid";
-
-	private static final String NODE_NAME_NEXTAVAILABLEDOCID = "nextavailabledocid";
-
-	private static final String NODE_NAME_USERSLISTMODEL = "userslistmodel";
-
-	private static final String NODE_NAME_DOCSLISTMODEL = "docslistmodel";
-
-	private static final String NODE_NAME_TAG = "tag";
-
-	private static final String NODE_NAME_TAGS = "tags";
-
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7503055761943137003L;
 	private int nextAvailableUserID = 1;
 	private int nextAvailableDocID = 1;
 	private DefaultListModel<User> usersListModel;
@@ -388,112 +374,34 @@ public class FileSharingSystem implements XMLSerializable
 		return tags;
 	}
 
-	/* (non-Javadoc)
-	 * 
-	 * @see nullSquad.simulator.XMLSerializable#toXML() */
-	@Override
-	public String toXML()
+	/**
+	 * @param fileSharingSystem
+	 * @author MVezina
+	 */
+	public void restoreState(FileSharingSystem fileSharingSystem)
 	{
-		String xmlStr = "<" + NODE_NAME + ">\n";
-
-		xmlStr += "<" + NODE_NAME_NEXTAVAILABLEUSERID + ">";
-		xmlStr += nextAvailableUserID;
-		xmlStr += "</" + NODE_NAME_NEXTAVAILABLEUSERID + ">\n";
-
-		xmlStr += "<" + NODE_NAME_NEXTAVAILABLEDOCID + ">";
-		xmlStr += nextAvailableDocID;
-		xmlStr += "</" + NODE_NAME_NEXTAVAILABLEDOCID + ">\n";
-
-		xmlStr += "<" + NODE_NAME_USERSLISTMODEL + ">";
-
-		for (int i = 0; i < usersListModel.size(); i++)
+		this.nextAvailableUserID = fileSharingSystem.nextAvailableUserID;
+		this.nextAvailableDocID = fileSharingSystem.nextAvailableDocID;
+		
+		this.usersListModel.clear();
+		this.documentsListModel.clear();
+		
+		DefaultListModel<Document> docsList = fileSharingSystem.documentsListModel;
+		DefaultListModel<User> userList = fileSharingSystem.usersListModel;
+		for(int i = 0; i < userList.size(); i++)
 		{
-			xmlStr += usersListModel.getElementAt(i).toXML();
+			this.usersListModel.addElement(userList.getElementAt(i));
 		}
-
-		xmlStr += "</" + NODE_NAME_USERSLISTMODEL + ">\n";
-
-		xmlStr += "<" + NODE_NAME_DOCSLISTMODEL + ">";
-
-		for (int i = 0; i < documentsListModel.size(); i++)
+		
+		for(int i = 0; i < docsList.size(); i++)
 		{
-			xmlStr += documentsListModel.getElementAt(i).toXML();
+			this.documentsListModel.addElement(docsList.getElementAt(i));
 		}
-
-		xmlStr += "</" + NODE_NAME_DOCSLISTMODEL + ">\n";
-
-		xmlStr += "<" + NODE_NAME_TAGS + ">\n";
-
-		for (String s : tags)
-		{
-			xmlStr += "<" + NODE_NAME_TAG + ">" + s + "</" + NODE_NAME_TAG + ">\n";
-		}
-
-		xmlStr += "</" + NODE_NAME_TAGS + ">\n";
-
-		return xmlStr + "</" + NODE_NAME + ">\n";
-	}
-
-	public static FileSharingSystem createFileSharingSystemFromXML(Node root)
-	{
-		if (!root.getNodeName().equals(NODE_NAME))
-			return null;
-
-		FileSharingSystem fss = new FileSharingSystem(null);
-
-		NodeList allNodes = root.getChildNodes();
-
-		for (int i = 0; i < allNodes.getLength(); i++)
-		{
-			Node currNode = allNodes.item(i);
-
-			if (currNode.getNodeName().equals(NODE_NAME))
-				break;
-
-			if (currNode.getNodeName().equals(NODE_NAME_NEXTAVAILABLEUSERID))
-			{
-				fss.nextAvailableUserID = Integer.parseInt(currNode.getTextContent().trim());
-			}
-
-			if (currNode.getNodeName().equals(NODE_NAME_NEXTAVAILABLEDOCID))
-			{
-				fss.nextAvailableDocID = Integer.parseInt(currNode.getTextContent().trim());
-			}
-
-			if (currNode.getNodeName().equals(NODE_NAME_TAGS))
-			{
-				if (fss.tags == null)
-					fss.tags = new ArrayList<>();
-
-				// Clear tags
-				fss.tags.clear();
-
-				NodeList tagNodes = currNode.getChildNodes();
-
-				for (int t = 0; t < tagNodes.getLength(); t++)
-				{
-					Node tagNode = tagNodes.item(t);
-					if (tagNode.getNodeName().equals(NODE_NAME_TAG))
-					{
-						fss.tags.add(tagNode.getTextContent());
-					}
-
-				}
-			}
-
-			if (currNode.getNodeName().equals(NODE_NAME_USERSLISTMODEL))
-			{
-
-			}
-
-			if (currNode.getNodeName().equals(NODE_NAME_DOCSLISTMODEL))
-			{
-			}
-
-		}
-
-		return fss;
-
+		
+		
+		
+		
+		
 	}
 
 }

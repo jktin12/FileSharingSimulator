@@ -13,11 +13,15 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 import javax.swing.*;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 import javax.swing.filechooser.FileFilter;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -116,7 +120,6 @@ public class SimulatorGUI extends JFrame
 
 				if (fileChooser.getSelectedFile().exists())
 				{
-					System.out.println("Exists");
 					fileChooser.getSelectedFile().delete();
 				}
 
@@ -247,7 +250,38 @@ public class SimulatorGUI extends JFrame
 			new SimulatorGUI("Simulator");
 		}
 
-		// restoreSimulatorState();
+		 restoreSimulatorState();
+
+	}
+	
+	
+	public void saveState(OutputStream oS) throws IOException
+	{
+		if (oS == null)
+			return;
+
+		ObjectOutputStream oos = new ObjectOutputStream(oS);
+
+		oos.writeObject(this);
+		oos.close();
+	}
+
+	public void restoreState(InputStream iS) throws IOException, ClassNotFoundException
+	{
+		if (iS == null)
+			return;
+
+		ObjectInputStream oIS = new ObjectInputStream(iS);
+
+		Object inputObject = oIS.readObject();
+
+		oIS.close();
+
+		if (!(inputObject instanceof Simulator))
+		{
+			return;
+		}
+
 
 	}
 
@@ -257,13 +291,14 @@ public class SimulatorGUI extends JFrame
 	 * 
 	 * @author MVezina
 	 */
-	void runSimulator_Click()
+	private void runSimulator_Click()
 	{
 
 		while (simulator.getTotalSimulatorSequences() - simulator.getCurrentSimulatorSequence() > 0)
 		{
 			stepSimulator_Click();
 		}
+		saveSimulatorState();
 
 		// saveSimulatorState();
 	}
@@ -273,7 +308,7 @@ public class SimulatorGUI extends JFrame
 	 * 
 	 * @author MVezina
 	 */
-	void stepSimulator_Click()
+	private void stepSimulator_Click()
 	{
 		simulator.simulationStep();
 
@@ -313,9 +348,18 @@ public class SimulatorGUI extends JFrame
 		if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
 		{
 
-			// simulator.restoreSimulatorState(fileChooser.getSelectedFile());
-			// this.simulatorPanel.setLogText(Simulator.logText);
-			// this.updateFrameTitle();
+			try
+			{
+				simulator.restoreState(new FileInputStream(fileChooser.getSelectedFile()));
+			} catch (Exception ex)
+			{
+				JOptionPane.showMessageDialog(this, "Failed to Restore state From file!");
+				ex.printStackTrace();
+			}
+			
+			
+			this.simulatorPanel.setLogText(Simulator.logText);
+			this.updateFrameTitle();
 		}
 
 	}
@@ -331,7 +375,14 @@ public class SimulatorGUI extends JFrame
 		// clicked
 		if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
 		{
-			// simulator.saveSimulatorState(fileChooser.getSelectedFile());
+			try
+			{
+				simulator.saveState(new FileOutputStream(fileChooser.getSelectedFile()));
+			} catch (Exception ex)
+			{
+				JOptionPane.showMessageDialog(this, "Failed to Save state to file!");
+				ex.printStackTrace();
+			}
 		}
 
 	}
@@ -375,39 +426,7 @@ public class SimulatorGUI extends JFrame
 	public static void main(String[] args) throws Exception
 	{
 		new SimulatorGUI("Simulator");
-		
-		//testXMLSerialization();
-		
-		//System.exit(0);
 
-	}
-
-	public static void testXMLSerialization() throws Exception
-	{
-		File f = new File("file.xml");
-		
-		java.util.List<String> tags = new ArrayList<>();
-		
-		tags.add("Tag1");
-		tags.add("Tag2");
-		
-		FileSharingSystem fss = new FileSharingSystem(tags);
-		
-		Simulator s = new Simulator(fss, 100);
-		FileWriter fW = new FileWriter(f);
-		fW.write(s.toXML());
-		fW.close();
-		
-		DocumentBuilder dB = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-		org.w3c.dom.Document doc = dB.parse(new FileInputStream(f));
-		
-		Simulator s2 = Simulator.createSimulatorFromXML(doc.getDocumentElement());
-		
-		
-		System.out.println(s2.getFileSharingSystem().getTags().size());
-		
-		System.out.println(s2.getTotalSimulatorSequences());
-		
 	}
 
 }

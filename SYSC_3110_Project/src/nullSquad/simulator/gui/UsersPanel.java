@@ -18,7 +18,7 @@ import nullSquad.strategies.ranking.DocumentRankingStrategy;
  * 
  * @author MVezina
  */
-public class UsersPanel extends JPanel implements ListDataListener, ListCellRenderer<User>, UserPayoffListener
+public class UsersPanel extends JPanel implements ListCellRenderer<User>
 {
 
 	/* Serializable ID */
@@ -70,7 +70,7 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 
 		// Set the users list model
 		this.allUsersListModel = allUsersListModel;
-		this.allUsersListModel.addListDataListener(this);
+		
 
 		// Create the users tab panel
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -78,6 +78,9 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 		// Initialize the list models
 		consumersListModel = new DefaultListModel<Consumer>();
 		producerListModel = new DefaultListModel<Producer>();
+		
+		
+		this.allUsersListModel.addListDataListener(new UserListHandler(producerListModel, consumersListModel));
 
 		// Create the Strategy Selection Panel
 		rankStrategySelectionPanel = new JPanel();
@@ -445,67 +448,7 @@ public class UsersPanel extends JPanel implements ListDataListener, ListCellRend
 		return label;
 	}
 
-	@Override
-	public void intervalAdded(ListDataEvent e)
-	{
+	
 
-		if (e.getSource() == allUsersListModel)
-		{
-			// We want to add the newly added user object into the appropriate
-			// sub-list model and subscribe to payoff updates
-			User newUser = allUsersListModel.getElementAt(e.getIndex0());
-			newUser.addPayoffListener(this);
-
-			if (newUser instanceof Producer)
-			{
-				producerListModel.addElement((Producer) newUser);
-			}
-			else if (newUser instanceof Consumer)
-			{
-				consumersListModel.addElement((Consumer) newUser);
-			}
-		}
-
-	}
-
-	@Override
-	public void intervalRemoved(ListDataEvent e)
-	{
-		// Remove a user from the associated Producer / Consumer JLists whenever
-		// a user is removed from the file sharing system list model
-
-		User removedUser = (allUsersListModel.getElementAt(e.getIndex0()));
-
-		if (removedUser instanceof Producer)
-		{
-			// Remove from producer list
-			producerListModel.removeElement((Producer) removedUser);
-		}
-		else if (removedUser instanceof Consumer)
-		{
-			// Remove from consumer list
-			consumersListModel.removeElement((Consumer) removedUser);
-		}
-
-	}
-
-	/**
-	 * Empty Implementation from ListDataListener
-	 */
-	@Override
-	public void contentsChanged(ListDataEvent e)
-	{
-	}
-
-	@Override
-	public void payoffUpdated(UserPayoffEvent uPE)
-	{
-		// Update the stats label for the selected user when the payoff is
-		// updated
-		if (uPE.getUser() == this.getCurrentlySelectedUser())
-		{
-			updateUserStats(uPE.getUser());
-		}
-	}
 
 }

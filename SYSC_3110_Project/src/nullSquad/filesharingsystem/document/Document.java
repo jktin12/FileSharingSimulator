@@ -12,16 +12,19 @@ import java.util.*;
 import org.w3c.dom.Node;
 
 import nullSquad.filesharingsystem.users.*;
-import nullSquad.simulator.XMLSerializable;
 
 /**
  * Document class represents a document that is produced by a producer
  * @author Marc Tebo
  *
  */
-public class Document implements XMLSerializable
+public class Document implements Serializable
 {
-	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2347496854090996063L;
+	public static String NODE_NAME = "document";
 	private String name;
 	private String tag;
 	private int docID;
@@ -224,23 +227,4 @@ public class Document implements XMLSerializable
 	}
 
 
-	/** 
-	 * @author Marc Tebo
-	 * @see nullSquad.simulator.XMLSerializable#toXML()
-	 */
-	@Override
-	public String toXML()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-
-	public static Document createDocumentFromXML(Node root)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 }

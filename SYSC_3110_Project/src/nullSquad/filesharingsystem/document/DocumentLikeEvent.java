@@ -8,7 +8,6 @@ package nullSquad.filesharingsystem.document;
 import java.util.EventObject;
 
 import nullSquad.filesharingsystem.users.*;
-import nullSquad.simulator.XMLSerializable;
 
 /**
  * Represents the event of a user liking a document

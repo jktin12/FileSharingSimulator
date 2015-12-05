@@ -6,20 +6,26 @@
 
 package nullSquad.filesharingsystem.users;
 
+import java.io.Serializable;
 import java.util.*;
+
 import nullSquad.filesharingsystem.*;
 import nullSquad.filesharingsystem.document.*;
-import nullSquad.simulator.XMLSerializable;
 import nullSquad.strategies.ranking.DocumentRankingStrategy;
+
 
 /**
  * Abstract class that represents a User
  * 
  * @author MVezina
  */
-public abstract class User implements XMLSerializable
+public abstract class User implements Serializable
 {
-	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2111365206540720745L;
 	private DocumentRankingStrategy.Strategy searchStrategy;
 	protected int userID;
 	protected String userName;
@@ -45,7 +51,6 @@ public abstract class User implements XMLSerializable
 		if (taste == null)
 			taste = "";
 
-		
 		// Initialize default values
 		this.userID = 0;
 		this.userName = userName;
@@ -60,6 +65,7 @@ public abstract class User implements XMLSerializable
 		this.setDocumentRankingStrategy(DocumentRankingStrategy.Strategy.DocumentPopularity);
 
 	}
+	
 
 	/**
 	 * Adds the current iteration payoff to the payoff History
@@ -374,5 +380,6 @@ public abstract class User implements XMLSerializable
 	{
 		return "User ID: " + this.userID + "\nUser Name: " + this.userName + "\nTaste: " + this.taste + "\nFollowers: " + followers.size() + "\nFollowing: " + this.following.size() + "\nNumber of Documents Liked: " + this.likedDocuments.size();
 	}
+
 
 }

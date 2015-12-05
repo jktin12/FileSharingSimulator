@@ -28,6 +28,8 @@ import nullSquad.strategies.ranking.DocumentRankingStrategy;
 public class Producer extends User implements ProducerPayoffStrategy, DocumentLikeListener
 {
 
+	public static String NODE_NAME = "producer";
+
 	// The list of documents that the producer has produced
 	private List<Document> docsProduced;
 
@@ -304,27 +306,5 @@ public class Producer extends User implements ProducerPayoffStrategy, DocumentLi
 				upl.payoffUpdated(new UserPayoffEvent(this));
 			}
 		}
-	}
-
-	/* (non-Javadoc)
-	 * @see nullSquad.simulator.XMLSerializable#toXML()
-	 */
-	@Override
-	public String toXML()
-	{
-		String xmlStr = "<producer>\n";
-		
-		for(Document d : docsProduced)
-			xmlStr += d.toXML();
-		
-		return null;
-		
-	}
-
-	public static Producer createProducerFromNode(Node root)
-	{
-		// TODO Auto-generated method stub
-		return null;
-		
 	}
 }

@@ -9,9 +9,14 @@ package nullSquad.filesharingsystem.users;
 import nullSquad.filesharingsystem.*;
 import nullSquad.filesharingsystem.document.*;
 import nullSquad.simulator.Simulator;
+import nullSquad.simulator.StringOutputStream;
 import nullSquad.strategies.payoff.ConsumerPayoffStrategy;
 import nullSquad.strategies.ranking.DocumentRankingStrategy;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.*;
 
 import org.w3c.dom.Node;
@@ -26,6 +31,9 @@ import org.w3c.dom.Node;
 public class Consumer extends User implements ConsumerPayoffStrategy
 {
 
+	private static final long serialVersionUID = -3413511102536759411L;
+
+	public static String NODE_NAME = "consumer";
 	
 	// The Consumer Payoff Strategy to be used
 	private ConsumerPayoffStrategy payoffStrategy;
@@ -200,21 +208,6 @@ public class Consumer extends User implements ConsumerPayoffStrategy
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see nullSquad.simulator.XMLSerializable#toXML()
-	 */
-	@Override
-	public String toXML()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	public static Consumer createConsumerFromNode(Node root)
-	{
-		// TODO Auto-generated method stub
-		return null;
-		
-	}
 
 }

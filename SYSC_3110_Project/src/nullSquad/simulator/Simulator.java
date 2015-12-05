@@ -1,21 +1,26 @@
 package nullSquad.simulator;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOError;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.Random;
-
-import org.w3c.dom.*;
 
 import nullSquad.filesharingsystem.*;
 import nullSquad.filesharingsystem.users.*;
 
-public class Simulator implements XMLSerializable
+public class Simulator implements Serializable
 {
-	/* XML Node Names */
-	public static final String NODE_NAME = "simulator";
-	private static final String NODE_NAME_TOTALSIMULATORSEQUENCES = "totalsimulatorsequences";
-	private static final String NODE_NAME_CURRENTSIMULATORSEQUENCE = "currentsimulatorsequence";
-	private static final String NODE_NAME_LOGTEXT = "logtext";
-	/* End XML Node Names */
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8763309362472029829L;
 	private FileSharingSystem fileSharingSystem;
 	private int currentSimulatorSequence;
 	private int totalSimulatorSequences;
@@ -114,6 +119,50 @@ public class Simulator implements XMLSerializable
 		return totalSimulatorSequences;
 	}
 
+	public void saveState(OutputStream oS) throws IOException
+	{
+		if (oS == null)
+			return;
+
+		ObjectOutputStream oos = new ObjectOutputStream(oS);
+
+		oos.writeObject(this);
+		oos.writeObject(logText);
+		
+		oos.close();
+	}
+
+	public void restoreState(InputStream iS) throws IOException, ClassNotFoundException
+	{
+		if (iS == null)
+			return;
+
+		ObjectInputStream oIS = new ObjectInputStream(iS);
+
+		// Read the first (Simulator) object
+		Object inputObject = oIS.readObject();
+		
+		// Read the static object
+		logText = (String)oIS.readObject();
+		
+
+		oIS.close();
+
+		if (!(inputObject instanceof Simulator))
+		{
+			return;
+		}
+
+		Simulator s = (Simulator) inputObject;
+
+		this.currentSimulatorSequence = s.currentSimulatorSequence;
+		this.totalSimulatorSequences = s.totalSimulatorSequences;
+
+		this.randomNumber = s.randomNumber;
+		fileSharingSystem.restoreState(s.fileSharingSystem);
+
+	}
+
 	/**
 	 * Appends text t to log text
 	 * 
@@ -135,76 +184,6 @@ public class Simulator implements XMLSerializable
 	public static void clearLog()
 	{
 		logText = "";
-	}
-
-	/* (non-Javadoc)
-	 * 
-	 * @see nullSquad.simulator.XMLSerializable#toXML() */
-	@Override
-	public String toXML()
-	{
-		String xmlStr = "<" + NODE_NAME + ">\n";
-
-		xmlStr += "<" + NODE_NAME_LOGTEXT + ">";
-		xmlStr += logText;
-		xmlStr += "</" + NODE_NAME_LOGTEXT + ">\n";
-
-		xmlStr += fileSharingSystem.toXML();
-
-		xmlStr += "<" + NODE_NAME_CURRENTSIMULATORSEQUENCE + ">";
-		xmlStr += currentSimulatorSequence;
-		xmlStr += "</" + NODE_NAME_CURRENTSIMULATORSEQUENCE + ">\n";
-
-		xmlStr += "<" + NODE_NAME_TOTALSIMULATORSEQUENCES + ">";
-		xmlStr += totalSimulatorSequences;
-		xmlStr += "</" + NODE_NAME_TOTALSIMULATORSEQUENCES + ">\n";
-
-		return xmlStr + "</" + NODE_NAME + ">\n";
-	}
-
-	public static Simulator createSimulatorFromXML(Node rootNode)
-	{
-		
-		if (!rootNode.getNodeName().equals(Simulator.NODE_NAME))
-		{
-			return null;
-		}
-		
-		Simulator newSim = new Simulator(null, 0);
-		
-		NodeList allNodes = rootNode.getChildNodes();
-
-		for (int i = 0; i < allNodes.getLength(); i++)
-		{
-			Node currNode = allNodes.item(i);
-			// Break from importing if another simulator is found
-			if (currNode.getNodeName().equals(Simulator.NODE_NAME))
-				break;
-
-			if (currNode.getNodeName().equals(NODE_NAME_LOGTEXT))
-			{
-				logText = currNode.getTextContent();
-			}
-
-			if (currNode.getNodeName().equals(NODE_NAME_CURRENTSIMULATORSEQUENCE))
-			{
-				newSim.currentSimulatorSequence = Integer.parseInt(currNode.getTextContent().trim());
-			}
-
-			if (currNode.getNodeName().equals(NODE_NAME_TOTALSIMULATORSEQUENCES))
-			{
-				newSim.totalSimulatorSequences = Integer.parseInt(currNode.getTextContent().trim());
-			}
-
-			if (currNode.getNodeName().equals(FileSharingSystem.NODE_NAME))
-			{
-				newSim.fileSharingSystem = FileSharingSystem.createFileSharingSystemFromXML(currNode);
-			}
-
-		}
-
-		return newSim;
-
 	}
 
 }

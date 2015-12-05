@@ -16,7 +16,7 @@ import nullSquad.filesharingsystem.document.DocumentLikeListener;
  * 
  * @author MVezina
  */
-public class DocumentsPanel extends JPanel implements ListCellRenderer<Document>, DocumentLikeListener, ListDataListener
+public class DocumentsPanel extends JPanel implements ListCellRenderer<Document>
 {
 
 	/* Serializable ID */
@@ -41,7 +41,7 @@ public class DocumentsPanel extends JPanel implements ListCellRenderer<Document>
 
 		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		this.allDocumentsListModel = documentsListModel;
-		this.allDocumentsListModel.addListDataListener(this);
+		//
 
 		// Create the document list scroll pane
 		documentsJList = new JList<>(allDocumentsListModel);
@@ -65,6 +65,7 @@ public class DocumentsPanel extends JPanel implements ListCellRenderer<Document>
 		// Add the info panel to the document tab panel
 		this.add(documentListScrollPane);
 		this.add(documentStatsListPanel);
+		
 
 	}
 
@@ -83,12 +84,12 @@ public class DocumentsPanel extends JPanel implements ListCellRenderer<Document>
 			if (documentsJList.getSelectedIndex() < 0)
 			{
 				// No document is selected
-				updateDocumentStats(null);
+				updateDocumentStats();
 				return;
 			}
 
 			// Update the document stats
-			updateDocumentStats(documentsJList.getSelectedValue());
+			updateDocumentStats();
 		}
 	}
 
@@ -98,8 +99,10 @@ public class DocumentsPanel extends JPanel implements ListCellRenderer<Document>
 	 * @param selectedDoc The document currently selected. (null = No document
 	 *        is selected)
 	 */
-	private void updateDocumentStats(Document selectedDoc)
+	public void updateDocumentStats()
 	{
+		Document selectedDoc = documentsJList.getSelectedValue();
+		
 		if (selectedDoc == null)
 		{
 			documentStatsLabel.setText("No Document Selected!");
@@ -144,34 +147,6 @@ public class DocumentsPanel extends JPanel implements ListCellRenderer<Document>
 		return label;
 	}
 
-	@Override
-	public void DocumentLiked(DocumentLikeEvent docLikeEvent)
-	{
-		// We want to update the selected document's stats label if a user likes
-		// the document
-		if (documentsJList.getSelectedValue() != null && documentsJList.getSelectedValue().equals(docLikeEvent.getDocument()))
-		{
-			updateDocumentStats(documentsJList.getSelectedValue());
-		}
-	}
 
-	@Override
-	public void intervalAdded(ListDataEvent e)
-	{
-		// Add this class as a document like listener for all documents
-		documentsJList.getModel().getElementAt(e.getIndex0()).addLikeListener(this);
-	}
-
-	@Override
-	public void intervalRemoved(ListDataEvent e)
-	{
-		// Update document stats (Just incase the selected index was removed)
-		updateDocumentStats(documentsJList.getSelectedValue());
-	}
-
-	@Override
-	public void contentsChanged(ListDataEvent e)
-	{
-	}
 
 }
